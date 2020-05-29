@@ -1,0 +1,15 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/sidebar.html' %}
+    </div>
+    {% include 'employees/components/designation_table.html' %}
+    {% include 'employees/components/add_designation.html' %}
+
+</div>
+{% endblock content%}

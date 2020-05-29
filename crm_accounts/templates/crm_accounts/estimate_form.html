@@ -1,0 +1,191 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/sidebar.html' %}
+    </div>
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="page-title">Create Estimate</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.client|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.projects|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.email|as_crispy_field }}
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.taxes|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.client_address|attr:"rows:3"|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.billing_address|attr:"rows:3"|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.extimate_date|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="form-group">
+                                    {{ form.expiry_date|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-white">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 20px">#</th>
+                                                <th class="col-sm-2">Item</th>
+                                                <th class="col-md-6">Description</th>
+                                                <th style="width:100px;">Unit Cost</th>
+                                                <th style="width:80px;">Qty</th>
+                                                <th>Amount</th>
+                                                <th> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                    {{ form.item_name|as_crispy_field }}
+                                                </td>
+                                                <td>
+                                                    {{ form.item_description|as_crispy_field }}
+                                                </td>
+                                                <td>
+                                                    {{ form.unit_cost|as_crispy_field }}
+                                                </td>
+                                                <td>
+                                                    {{ form.quantity|as_crispy_field }}
+                                                </td>
+                                                <td>
+                                                    {{ form.amount|as_crispy_field }}
+                                                </td>
+                                                <td><a href="javascript:void(0)" class="text-success font-18"
+                                                        title="Add"><i class="fa fa-plus"></i></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>
+                                                    <input class="form-control" type="text" style="min-width:150px">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" type="text" style="min-width:150px">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" style="width:100px" type="text">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" style="width:80px" type="text">
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" readonly="" style="width:120px"
+                                                        type="text">
+                                                </td>
+                                                <td><a href="javascript:void(0)" class="text-danger font-18"
+                                                        title="Remove"><i class="fa fa-trash-o"
+                                                            aria-hidden="true"></i></a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-white">
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td style="text-align: right; padding-right: 30px;width: 230px">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" class="text-right">Tax</td>
+                                                <td style="text-align: right; padding-right: 30px;width: 230px">
+                                                    <input class="form-control text-right" value="0" readonly=""
+                                                        type="text">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" class="text-right">
+                                                    Discount %
+                                                </td>
+                                                <td style="text-align: right; padding-right: 30px;width: 230px">
+                                                    {{ form.discount|as_crispy_field }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" style="text-align: right; font-weight: bold">
+                                                    Grand Total
+                                                </td>
+                                                <td
+                                                    style="text-align: right; padding-right: 30px; font-weight: bold; font-size: 16px;width: 230px">
+                                                    $ 0.00
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {{ form.other_information|attr:"rows:3"|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center m-t-20">
+                            <button class="btn btn-primary btn-lg m-r-10" type="submit">Save & Send</button>
+                            <button class="btn btn-primary btn-lg">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% include 'backend/notifications.html' %}
+    </div>
+
+
+    <div class="sidebar-overlay" data-reff=""></div>
+</div>
+{% endblock content%}

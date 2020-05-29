@@ -1,0 +1,108 @@
+{% load crispy_forms_tags %}
+<div id="create_project" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Project</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.name|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.clients|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.start_date|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.end_date|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.project_cost|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.priority|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {{ form.project_leader|as_crispy_field }}
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Team Leader</label>
+                                <div class="project-members">
+                                    <a href="#" data-toggle="tooltip" title="Jeffery Lalor">
+                                        <img src="assets/img/user.jpg" class="avatar" alt="Jeffery Lalor" height="20"
+                                            width="20">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                {{ form.team_member|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Team Members</label>
+                                <div class="project-members">
+                                    <a href="#" data-toggle="tooltip" title="John Doe">
+                                        <img src="assets/img/user.jpg" class="avatar" alt="John Doe" height="20"
+                                            width="20">
+                                    </a>
+                                    <a href="#" data-toggle="tooltip" title="Richard Miles">
+                                        <img src="assets/img/user.jpg" class="avatar" alt="Richard Miles" height="20"
+                                            width="20">
+                                    </a>
+                                    <a href="#" data-toggle="tooltip" title="John Smith">
+                                        <img src="assets/img/user.jpg" class="avatar" alt="John Smith" height="20"
+                                            width="20">
+                                    </a>
+                                    <a href="#" data-toggle="tooltip" title="Mike Litorus">
+                                        <img src="assets/img/user.jpg" class="avatar" alt="Mike Litorus" height="20"
+                                            width="20">
+                                    </a>
+                                    <span class="all-team">+2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form.description|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.image|as_crispy_field }}
+                    </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary btn-lg" type="submit">Create Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

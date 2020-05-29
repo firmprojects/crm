@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <form class="m-b-30" method="POST">
+                {% csrf_token %}
+                {{ u_form|crispy }}
+                {{ p_form|crispy }}
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock content%}

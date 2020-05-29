@@ -1,0 +1,100 @@
+{% load static%}
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="menu-title">Main</li>
+                <li class="active">
+                    <a href="/"><i class="fa fa-dashboard"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'chat:chat' %}"><i class="fa fa-comments" aria-hidden="true"></i> Chat <span class="badge badge-pill bg-primary pull-right">5</span></a>
+                </li>
+                <li class="submenu">
+                    <a href="#" class="noti-dot"><i class="fa fa-users"></i><span> Staff</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+                        <li><a href="{% url 'employees:staff' %}">Staff</a></li>
+                        <li><a href="{% url 'employees:holiday' %}">Holidays</a></li>
+                        <li><a href="{% url 'employees:leave' %}"><span>Leave Requests</a></li>
+                        <li><a href="{% url 'employees:leave_type' %}">Leave Type</a></li>
+                        <li><a href="{% url 'employees:attendance' %}">Attendance</a></li>
+                        <li><a href="{% url 'employees:departments' %}">Departments</a></li>
+                        <li><a href="{% url 'employees:designation' %}">Designations</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-calculator"></i><span> Accounting </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+                        <li><a href="{% url 'crm_accounts:estimates' %}">Estimates</a></li>
+                        <li><a href="{% url 'crm_accounts:invoices' %}">Invoices</a></li>
+                        <li><a href="{% url 'crm_accounts:payments' %}">Payments</a></li>
+                        <li><a href="{% url 'crm_accounts:expenses' %}">Expenses</a></li>
+                        <li><a href="{% url 'crm_accounts:providentfund' %}">Provident Fund</a></li>
+                        <li><a href="{% url 'crm_accounts:taxes' %}">Taxes</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-tasks"></i><span> Projects</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+                        <li><a href="{% url 'project:projects' %}">Projects</a></li>
+                        <li><a href="{% url 'project:clients' %}">Clients</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-envelope"></i><span> Messsaging </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Email</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="{% url 'messaging:compose' %}">Compose Mail</a></li>
+                                <li><a href="{% url 'messaging:inbox' %}">Inbox</a></li>
+                                <li><a href="{% url 'messaging:mail_view' %}">Mail View</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-video-camera camera" aria-hidden="true"></i> <span> Calls</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="{% url 'chat:phonecall' %}">Voice Call</a></li>
+                                <li><a href="{% url 'chat:videocall' %}">Video Call</a></li>
+                                <li><a href="{% url 'chat:incomingcall' %}">Incoming Call</a></li>
+                            </ul>
+                        </li>
+                       
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-commenting-o" aria-hidden="true"></i> <span> Blog</span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+                        <li><a href="{% url 'messaging:blog' %}">Blog</a></li>
+                        <li><a href="{% url 'messaging:blog_view' %}">Blog View</a></li>
+                        <li><a href="{% url 'messaging:add_blog' %}">Add Blog</a></li>
+                        <li><a href="{% url 'messaging:edit_blog' %}">Edit Blog</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-pie-chart"></i><span> Reports </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fa fa-user"></i><span> Users </span> <span class="menu-arrow"></span></a>
+                    <ul class="list-unstyled" style="display: none;">
+                        <li><a href="{% url 'users:users' %}">All Users</a></li>
+                        <li><a href="{% url 'users:contacts' %}">Contacts</a></li>
+                    </ul>
+                </li>
+               
+                <li>
+                    <a href="{% url 'dashboard:assets' %}"><i class="fa fa-building-o"></i><span>Assets</span></a>
+                </li>
+                  <li>
+                    <a href="{% url 'dashboard:settings' %}"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                </li>
+               
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-5 col-5">
+                <h4 class="page-title">Department</h4>
+            </div>
+            <div class="col-sm-7 col-7 text-right m-b-30">
+                <a href="#" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#add_department"><i
+                        class="fa fa-plus"></i> Add New Department</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <table class="table table-striped custom-table m-b-0 datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Department Name</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in dept %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.name}}</td>
+
+                                <td class="text-right">
+                                    <a type="button" class="btn btn-sm btn-primary" href="{% url 'employees:update_department' item.id %}">
+                                      <span class="fa fa-pencil"></span>
+                                    </a>
+                                    <a type="button" class="btn btn-sm btn-danger" href="{% url 'employees:delete_department' item.id %}">
+                                      <span class="fa fa-trash"></span>
+                                    </a>
+                                 </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
