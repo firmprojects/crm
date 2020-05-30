@@ -1,5 +1,7 @@
 from django.urls import path, include
-from .views import CreateProject, ProjectDetail, ClientsCreateView, ClientsDetailView, ClientsUpdateView, ClientDelete
+from .views import CreateProject, ProjectDetail, \
+    ClientsCreateView, ClientsDetailView, ClientsUpdateView, ClientDelete, \
+    UsersAutocompletesView, ClientAutocompletesView
 
 app_name = 'project'
 urlpatterns = [
@@ -8,5 +10,8 @@ urlpatterns = [
     path('clients/', ClientsCreateView.as_view(), name='clients'),
     path('client/<int:pk>/', ClientsDetailView.as_view(), name='client_detail'),
     path('client/update/<int:pk>/', ClientsUpdateView.as_view(), name='edit_client'),
-    path('client/delete/<int:pk>/', ClientDelete.as_view(), name='delete_client')
+    path('client/delete/<int:pk>/', ClientDelete.as_view(), name='delete_client'),
+    path('user_autocomplete/', UsersAutocompletesView.as_view(), name="user_autocomplete"),
+    path('clients_autocomplete/', ClientAutocompletesView.as_view(), name="client_autocomplete"),
+
 ]

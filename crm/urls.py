@@ -10,7 +10,7 @@ urlpatterns = [
     path('employees/', include('employees.urls')),
     path('crm_accounts/', include('crm_accounts.urls')),
     path('chat/', include('chat.urls')),
-    path('project/', include('project.urls')),
+    path('project/', include('project.urls', namespace='project')),
     path('messaging/', include('messaging.urls')),
     path('users/', include('users.urls')),
     path('settings/', include('settings.urls')),

@@ -44,7 +44,7 @@ class Projects(models.Model):
     priority = models.CharField(max_length=50, choices=PRIORITY)
     status = models.CharField(max_length=50, choices=STATUS)
     project_leader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leader_set', blank=True, null=True)
-    team_member = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='team_set', blank=True, null=True)
+    team_member = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='team_set', blank=True)
 
     description = models.TextField()
     image = models.ImageField(blank=True, null=True)
