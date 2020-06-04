@@ -1,8 +1,10 @@
+from dal import autocomplete
 from django.shortcuts import render, get_object_or_404
 from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from project.models import Clients, Projects
 
 
 # Estimate views
@@ -123,5 +125,23 @@ class TaxUpdate(UpdateView):
 
 class TaxDelete(DeleteView):
     model = Taxes
+
+
+class ClientAutocompletesView(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        qs = Clients.objects.all().order_by('-company_name')
+        if self.q:
+            qs = qs.filter(company_name__istartswith=self.q)
+        return qs
+
+
+class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        qs = Projects.objects.all().order_by('-name')
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
 
 

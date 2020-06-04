@@ -1738,4 +1738,158 @@ blockquote p {font-style: italic;font-weight: 400;}
 	.custom-menu.navbar-nav > li > a {margin-left: 10px;}
 	.profile-bg {height:180px;}
 	.error-box h1 {font-size: 50px;}
+	
 }
+
+
+
+/*-----------------------------------------
+40. Modals
+-------------------------------------------*/
+.izimodal{
+	overflow: hidden;
+}
+
+.iziModal-content{
+	width: 100%;
+}
+
+.modal-inside{
+	position: relative;
+	width: 100%;
+}
+
+.close-modal{
+    opacity: 1;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 100%;
+    position: absolute;
+    top: 5px;
+    right: 12px;
+    color: #aaa;
+    z-index: 20;
+    line-height: 40px;
+    font-weight: 100;
+    font-size: 17px;
+}
+
+.close-modal i{
+    color: #aaa;
+    line-height: 40px;
+    font-weight: 100;
+    font-size: 17px;
+	-webkit-transition-duration: .3s;
+	transition-duration: .3s;    
+}
+
+.close-modal:hover i{
+    color: #222;
+}
+
+.modal-heading{
+	margin-bottom: 15px;
+}
+
+.modal-heading h2{
+	font-size: 36px;
+	color: #222;
+	font-weight: 300;
+	line-height: 1.5;	
+}
+
+.modal-heading h3{
+	font-size: 28px;
+	color: #222;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.modal-heading h4{
+	font-size: 25px;
+	color: #222;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.modal-heading h5{
+	font-size: 20px;
+	color: #222;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.modal-heading h6{
+	font-size: 17px;
+	color: #222;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.modal-heading strong{
+	font-weight: 600;
+	letter-spacing: -1px;
+	word-spacing: 1px;
+}
+
+.modal-heading ul{
+	padding: 0px;
+}
+
+.modal-heading ul li{
+	list-style-type: none;
+	display: inline-block;
+}
+
+.modal-heading ul li:after{
+	content: " /";
+    font-size: 13px;
+    color: #999;	
+    margin: 0px 2px;
+}
+.modal-heading ul li:last-child:after{
+	content: none;
+}
+
+.modal-heading ul li a{
+    font-size: 13px;
+    color: #999;
+    line-height: 1.7;
+    font-weight: 400;	
+}
+
+.modal-heading ul li a:hover{
+	color: #2387ea;
+}
+
+.modal-inside p {
+    font-size: 15px;
+    color: #999;
+    line-height: 1.7;
+    font-weight: 400;
+}
+
+
+.izimodal .inner-frame{
+	padding: 0px 30px 30px 30px;
+}
+
+
+.quick-view-price{
+	position: relative;
+}
+
+.quick-view-price h4{
+	display: inline-block;
+	font-size: 22px;
+	color: #222;
+	font-weight: 400;
+	line-height: 1.5;
+}
+
+.quick-view-price .old-price{
+	color: #999;
+	margin-right: 15px;
+}
+

@@ -1,0 +1,139 @@
+{% extends 'backend/staff_base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/staff_sidebar.html' %}
+    </div>
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-8 col-4">
+                    <h4 class="page-title">Tasks</h4>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <ul class="nav nav-tabs nav-tabs-solid">
+                                <li class="nav-item"><a class="nav-link active" href="#solid-tab1" data-toggle="tab">All Tasks</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#solid-tab2" data-toggle="tab">Ongoing Tasks</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#solid-tab3" data-toggle="tab">Completed Tasks</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="solid-tab1">
+                                    <table class="table table-striped custom-table m-b-0 datatable">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Employee</th>
+                                                <th class="text-center">Asigned Date</th>
+                                                <th class="text-center">Priority</th>
+                                                 <th class="text-center">Project</th>
+                                                <th class="text-center">Assigned Hours</th>
+                                                <th class="text-center">Description</th>
+                                                <th class="text-center">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <a href="profile.html" class="avatar">J</a>
+                                                    <h2><a href="profile.html">John Doe <span>Web Designer</span></a></h2>
+                                                </td>
+                                                <td class="text-center">5 Aug 2017</td>
+                                                <td class="text-center">High</td>
+                                                <td class="text-center">Project Title</td>
+                                                <td class="text-center">7</td>
+                                                <td class="text-center">Lorem ipsum dolor sit amet</td>
+                                                <td class="text-center">
+                                               
+                                                    <a class="primary-button button-sm" data-izimodal-open="#modal3">
+                                                        <button type="button" class="btn btn-primary btn-sm">Start</button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="solid-tab2">
+                                    <table class="table custom-table m-b-0 datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Start Time</th>
+                                                <th>Project</th>
+                                                <th>Time Spent</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                   <h2><a href="#">Task title</h2>
+                                                </td>
+                                                <td>8.00am</td>
+                                                <td>Project Title</td>
+                                                <td>00:00:01 </td>
+                                                <td class="text-center"><button type="button" class="btn btn-warning btn-sm">Pause</button>
+                                                    <button type="button" class="btn btn-info btn-sm">Resume</button></td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="solid-tab3">
+                                    <table class="table custom-table m-b-0 datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Project</th>
+                                                <th>Time Spent</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                   <h2><a href="#">Task title</h2>
+                                                </td>
+                                                <td>Project Title</td>
+                                                <td>00:00:01 </td>
+                                                <td class="text-center">
+                                                    Completed
+                                                </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    <!-- Modal Start -->
+    <div class="izimodal" id="modal3" data-iziModal-width="600px" data-iziModal-fullscreen="false"
+							data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+        <!-- Close Button Start -->
+        <div class="close-modal">
+            <button class="close-modal" data-izimodal-close><i class="fa fa-close"></i></button>
+        </div>
+        <!-- Close Button Start -->
+        <!-- Modal Body Start -->
+        <div class="modal-inside inner-30 center-holder">
+            <div class="modal-heading">
+                <h4>Are you ready to start this task now?</h4>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing </p>
+            <button class="btn btn-primary">Start</button>
+        </div>
+        <!-- Modal Body End -->
+    </div>
+
+</div>
+{% endblock content%}

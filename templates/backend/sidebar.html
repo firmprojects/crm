@@ -5,7 +5,7 @@
             <ul>
                 <li class="menu-title">Main</li>
                 <li class="active">
-                    <a href="/"><i class="fa fa-dashboard"></i> Dashboard</a>
+                    <a href="{% url 'dashboard:home' %}"><i class="fa fa-dashboard"></i> Dashboard</a>
                 </li>
                 <li>
                     <a href="{% url 'chat:chat' %}"><i class="fa fa-comments" aria-hidden="true"></i> Chat <span class="badge badge-pill bg-primary pull-right">5</span></a>
@@ -42,26 +42,16 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="{% url 'tasks:tasks' %}"><i class="fa fa-tasks"></i><span> Task</span><span class="menu-arrow"></span></a>
+                </li>
+
                 <li class="submenu">
-                    <a href="#"><i class="fa fa-envelope"></i><span> Messsaging </span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Email</span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Email</span> <span class="menu-arrow"></span></a>
-                            <ul class="list-unstyled" style="display: none;">
-                                <li><a href="{% url 'messaging:compose' %}">Compose Mail</a></li>
-                                <li><a href="{% url 'messaging:inbox' %}">Inbox</a></li>
-                                <li><a href="{% url 'messaging:mail_view' %}">Mail View</a></li>
-                            </ul>
-                        </li>
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-video-camera camera" aria-hidden="true"></i> <span> Calls</span> <span class="menu-arrow"></span></a>
-                            <ul class="list-unstyled" style="display: none;">
-                                <li><a href="{% url 'chat:phonecall' %}">Voice Call</a></li>
-                                <li><a href="{% url 'chat:videocall' %}">Video Call</a></li>
-                                <li><a href="{% url 'chat:incomingcall' %}">Incoming Call</a></li>
-                            </ul>
-                        </li>
-                       
+                        <li><a href="{% url 'messaging:compose' %}">Compose Mail</a></li>
+                        <li><a href="{% url 'messaging:inbox' %}">Inbox</a></li>
+                        <li><a href="{% url 'messaging:mail_view' %}">Mail View</a></li>
                     </ul>
                 </li>
                 <li class="submenu">

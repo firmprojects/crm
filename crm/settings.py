@@ -36,7 +36,13 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'phonenumber_field',
     'ajax_select',
-    'settings'
+    'settings',
+    'tasks',
+
+
+
+    
+
 ]
 
 MIDDLEWARE = [
@@ -180,4 +186,6 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+
+LOGIN_REDIRECT_URL  = 'users:staff_dashboard'
 

@@ -5,15 +5,16 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('accounts/', include('allauth.urls')),
     path('employees/', include('employees.urls')),
     path('crm_accounts/', include('crm_accounts.urls')),
     path('chat/', include('chat.urls')),
-    path('project/', include('project.urls')),
+    path('project/', include('project.urls', namespace='project')),
     path('messaging/', include('messaging.urls')),
-    path('users/', include('users.urls')),
+    path('', include('users.urls')),
     path('settings/', include('settings.urls')),
+    path('task/', include('tasks.urls')),
 ]
 
 

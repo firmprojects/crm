@@ -25,12 +25,18 @@
                         <div class="row">
                             <div class="col-sm-6 col-md-3">
                                 <div class="form-group">
-                                    {{ form.client|as_crispy_field }}
+                                    <label for="id_label_clients" style="width: 100%">
+                                        Clients*
+                                    <select name="clients" style="width: 100%" class="invoice_clients js-states form-control" id="id_label_clients"></select>
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-3">
                                 <div class="form-group">
-                                    {{ form.projects|as_crispy_field }}
+                                    <label for="id_label_projects" style="width: 100%">
+                                        Projects*
+                                    <select name="Projects" style="width: 100%" class="invoice_projects js-states form-control" id="id_label_projects"></select>
+                                    </label>
                                 </div>
                             </div>
 
@@ -190,3 +196,35 @@
     <div class="sidebar-overlay" data-reff=""></div>
 </div>
 {% endblock content%}
+
+{% block js %}
+<script>
+$( document ).ready(function() {
+    
+ $('.invoice_clients').select2({
+    minimumInputLength: 1,
+    placeholder: "Clients*",
+    multiple: false,
+    ajax: {
+        url: '/crm_accounts/client_autocomplete/',
+        dataType: 'json'
+    },
+});
+
+ $('.invoice_projects').select2({
+    minimumInputLength: 1,
+    placeholder: "Project*",
+    multiple: false,
+    ajax: {
+        url: '/crm_accounts/project_autocomplete/',
+        dataType: 'json'
+    },
+});
+
+
+
+
+
+});
+</script>
+{% endblock js %}

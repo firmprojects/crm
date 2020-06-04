@@ -1,6 +1,9 @@
+from dal import autocomplete
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+
+from users.models import CustomUser
 from .models import Projects, Clients
 from .forms import ProjectForm, ClientSignupForm
 from allauth.account.views import SignupView
@@ -67,3 +70,28 @@ class ClientsUpdateView(UpdateView):
 class ClientDelete(DeleteView):
     model = Clients
     template_name = 'project/delete_client.html'
+
+
+class UsersAutocompletesView(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        qs = CustomUser.objects.all().order_by('-id')
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+        return qs
+
+
+class ClientAutocompletesView(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        qs = Clients.objects.all().order_by('-company_name')
+        if self.q:
+            qs = qs.filter(company_name__istartswith=self.q)
+        return qs
+
+
+
+class Milestones(TemplateView):
+    template_name = 'project/milestones.html'
+
+

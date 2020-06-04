@@ -4,7 +4,7 @@
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="/"><i class="fa fa-home back-icon"></i> Back to Home</a>
+                    <a href="{% url 'dashboard:home' %}"><i class="fa fa-home back-icon"></i> Back to Home</a>
                 </li>
                 <li>
                     <a href="{% url 'messaging:inbox' %}">Inbox <span class="mail-count">(21)</span></a>

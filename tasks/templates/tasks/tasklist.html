@@ -1,0 +1,343 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/project_sidebar.html' %}
+    </div>
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-8 col-4">
+                    <h4 class="page-title">Tasks</h4>
+                </div>
+                <div class="col-sm-4 col-8 text-right m-b-30">
+                    <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal" data-target="#add_ticket"><i class="fa fa-plus"></i> Add New Task</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table m-b-0 datatable">
+                            <thead>
+                                <tr>
+                                    <th>Task Id</th>
+                                    <th>Title</th>
+                                    <th>Assigned Staff</th>
+                                    <th>Created Date</th>
+                                    <th>Expiring Date</th>
+                                    <th>Priority</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-right">Start Task</th>
+                                    <th class="text-right">Time Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><a href="{% url 'tasks:detail' %}">#TKT-0001</a></td>
+                                    <td>Laptop Issue</td>
+                                    <td>John Smith</td>
+                                    <td>5 May 2017 07:21 AM</td>
+                                    <td>5 May 2017 11.12 AM</td>
+                                    
+                                    <td>High </td>
+                                    <td class="text-center">
+                                        <div class="dropdown action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-dot-circle-o text-danger"></i> New
+                                            </a>
+                                          </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <i class="fa fa-play"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="add_ticket" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Ticket</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Subject</label>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Id</label>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Assign Staff</label>
+                                    <select class="select">
+                                        <option>-</option>
+                                        <option>Mike Litorus</option>
+                                        <option>John Smith</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Client</label>
+                                    <select class="select">
+                                        <option>-</option>
+                                        <option>Delta Infotech</option>
+                                        <option>International Software Inc</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select class="select">
+                                        <option>High</option>
+                                        <option>Medium</option>
+                                        <option>Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>CC</label>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Assign</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Assignee</label>
+                                    <div class="project-members">
+                                        <a title="John Smith" data-placement="top" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="John Smith" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Add Followers</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Followers</label>
+                                    <div class="project-members">
+                                        <a title="Richard Miles" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="Richard Miles" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <a title="John Smith" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="John Smith" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <a title="Mike Litorus" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="Mike Litorus" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <a title="Wilmer Deluna" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="Wilmer Deluna" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <span class="all-team">+2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Upload Files</label>
+                                    <input class="form-control" type="file">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-primary btn-lg">Create Ticket</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="edit_ticket" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Ticket</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Subject</label>
+                                    <input class="form-control" type="text" value="Laptop Issue">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Id</label>
+                                    <input class="form-control" type="text" readonly="" value="TKT-0001">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Assign Staff</label>
+                                    <select class="select">
+                                        <option>-</option>
+                                        <option selected>Mike Litorus</option>
+                                        <option>John Smith</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Client</label>
+                                    <select class="select">
+                                        <option>-</option>
+                                        <option>Delta Infotech</option>
+                                        <option selected>International Software Inc</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select class="select">
+                                        <option>High</option>
+                                        <option selected>Medium</option>
+                                        <option>Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>CC</label>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Assign</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Assignee</label>
+                                    <div class="project-members">
+                                        <a title="John Smith" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="John Smith" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Add Followers</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Ticket Followers</label>
+                                    <div class="project-members">
+                                        <a title="Richard Miles" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="Richard Miles" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <a title="John Smith" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="John Smith" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <a title="Mike Litorus" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="Mike Litorus" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <a title="Wilmer Deluna" data-toggle="tooltip" href="#">
+                                            <img width="20" height="20" alt="Wilmer Deluna" class="avatar" src="assets/img/user.jpg">
+                                        </a>
+                                        <span class="all-team">+2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Upload Files</label>
+                                    <input class="form-control" type="file">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-primary btn-lg">Edit Ticket</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="delete_ticket" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Ticket</h4>
+                </div>
+                <form>
+                    <div class="modal-body card-box">
+                        <p>Are you sure want to delete this ticket?</p>
+                        <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock content%}
