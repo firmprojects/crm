@@ -1,4 +1,6 @@
 import os
+import pytz
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
 
 
 
-    
+
 
 ]
 
@@ -92,9 +94,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
-        'NAME': 'crm',
-        'PASSWORD': 'enternow',
-        'HOST': '127.0.0.1',
+        'NAME': 'NAME',
+        'PASSWORD': 'PASS',
+        'HOST': 'localhost',
         'PORT': '5432'
     },
 }
@@ -188,4 +190,3 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
 LOGIN_REDIRECT_URL  = 'users:staff_dashboard'
-
