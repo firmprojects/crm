@@ -1,11 +1,12 @@
 from django.urls import path, include
 from .views import CreateProject, ProjectDetail, \
     ClientsCreateView, ClientsDetailView, ClientsUpdateView, ClientDelete, \
-    UsersAutocompletesView, ClientAutocompletesView, Milestones
+    UsersAutocompletesView, ClientAutocompletesView, Milestones, CreateProjectList
 
 app_name = 'project'
 urlpatterns = [
     path('create/', CreateProject.as_view(), name='projects'),
+    path('list/', CreateProjectList.as_view(), name='project-list'),
     path('<int:pk>/', ProjectDetail.as_view(), name='project_detail'),
     path('clients/', ClientsCreateView.as_view(), name='clients'),
     path('client/<int:pk>/', ClientsDetailView.as_view(), name='client_detail'),

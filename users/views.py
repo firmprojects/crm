@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 import json
+import datetime
 
 
 WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Saturday',6:'Sunday'}
@@ -26,21 +27,18 @@ class AddContacts(TemplateView):
 
 class StaffDashboard(TemplateView):
     template_name = 'users/staff_dashboard.html'
-    def get(self,request,**kwargs):
 
-
-
-
-        return super().get(request,**kwargs)
 
 class LoginPage(LoginView):
     template_name = 'account/login.html'
 
     # def get(self, *args, **kwargs):
+    #     super().get(*args,**kwargs)
+    #     print("ok")
     #     if self.request.user.is_authenticated:
     #         if self.request.user.is_employee:
     #             return redirect('users/staff_dashboard.html')
-
+    #
     #     return HttpResponseRedirect(redirect('dashboard/index.html', args=[self.request.user.username]))
 
 @csrf_exempt
@@ -115,7 +113,9 @@ def get_weekly_report(request):
             try:
 
                 report[date.isoformat()] = clocking.clockin_data[date.strftime("%Y-%m-%d")]
+
                 hours_spent[date.isoformat()] = 0
+                print("ok2")
                 for i in clocking.clockin_data[date.strftime("%Y-%m-%d")]:
                     if "clock_out" in i:
                         hours_spent[date.isoformat()] += (parse_datetime(i['clock_out'])-parse_datetime(i['clock_in'])).total_seconds()

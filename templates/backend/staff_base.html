@@ -42,14 +42,28 @@
 {% include 'backend/header.html' %}
 {% include 'backend/staff_sidebar.html' %}
  {% block content %}{% endblock %}
- {% block js %}{% endblock %}
+
 
 </div>
 
-
+    
     <div class="sidebar-overlay" data-reff=""></div>
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
-
+    <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/timer.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/morris/morris.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/raphael/raphael-min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+    {% block js %}{% endblock %}
 
 
 </body>

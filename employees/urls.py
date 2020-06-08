@@ -29,6 +29,7 @@ from .views import(
     CreateLeaveType,
     UpdateLeaveType,
     DeleteLeaveType,
+    getAttendance
 )
 app_name = 'employees'
 
@@ -64,5 +65,7 @@ urlpatterns = [
     path('voice_call/', voice_call, name='voice_call'),
     path('video_call/', video_call, name='video_call'),
     path('chat/', chat, name='chat'),
+
+    path('get_attendance/',getAttendance,name='getAttendance')
 
 ]

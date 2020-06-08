@@ -1,8 +1,8 @@
 from dal import autocomplete
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, View
+from django.shortcuts import redirect
 from users.models import CustomUser
 from .models import Projects, Clients
 from .forms import ProjectForm, ClientSignupForm
@@ -18,6 +18,24 @@ class CreateProject(CreateView):
         context = super(CreateProject, self).get_context_data(**kwargs)
         context['projects'] = Projects.objects.all()
         return context
+
+
+
+class CreateProjectList(View):
+    def get(self, request):
+        form = ProjectForm()
+        data = Projects.objects.all()
+        return render(request, 'project/project-list.html', {"data": data, "form":form})
+
+    
+    def post(self, request):
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('project:project-list')
+        else:
+            return None
+        return redirect('project:project-list')
 
 
 class ProjectDetail(DetailView):
