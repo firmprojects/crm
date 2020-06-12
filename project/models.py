@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
-
+from django.contrib.postgres import fields
 
 
 
@@ -46,8 +46,10 @@ class Projects(models.Model):
     project_leader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leader_set', blank=True, null=True)
     team_member = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='team_set', blank=True)
 
+
     description = models.TextField()
-    image = models.ImageField(blank=True, null=True)
+    image = fields.ArrayField(base_field=models.ImageField(blank=True, null=True),default=list)
+    file = fields.ArrayField(base_field=models.FileField(blank=True,null=True),default=list)
 
     def __str__(self):
         return self.name
@@ -55,5 +57,15 @@ class Projects(models.Model):
     def get_absolute_url(self):
         return reverse('project:projects')
 
+    def get_task_number(self):
+        complete = self.milestone_set.all().filter(completed=True)
+        in_complete = self.milestone_set.all().filter(completed=False)
+        return {"complete":len(complete),"in_complete":len(in_complete)}
 
 
+
+class Milestone(models.Model):
+    task = models.CharField(max_length=200)
+    project = models.ForeignKey(Projects,on_delete=models.CASCADE)
+    assigned_to = models.OneToOneField(to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)
+    completed = models.BooleanField(default=False)

@@ -56,9 +56,9 @@ def clock_in(request):
             clocking.save()
 
         if str(today) in clocking.clockin_data:
-            clocking.clockin_data[str(today)].append({'clock_in':time_now})
+            clocking.clockin_data[str(today)].append({'clock_in':time_now,'pos':data['pos']})
         else:
-            clocking.clockin_data[str(today)] = [{'clock_in':time_now}]
+            clocking.clockin_data[str(today)] = [{'clock_in':time_now,'pos':data['pos']}]
 
         clocking.save()
         return JsonResponse({"time_now":time_now})
@@ -103,29 +103,32 @@ def get_date_on_refresh(request):
 def get_weekly_report(request):
 
     if request.user.is_authenticated:
-        clocking = Clocking.objects.get(user=request.user)
-        time_delta = timezone.timedelta(days=7)
-        start_date = parse_date(request.POST['start'])
+        try:
+            clocking = Clocking.objects.get(user=request.user)
+            time_delta = timezone.timedelta(days=7)
+            start_date = parse_date(request.POST['start'])
 
-        report = {}
-        hours_spent = {}
-        for date in (start_date + timezone.timedelta(days=i) for i in range(1,8)):
-            try:
+            report = {}
+            hours_spent = {}
+            for date in (start_date + timezone.timedelta(days=i) for i in range(1,8)):
+                try:
 
-                report[date.isoformat()] = clocking.clockin_data[date.strftime("%Y-%m-%d")]
+                    report[date.isoformat()] = clocking.clockin_data[date.strftime("%Y-%m-%d")]
 
-                hours_spent[date.isoformat()] = 0
-                print("ok2")
-                for i in clocking.clockin_data[date.strftime("%Y-%m-%d")]:
-                    if "clock_out" in i:
-                        hours_spent[date.isoformat()] += (parse_datetime(i['clock_out'])-parse_datetime(i['clock_in'])).total_seconds()
+                    hours_spent[date.isoformat()] = 0
 
-                    else:
-                        hours_spent[date.isoformat()] += 0
-            except KeyError:
-                pass
+                    for i in clocking.clockin_data[date.strftime("%Y-%m-%d")]:
+                        if "clock_out" in i:
+                            hours_spent[date.isoformat()] += (parse_datetime(i['clock_out'])-parse_datetime(i['clock_in'])).total_seconds()
 
-        return JsonResponse({"report":report,'hours_spent':hours_spent})
+                        else:
+                            hours_spent[date.isoformat()] += 0
+                except KeyError:
+                    pass
+
+            return JsonResponse({"report":report,'hours_spent':hours_spent})
+        except Clocking.DoesNotExist:
+            return JsonResponse({})
 
 # def home(request):
 #     if request.user.is_authenticated:

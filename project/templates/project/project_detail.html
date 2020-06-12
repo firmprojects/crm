@@ -1,6 +1,27 @@
-{% extends 'backend/base.html '%}
+{% extends 'backend/base.html' %}
 {% load static %}
 
+{% block js %}
+<script type="text/javascript">
+  console.log("ok");
+  $(document).ready(function () {
+
+    $('#add_team_member').select2({
+        minimumInputLength: 1,
+        placeholder: "Team member",
+        multiple: true,
+        ajax: {
+            url: '/project/user_autocomplete/',
+            dataType: 'json'
+        },
+        select : function (e) {
+            console.log('select event', e);
+        },
+    })
+
+  })
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="main-wrapper">
@@ -16,7 +37,7 @@
                     <h4 class="page-title">Hospital Admin</h4>
                 </div>
                 <div class="col-sm-5 col-7 text-right m-b-30">
-                    <a href="{% url 'project:milestones' %}" class="btn btn-secondary btn-rounded"> Set Milestones</a>
+                    <a href="{% url 'project:milestones' object.pk %}" class="btn btn-secondary btn-rounded"> Set Milestones</a>
                     <a href="#" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#edit_project"><i
                             class="fa fa-plus"></i> Edit Project</a>
                 </div>
@@ -27,8 +48,8 @@
                         <div class="card-body">
                             <div class="project-title">
                                 <h5>{{ object.name }}</h5>
-                                <small class="block text-ellipsis m-b-15"><span class="text-xs">2</span> <span
-                                        class="text-muted">open tasks, </span><span class="text-xs">5</span> <span
+                                <small class="block text-ellipsis m-b-15"><span class="text-xs">{{ object.get_task_number.in_complete }}</span> <span
+                                        class="text-muted">open tasks, </span><span class="text-xs">{{ object.get_task_number.complete }}</span> <span
                                         class="text-muted">tasks completed</span></small>
                             </div>
                             <p>{{ object.description }}</p>
@@ -37,11 +58,11 @@
                     <div class="project-task">
                         <ul class="nav nav-tabs nav-tabs-top nav-justified m-b-0">
                             <li class="nav-item"><a class="nav-link active" href="#all_tasks" data-toggle="tab"
-                                    aria-expanded="true">All Tasks</a></li>
+                                    aria-expanded="true">All Milestones</a></li>
                             <li class="nav-item"><a class="nav-link" href="#pending_tasks" data-toggle="tab"
-                                    aria-expanded="false">Pending Tasks</a></li>
+                                    aria-expanded="false">Pending Milestones</a></li>
                             <li class="nav-item"><a class="nav-link" href="#completed_tasks" data-toggle="tab"
-                                    aria-expanded="false">Completed Tasks</a></li>
+                                    aria-expanded="false">Completed Milestones</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane show active" id="all_tasks">
@@ -49,16 +70,23 @@
                                     <div class="task-list-container">
                                         <div class="task-list-body">
                                             <ul id="task-list">
+                                              {% for i in object.milestone_set.all %}
                                                 <li class="task">
                                                     <div class="task-container">
                                                         <span class="task-action-btn task-check">
+                                                          {% if i.completed %}
+                                                            <span class="action-circle large complete-btn completed"
+                                                                title="Mark Complete">
+                                                                <i class="material-icons">check</i>
+                                                            </span>
+                                                          {% else %}
                                                             <span class="action-circle large complete-btn"
                                                                 title="Mark Complete">
                                                                 <i class="material-icons">check</i>
                                                             </span>
+                                                          {% endif %}
                                                         </span>
-                                                        <span class="task-label" contenteditable="true">Patient
-                                                            appointment booking</span>
+                                                        <span class="task-label" contenteditable="true">{{ i.task }}</span>
                                                         <span class="task-action-btn task-btn-right">
                                                             <span class="action-circle large" title="Assign">
                                                                 <i class="material-icons">person_add</i>
@@ -70,7 +98,9 @@
                                                         </span>
                                                     </div>
                                                 </li>
-                                                <li class="task">
+                                              {% endfor %}
+
+                                                <!-- <li class="task">
                                                     <div class="task-container">
                                                         <span class="task-action-btn task-check">
                                                             <span class="action-circle large complete-btn"
@@ -90,90 +120,7 @@
                                                             </span>
                                                         </span>
                                                     </div>
-                                                </li>
-                                                <li class="completed task">
-                                                    <div class="task-container">
-                                                        <span class="task-action-btn task-check">
-                                                            <span class="action-circle large complete-btn"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                        </span>
-                                                        <span class="task-label">Doctor available module</span>
-                                                        <span class="task-action-btn task-btn-right">
-                                                            <span class="action-circle large" title="Assign">
-                                                                <i class="material-icons">person_add</i>
-                                                            </span>
-                                                            <span class="action-circle large delete-btn"
-                                                                title="Delete Task">
-                                                                <i class="material-icons">delete</i>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="task">
-                                                    <div class="task-container">
-                                                        <span class="task-action-btn task-check">
-                                                            <span class="action-circle large complete-btn"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                        </span>
-                                                        <span class="task-label" contenteditable="true">Patient and
-                                                            Doctor video conferencing</span>
-                                                        <span class="task-action-btn task-btn-right">
-                                                            <span class="action-circle large" title="Assign">
-                                                                <i class="material-icons">person_add</i>
-                                                            </span>
-                                                            <span class="action-circle large delete-btn"
-                                                                title="Delete Task">
-                                                                <i class="material-icons">delete</i>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="task">
-                                                    <div class="task-container">
-                                                        <span class="task-action-btn task-check">
-                                                            <span class="action-circle large complete-btn"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                        </span>
-                                                        <span class="task-label" contenteditable="true">Private chat
-                                                            module</span>
-                                                        <span class="task-action-btn task-btn-right">
-                                                            <span class="action-circle large" title="Assign">
-                                                                <i class="material-icons">person_add</i>
-                                                            </span>
-                                                            <span class="action-circle large delete-btn"
-                                                                title="Delete Task">
-                                                                <i class="material-icons">delete</i>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                                <li class="task">
-                                                    <div class="task-container">
-                                                        <span class="task-action-btn task-check">
-                                                            <span class="action-circle large complete-btn"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                        </span>
-                                                        <span class="task-label" contenteditable="true">Patient Profile
-                                                            add</span>
-                                                        <span class="task-action-btn task-btn-right">
-                                                            <span class="action-circle large" title="Assign">
-                                                                <i class="material-icons">person_add</i>
-                                                            </span>
-                                                            <span class="action-circle large delete-btn"
-                                                                title="Delete Task">
-                                                                <i class="material-icons">delete</i>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </li>
+                                                </li> -->
                                             </ul>
                                         </div>
                                         <div class="task-list-footer">
@@ -188,13 +135,81 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="pending_tasks"></div>
-                            <div class="tab-pane" id="completed_tasks"></div>
+                            <div class="tab-pane" id="pending_tasks">
+                              <div class="task-wrapper">
+                                  <div class="task-list-container">
+                                    <div class="task-list-body">
+                                      <ul id="task-list">
+                                      {% for i in object.milestone_set.all %}
+                                        {% if not i.completed %}
+                                          <li class="task">
+                                              <div class="task-container">
+                                                  <span class="task-action-btn task-check">
+                                                      <span class="action-circle large complete-btn"
+                                                          title="Mark Complete">
+                                                          <i class="material-icons">check</i>
+                                                      </span>
+                                                  </span>
+                                                  <span class="task-label" contenteditable="true">{{ i.task }}</span>
+                                                  <span class="task-action-btn task-btn-right">
+                                                      <span class="action-circle large" title="Assign">
+                                                          <i class="material-icons">person_add</i>
+                                                      </span>
+                                                      <span class="action-circle large delete-btn"
+                                                          title="Delete Task">
+                                                          <i class="material-icons">delete</i>
+                                                      </span>
+                                                  </span>
+                                              </div>
+                                          </li>
+                                        {% endif %}
+                                      {% endfor %}
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="completed_tasks">
+                              <div class="task-wrapper">
+                                  <div class="task-list-container">
+                                    <div class="task-list-body">
+                                      <ul id="task-list">
+                                      {% for i in object.milestone_set.all %}
+                                        {% if i.completed %}
+                                          <li class="task">
+                                              <div class="task-container">
+                                                  <span class="task-action-btn task-check">
+                                                      <span class="action-circle large complete-btn completed"
+                                                          title="Mark Complete">
+                                                          <i class="material-icons">check</i>
+                                                      </span>
+                                                  </span>
+                                                  <span class="task-label" contenteditable="true">{{ i.task }}</span>
+                                                  <span class="task-action-btn task-btn-right">
+                                                      <span class="action-circle large" title="Assign">
+                                                          <i class="material-icons">person_add</i>
+                                                      </span>
+                                                      <span class="action-circle large delete-btn"
+                                                          title="Delete Task">
+                                                          <i class="material-icons">delete</i>
+                                                      </span>
+                                                  </span>
+                                              </div>
+                                          </li>
+                                      {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card mt-3">
                         <div class="card-body">
-                            <h5 class="card-title m-b-20">Uploaded image files</h5>
+                          <div class="card-title d-flex">
+                            <h5 class="m-b-20">Uploaded image files</h5>
+                          </div>
                             <div class="row">
                                 <div class="col-md-3 col-sm-4 col-lg-4 col-xl-3">
                                     <div class="uploaded-box">
@@ -346,25 +361,25 @@
                     </div>
                     <div class="card project-user">
                         <div class="card-body">
-                            <h6 class="card-title m-b-20">Assigned Leader <button type="button"
-                                    class="pull-right btn btn-primary btn-sm" data-toggle="modal"
-                                    data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button></h6>
+                            <h6 class="card-title m-b-20">Assigned Leader
+                              <!-- <button type="button" class="pull-right btn btn-primary btn-sm" data-toggle="modal" data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button> -->
+                            </h6>
                             <ul class="list-box">
                                 <li>
                                     <a href="profile.html">
                                         <div class="list-item">
                                             <div class="list-left">
-                                                <span class="avatar">W</span>
+                                                <span class="avatar"></span>
                                             </div>
                                             <div class="list-body">
-                                                <span class="message-author">Wilmer Deluna</span>
+                                                <span class="message-author">{{ object.project_leader }}</span>
                                                 <div class="clearfix"></div>
                                                 <span class="message-content">Team Leader</span>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="profile.html">
                                         <div class="list-item">
                                             <div class="list-left">
@@ -377,7 +392,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>
@@ -387,21 +402,23 @@
                                     class="pull-right btn btn-primary btn-sm" data-toggle="modal"
                                     data-target="#assign_user"><i class="fa fa-plus"></i> Add</button></h6>
                             <ul class="list-box">
+                              {% for i in object.team_member.all %}
                                 <li>
                                     <a href="profile.html">
                                         <div class="list-item">
                                             <div class="list-left">
-                                                <span class="avatar">J</span>
+                                                <span class="avatar"></span>
                                             </div>
                                             <div class="list-body">
-                                                <span class="message-author">John Doe</span>
+                                                <span class="message-author">{{ i }}</span>
                                                 <div class="clearfix"></div>
                                                 <span class="message-content">Web Designer</span>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
-                                <li>
+                                {% endfor %}
+                                <!-- <li>
                                     <a href="profile.html">
                                         <div class="list-item">
                                             <div class="list-left">
@@ -414,7 +431,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>
@@ -422,123 +439,54 @@
             </div>
         </div>
     </div>
+
     <div id="assign_leader" class="modal custom-modal fade" role="dialog">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Assign Leader to this project</h3>
+                    <h3 class="modal-title">Assign a leader to this project</h3>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group m-b-30">
-                        <input placeholder="Search to add a leader" class="form-control search-input" type="text">
-                        <span class="input-group-append">
-                            <button class="btn btn-primary">Search</button>
-                        </span>
+                    <div class="input-group m-b-10">
+                        <input placeholder="Search staff" class="form-control search-input" type="text">
                     </div>
+                    <div class="input-group m-b-10">
+                        <input placeholder="Search milestone" class="form-control search-input mt-2" type="text">
+
+                    </div>
+
+
                     <div>
-                        <ul class="chat-user-list">
-                            <li>
-                                <a href="#">
-                                    <div class="media">
-                                        <span class="avatar">R</span>
-                                        <div class="media-body align-self-center text-nowrap">
-                                            <div class="user-name">Richard Miles</div>
-                                            <span class="designation">Web Developer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="media">
-                                        <span class="avatar">J</span>
-                                        <div class="media-body align-self-center text-nowrap">
-                                            <div class="user-name">John Smith</div>
-                                            <span class="designation">Android Developer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="media">
-                                        <span class="avatar">
-                                            <img src="assets/img/user.jpg" alt="John Doe">
-                                        </span>
-                                        <div class="media-body align-self-center text-nowrap">
-                                            <div class="user-name">Jeffery Lalor</div>
-                                            <span class="designation">Team Leader</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
+
                     </div>
                     <div class="m-t-50 text-center">
-                        <button class="btn btn-primary btn-lg">Add Leader</button>
+                        <button class="btn btn-primary btn-lg">Add</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
     <div id="assign_user" class="modal custom-modal fade" role="dialog">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Assign the user to this project</h3>
+                    <h3 class="modal-title">Assign team members to this project</h3>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group m-b-30">
-                        <input placeholder="Search a user to assign" class="form-control search-input" id="btn-input"
-                            type="text">
-                        <span class="input-group-append">
-                            <button class="btn btn-primary">Search</button>
-                        </span>
+                  <form method="post">
+                    {% csrf_token %}
+                    <div class="input-group m-b-10">
+                        <select placeholder="Search staff" name="team_member" id="add_team_member" style="width: 100%" class="form-control"></select>
                     </div>
-                    <div>
-                        <ul class="chat-user-list">
-                            <li>
-                                <a href="#">
-                                    <div class="media">
-                                        <span class="avatar">R</span>
-                                        <div class="media-body align-self-center text-nowrap">
-                                            <div class="user-name">Richard Miles</div>
-                                            <span class="designation">Web Developer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="media">
-                                        <span class="avatar">J</span>
-                                        <div class="media-body align-self-center text-nowrap">
-                                            <div class="user-name">John Smith</div>
-                                            <span class="designation">Android Developer</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="media">
-                                        <span class="avatar">
-                                            <img src="assets/img/user.jpg" alt="John Doe">
-                                        </span>
-                                        <div class="media-body align-self-center text-nowrap">
-                                            <div class="user-name">Jeffery Lalor</div>
-                                            <span class="designation">Team Leader</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+
                     <div class="m-t-50 text-center">
-                        <button class="btn btn-primary btn-lg">Add User</button>
+                        <button class="btn btn-primary btn-lg" type="submit">Add</button>
                     </div>
+                  </form>
                 </div>
             </div>
         </div>
@@ -682,7 +630,6 @@
             </div>
         </div>
     </div>
-
 
 </div>
 {% endblock content%}

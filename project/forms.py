@@ -21,7 +21,7 @@ class ClientSignupForm(SignupForm):
      country = forms.CharField(required=False)
      company_name = forms.CharField(required=False)
      photo = forms.ImageField(required=False)
-    
+
      @transaction.atomic
      def save(self, request):
         user = super(ClientSignupForm, self).save(request)
@@ -53,7 +53,7 @@ class ProjectForm(forms.ModelForm):
         fields = ['clients','name', 'start_date',
                   'end_date', 'project_cost', 'priority',
                   'project_leader', 'team_member',
-                  'description', 'image'
+                  'description'
                   ]
         widgets = {
             'start_date': DateInput(format='%Y-%m-%d'),
@@ -65,4 +65,3 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Clients
         fields = ['company_name','clients_id', 'address',  'photo']
-

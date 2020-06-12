@@ -37,7 +37,7 @@ def create_attendance(sender, instance, created, **kwargs):
             attendace = Attendance.objects.get(staff=instance)
 
         except ObjectDoesNotExist:
-            attendace = Attendance(staff=instance,attendace={},clock_ins={})
+            attendace = Attendance(staff=instance,attendance={},clock_ins={})
             attendace.save()
 
 post_save.connect(create_attendance,sender=Staff)

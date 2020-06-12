@@ -10,6 +10,7 @@ from allauth.account.views import SignupView
 from users.models import Clocking
 from django.utils import timezone
 import datetime
+from django.core.exceptions import ObjectDoesNotExist
 
 class StaffCreateView(SignupView):
     model = Staff
@@ -133,17 +134,22 @@ def attendance(request):
     staffs = Staff.objects.all()
 
     for i in staffs:
-        clock_in_data = Clocking.objects.get(user=i.user).clockin_data
-        report = {}
-        clockins = {}
-        for date,data in clock_in_data.items():
-            report[date] = "present" if data.__len__() > 0 else "absent"
-            clockins[date] = data
+        try:
+            clock_in_data = Clocking.objects.get(user=i.user).clockin_data
+            report = {}
+            clockins = {}
+            for date,data in clock_in_data.items():
+                report[date] = "present" if data.__len__() > 0 else "absent"
+                clockins[date] = data
 
-        attend = i.attendance
-        attend.attendance = report
-        attend.clock_ins = clockins
-        attend.save()
+            attend = Attendance.objects.get(staff=i)
+
+
+            attend.attendance = report
+            attend.clock_ins = clockins
+            attend.save()
+        except Clocking.DoesNotExist:
+            pass
 
     return render(request, 'employees/attendance.html')
 

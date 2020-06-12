@@ -19,6 +19,9 @@
                 <div class="col-sm-8 col-8 text-right m-b-30">
                     <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
                         data-target="#create_project"><i class="fa fa-plus"></i> Create Project</a>
+                        <button class="primary-button button-sm" data-izimodal-open="#modal3">
+							Open Modal
+						</button>
                     <div class="view-icons">
                         <a href="{% url 'project:projects' %}" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
                         <a href="{% url 'project:project-list' %}" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
@@ -101,7 +104,7 @@
         </div>
 
     </div>
-    {% include 'project/projects_form.html' %}
+ 
     {% include 'project/projects_delete.html' %}
     <div id="edit_project" class="modal custom-modal fade" role="dialog">
         <div class="modal-dialog">
@@ -246,6 +249,12 @@
 
 
 </div>
+
+
+{% include 'project/projects_form.html' %}
+
+
+
 {% endblock content%}
 
     {% block js %}

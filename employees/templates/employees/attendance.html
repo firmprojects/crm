@@ -776,6 +776,8 @@
               let report = ''
               res['present_absent'][item].map((attend,i)=>{
                 let tooltip_data = ''
+                var loc;
+                console.log(i);
                 if(res['clockin_out'][item][i] !== "N/A"){
                   res['clockin_out'][item][i].map((time,i)=>{
 
@@ -786,22 +788,21 @@
                     }
                     else{
                       let clock_out = new Date(time['clock_out'])
-
+                      loc = time['pos']
                       tooltip_data+=`<small><b>Clock in</b>: <i>${formatAMPM(clock_in)}</i>&nbsp;&nbsp;<b>Clock out</b>: <i>${formatAMPM(clock_out)}</i></br></small>`
                     }
                   })
                 }
 
-
-
                 if(attend === "present"){
-                  report += `<td><i class="fa fa-check text-success" data-html='true' data-toggle='tooltip' data-placement='right' title='${tooltip_data}'></i></td>`
+                  console.log(loc,"k");
+                  report += `<td><i class="fa fa-check text-success" data-html='true' data-toggle='tooltip' data-placement='right' title='${tooltip_data}'></i><a target='_blank' href='https://www.google.com/maps/place/${loc}'><i class="fa fa-compass" data-toggle='tooltip' data-placement='right' title='Location'></i></a></td>`
                 }
                 else if(attend === 'absent'){
-                  report += `<td><i class="fa fa-check text-danger" data-toggle='tooltip' data-placement='right' title='Absent'></i></td>`
+                  report += `<td><i class="fa fa-times text-danger" data-toggle='tooltip' data-placement='right' title='Absent'></i></td>`
                 }
                 else{
-                  report += `<td><i class="fa fa-check text-danger" data-toggle='tooltip' data-placement='right' title='N/A'></i></td>`
+                  report += `<td><i class="fa fa-times text-danger" data-toggle='tooltip' data-placement='right' title='N/A'></i></td>`
 
                 }
               })

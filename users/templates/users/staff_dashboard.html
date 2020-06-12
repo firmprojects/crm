@@ -7,9 +7,11 @@
 <script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
 <script type="text/javascript" src="{% static 'js/weekly_report_and_timer.js' %}">
 </script>
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+
 <style media="screen">
   .tooltip-inner {
-    max-width: 100% !important;
+    max-width: 400px !important;
 }
 
 </style>
@@ -20,6 +22,8 @@
 
 
   $(document).ready(function () {
+
+
 
     $("#today_").html(`${moment().format("dddd, MMMM DD")}`)
     $.ajax({
@@ -96,6 +100,7 @@
         type:'POST',url:"/get_weekly_report/",data:{"start":start,"end":end,"csrfmiddlewaretoken":"{{ csrf_token }}"},
         success:(res)=>{
           $("#weekly_report").html('')
+          console.log(res);
           for(let day of Object.keys(res['report'])){
             let row_data = ''
 
@@ -119,31 +124,6 @@
             <th><button class='btn btn-white' data-toggle="tooltip" data-placement="left" data-html="true" title="${tooltop_data}">View</a></th>
 
             `
-            // res['report'][day].map((item,i)=>{
-            //   let data = ''
-            //   if(i===0){
-            //     let current = new Date(day)
-            //     console.log(current);
-            //     data+=`
-            //     <th rowspan=${res['report'][day].length}>${moment(day,'YYYY-MM-DD').format('dddd, MMMM DD')}</th>
-            //     <th rowspan=${res['report'][day].length}>${sec_to_hrs_min(res['hours_spent'][day])}</th>
-            //     `
-            //   }
-            //   let clock_in = new Date(item['clock_in'])
-            //   if(item['clock_out'] === undefined){
-            //
-            //     data+=`<td>${formatAMPM(clock_in)}</td><td>--</td>`
-            //   }
-            //   else{
-            //     let clock_out = new Date(item['clock_out'])
-            //     total_time+=clock_out - clock_in
-            //
-            //     data+=`<td>${formatAMPM(clock_in)}</td><td>${formatAMPM(clock_out)}</td>`
-            //   }
-            //
-            //   row_data+=`<tr>${data}</tr>`
-            //
-            // })
 
             $("#weekly_report").append(`<tr>${row_data}</tr>`)
             $('[data-toggle="tooltip"]').tooltip()
@@ -153,19 +133,24 @@
   }
 
   function clockIn(){
-    $.ajax({
-      type:'POST',
-      data:{"data":JSON.stringify({'date':moment().format(),'today':`${moment().format("YYYY-MM-DD")}`})},
-      url:"{% url 'users:clock_in' %}",
-      success: (res)=>{
-        date = new Date(res['time_now'])
-        $("#clock_in_time").html(formatAMPM(date))
-        timer.start();
-        timer.addEventListener('secondsUpdated', function (e) {
-            $('#timer').html(timer.getTimeValues().toString());
-        });
-      }
+    navigator.geolocation.getCurrentPosition(pos=>{
+
+
+      $.ajax({
+        type:'POST',
+        data:{"data":JSON.stringify({'date':moment().format(),'today':`${moment().format("YYYY-MM-DD")}`,'pos':`${pos.coords.latitude},${pos.coords.longitude}`})},
+        url:"{% url 'users:clock_in' %}",
+        success: (res)=>{
+          date = new Date(res['time_now'])
+          $("#clock_in_time").html(formatAMPM(date))
+          timer.start();
+          timer.addEventListener('secondsUpdated', function (e) {
+              $('#timer').html(timer.getTimeValues().toString());
+          });
+        }
+      })
     })
+
   }
   function clockOut(){
     let today = new Date()

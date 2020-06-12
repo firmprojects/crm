@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="row">
-                
+
                 <table class="table table-striped custom-table datatable">
                     <thead>
                         <tr>
@@ -62,44 +62,66 @@
                             </td>
                             <td>
                                 <ul class="team-members">
-                                
+
                                     {% for i in item.team_member.all  %}
                                     <li>
                                         <a href="#" data-toggle="tooltip" title="{{ i.username }}"><img
                                                 src="{% static 'img/user.jpg' %}" alt="{{ i.username }}"></a>
                                     </li>
                                     {% endfor %}
-                                        
-                                    
-                                   
+
+
+
                                 </ul>
                             </td>
                             <td>  {{ item.end_date }} </td>
                             <td>
                                 <div class="dropdown action-label">
-                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-dot-circle-o text-danger"></i> High </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i> High</a>
-                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-warning"></i> Medium</a>
-                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-success"></i> Low</a>
+                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current" data-toggle="dropdown" aria-expanded="false">
+                                      {% if item.priority == 'high' %}
+                                        <i class="fa fa-dot-circle-o text-danger"></i> High
+                                      {% elif item.priority == 'medium' %}
+                                        <i class="fa fa-dot-circle-o text-warning"></i> Medium
+                                      {% else %}
+                                        <i class="fa fa-dot-circle-o text-success"></i> Low
+                                      {% endif %}
+                                    </a>
+                                    <div class="dropdown-menu" project_id="{{item.pk}}">
+                                        <a class="dropdown-item change_priority" priority='high' href="#"><i class="fa fa-dot-circle-o text-danger"></i> High</a>
+                                        <a class="dropdown-item change_priority" priority='medium' href="#"><i class="fa fa-dot-circle-o text-warning"></i> Medium</a>
+                                        <a class="dropdown-item change_priority" priority='low' href="#"><i class="fa fa-dot-circle-o text-success"></i> Low</a>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 <div class="dropdown action-label">
-                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-dot-circle-o text-success"></i> Active </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-success"></i> Active</a>
-                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i> Inactive</a>
+                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current_status" data-toggle="dropdown" aria-expanded="false">
+                                      {% if item.status == 'cancelled' %}
+                                        <i class="fa fa-dot-circle-o text-danger"></i> Cancelled
+                                      {% elif item.status == 'pending' %}
+                                        <i class="fa fa-dot-circle-o text-warning"></i> Pending
+                                      {% elif item.status == 'suspended' %}
+                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspended
+                                      {% else %}
+                                        <i class="fa fa-dot-circle-o text-success"></i> Working
+                                      {% endif %}
+                                     </a>
+                                    <div class="dropdown-menu" project_id="{{item.pk}}">
+                                        <a class="dropdown-item change_status" status='working' href="#"><i class="fa fa-dot-circle-o text-success"></i> Working</a>
+                                        <a class="dropdown-item change_status" status='pending' href="#"><i class="fa fa-dot-circle-o text-warning"></i> Pending</a>
+                                        <a class="dropdown-item change_status" status='suspended' href="#"><i class="fa fa-dot-circle-o text-danger"></i> Suspended</a>
+                                        <a class="dropdown-item change_status" status='cancelled' href="#"><i class="fa fa-dot-circle-o text-danger"></i> Cancelled</a>
+
+
                                     </div>
                                 </div>
                             </td>
-                          
+
                                 <td class="text-right">
                                     <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
                                       <span class="fa fa-pencil"></span>
                                     </a>
-                                    <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete_project" href="">
+                                    <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
                                       <span class="fa fa-trash"></span>
                                     </a>
                                  </td>
@@ -108,7 +130,7 @@
                     </tbody>
                 </table>
 
-              
+
             </div>
         </div>
 
@@ -116,7 +138,7 @@
     {% include 'project/projects_form.html' %}
     {% include 'project/projects_edit_form.html' %}
     {% include 'project/projects_delete.html' %}
-    
+
 
 
 
@@ -127,12 +149,61 @@
     {% block js %}
         <script>
 $( document ).ready(function() {
+        $(".change_priority").click(function () {
+
+          $.ajax({
+            type:"POST",url:"/project/change_priority/",
+            data:{"id":$(this).parent().attr("project_id"),"priority":$(this).attr("priority"),"csrfmiddlewaretoken":"{{csrf_token}}"},
+            success:function(res){
+              console.log(res);
+              if(res['priority'] === 'high'){
+                $(".current").html(`<i class="fa fa-dot-circle-o text-danger"></i> High`)
+              }
+              else if(res['priority'] === 'medium'){
+                $(".current").html(`<i class="fa fa-dot-circle-o text-warning"></i> Mediun`)
+              }
+              else{
+                $(".current").html(`<i class="fa fa-dot-circle-o text-success"></i> Low`)
+              }
+            }
+          })
+        })
+        $(".change_status").click(function () {
+
+          $.ajax({
+            type:"POST",url:"/project/change_status/",
+            data:{"id":$(this).parent().attr("project_id"),"status":$(this).attr("status"),"csrfmiddlewaretoken":"{{csrf_token}}"},
+            success:function(res){
+              console.log(res);
+              if(res['status'] === 'working'){
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-success"></i> Working`)
+              }
+              else if(res['status'] === 'pending'){
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-warning"></i> Pending`)
+              }
+              else if(res['status'] === 'suspended'){
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Suspended`)
+              }
+
+              else{
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Cancelled`)
+              }
+            }
+          })
+        })
+
+        $("#delete_project").on('show.bs.modal',function(event){
+          var button = $(event.relatedTarget)
+          console.log()
+          $(this).find("#delete").attr("href",`/project/delete_project/${button.attr("proj_id")}`)
+        })
 
         // select client area
          $('.project_clients').select2({
             minimumInputLength: 1,
+
             placeholder: "Project Clients*",
-            multiple: false,
+            multiple: true,
             ajax: {
                 url: '/project/clients_autocomplete/',
                 dataType: 'json'
@@ -143,7 +214,7 @@ $( document ).ready(function() {
         $('.project_leader').select2({
             minimumInputLength: 1,
             placeholder: "Project leader*",
-            multiple: false,
+            multiple:true,
             ajax: {
                 url: '/project/user_autocomplete/',
                 dataType: 'json'
@@ -155,6 +226,7 @@ $( document ).ready(function() {
               const member = ' <a href="#" data-toggle="tooltip"  title="'+ e.params.data.text +'"> <img  src="{% static 'img/user.jpg' %}" class="avatar" alt="'+ e.params.data.text +'" height="20"  width="20"></a>'
               $(".project-members").html(member);
             });
+        // $('.project_leader').select2()
 
         // select Team member
 
@@ -222,6 +294,7 @@ $( document ).ready(function() {
 
             });
         });
+
 
 
         </script>
