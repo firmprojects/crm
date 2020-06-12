@@ -48,8 +48,6 @@ class Projects(models.Model):
 
 
     description = models.TextField()
-    image = fields.ArrayField(base_field=models.ImageField(blank=True, null=True),default=list)
-    file = fields.ArrayField(base_field=models.FileField(blank=True,null=True),default=list)
 
     def __str__(self):
         return self.name
@@ -63,6 +61,12 @@ class Projects(models.Model):
         return {"complete":len(complete),"in_complete":len(in_complete)}
 
 
+class ImageUpload(models.Model):
+    project = models.ForeignKey(to=Projects,on_delete=models.CASCADE)
+    image = models.FileField(blank=True,null=True,upload_to='images/')
+class DocUpload(models.Model):
+    project = models.ForeignKey(to=Projects,on_delete=models.CASCADE)
+    doc = models.FileField(blank=True,null=True,upload_to='images/')
 
 class Milestone(models.Model):
     task = models.CharField(max_length=200)

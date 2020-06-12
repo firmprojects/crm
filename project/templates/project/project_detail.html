@@ -209,9 +209,29 @@
                         <div class="card-body">
                           <div class="card-title d-flex">
                             <h5 class="m-b-20">Uploaded image files</h5>
+                            <form class="m-b-20 form-inline ml-auto" method="post" action="{% url 'project:upload_image' object.pk%}" enctype="multipart/form-data">
+                              {% csrf_token %}
+                              <div class="custom-file">
+                                <label class="custom-file-label">Choose Image</label>
+                                <input type="file" name="image" accept="image/*" class="custom-file-input" placeholder="Choose Image">
+                              </div>
+                              <input type="submit"class="btn btn-primary ml-auto mt-2" value="Upload">
+                            </form>
                           </div>
                             <div class="row">
+                              {% for image in object.imageupload_set.all %}
                                 <div class="col-md-3 col-sm-4 col-lg-4 col-xl-3">
+                                    <div class="uploaded-box">
+                                        <div class="uploaded-img">
+                                            <img src="{% static 'img/placeholder.jpg' %}" class="img-fluid" alt="">
+                                        </div>
+                                        <div class="uploaded-img-name">
+                                            <a href="{{ image.image.url }}">{{ image.image.name }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                              {% endfor %}
+                                <!-- <div class="col-md-3 col-sm-4 col-lg-4 col-xl-3">
                                     <div class="uploaded-box">
                                         <div class="uploaded-img">
                                             <img src="{% static 'img/placeholder.jpg' %}" class="img-fluid" alt="">
@@ -250,41 +270,52 @@
                                             demo.png
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title m-b-20">Uploaded files</h5>
+                            <div class="card-title d-flex">
+                                <h5 class=" m-b-20">Uploaded files</h5>
+                                <form class="m-b-20 form-inline ml-auto" method="post" action="{% url 'project:upload_doc' object.pk%}" enctype="multipart/form-data">
+                                  {% csrf_token %}
+                                  <div class="custom-file">
+                                    <label class="custom-file-label">Choose Document</label>
+                                    <input type="file" name="document" class="custom-file-input" placeholder="Choose File">
+                                  </div>
+                                  <input type="submit"class="btn btn-primary ml-auto mt-2" value="Upload">
+                                </form>
+                            </div>
                             <ul class="files-list">
+                              {% for doc in object.docupload_set.all %}
                                 <li>
                                     <div class="files-cont">
                                         <div class="file-type">
                                             <span class="files-icon"><i class="fa fa-file-pdf-o"></i></span>
                                         </div>
                                         <div class="files-info">
-                                            <span class="file-name text-ellipsis"><a href="#">AHA Selfcare Mobile
-                                                    Application Test-Cases.xls</a></span>
-                                            <span class="file-author"><a href="#">John Doe</a></span> <span
-                                                class="file-date">May 31st at 6:53 PM</span>
-                                            <div class="file-size">Size: 14.8Mb</div>
+                                            <span class="file-name text-ellipsis"><a href="{{doc.doc.url}}" target="_blank">{{doc.doc.name}}</a></span>
+                                            <!-- <span class="file-author"><a href="#">John Doe</a></span> -->
+
+                                            <div class="file-size">Size: {{doc.doc.size}} bytes</div>
                                         </div>
                                         <ul class="files-action">
                                             <li class="dropdown dropdown-action">
                                                 <a href="" class="dropdown-toggle btn btn-link" data-toggle="dropdown"
                                                     aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="javascript:void(0)">Download</a>
+                                                    <a class="dropdown-item" href="{{doc.doc.url}}" target="_blank">Download</a>
                                                     <a class="dropdown-item" href="#" data-toggle="modal"
                                                         data-target="#share_files">Share</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                                    <!-- <a class="dropdown-item" href="javascript:void(0)">Delete</a> -->
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
                                 </li>
-                                <li>
+                                {% endfor %}
+                                <!-- <li>
                                     <div class="files-cont">
                                         <div class="file-type">
                                             <span class="files-icon"><i class="fa fa-file-pdf-o"></i></span>
@@ -309,7 +340,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </div>

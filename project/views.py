@@ -5,10 +5,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, View
 from django.shortcuts import redirect
 from users.models import CustomUser
-from .models import Projects, Clients, Milestone
+from .models import *
 from .forms import ProjectForm, ClientSignupForm
 from allauth.account.views import SignupView
-
+from django.core.files.storage import FileSystemStorage,File
+from django.conf import settings
+from django.db import models
 
 class CreateProject(CreateView):
     model = Projects
@@ -57,7 +59,32 @@ class ProjectDetail(DetailView):
             print("ok")
         return redirect(request.build_absolute_uri())
 
+def upload_image(request,pk):
+    if request.method == "POST":
 
+        image = request.FILES['image']
+        fs = FileSystemStorage(location=settings.MEDIA_ROOT+"/images")
+        image_file = fs.save(image.name,image)
+
+        up_ = ImageUpload(project = Projects.objects.get(pk=pk))
+        up_.image.name = "images/"+image_file
+        up_.save()
+
+
+        return redirect(reverse('project:project_detail',args=(pk,)))
+def upload_doc(request,pk):
+    if request.method == "POST":
+
+        document = request.FILES['document']
+        fs = FileSystemStorage(location=settings.MEDIA_ROOT+"/document")
+        doc_file = fs.save(document.name,document)
+
+        up_ = DocUpload(project = Projects.objects.get(pk=pk))
+        up_.doc.name = "document/"+doc_file
+        up_.save()
+
+
+        return redirect(reverse('project:project_detail',args=(pk,)))
 
 class ClientsCreateView(SignupView):
     model = Clients
