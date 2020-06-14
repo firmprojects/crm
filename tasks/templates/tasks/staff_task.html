@@ -29,33 +29,44 @@
                                     <table class="table table-striped custom-table m-b-0 datatable">
                                         <thead>
                                             <tr>
+                                                <th class="text-center">Task ID</th>
                                                 <th class="text-center">Employee</th>
-                                                <th class="text-center">Asigned Date</th>
+                                                <th class="text-center">Start Date</th>
+                                                <th class="text-center">End Date</th>
                                                 <th class="text-center">Priority</th>
-                                                 <th class="text-center">Project</th>
-                                                <th class="text-center">Assigned Hours</th>
+                                                <th class="text-center">Project</th>
                                                 <th class="text-center">Description</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                          {% for i in object_list %}
                                             <tr>
+                                                <td> {{ i.task_id }}</td>
                                                 <td class="text-center">
                                                     <a href="profile.html" class="avatar">J</a>
-                                                    <h2><a href="profile.html">John Doe <span>Web Designer</span></a></h2>
+                                                    <h2><a href="profile.html">{{i.assign_to.user.username}} <span>Web Designer</span></a></h2>
                                                 </td>
-                                                <td class="text-center">5 Aug 2017</td>
-                                                <td class="text-center">High</td>
-                                                <td class="text-center">Project Title</td>
-                                                <td class="text-center">7</td>
-                                                <td class="text-center">Lorem ipsum dolor sit amet</td>
+                                                <td class="text-center">{{i.start_date}}</td>
+                                                <td class="text-center">{{i.end_date}}</td>
+                                                <td class="text-center">{{i.priority}}</td>
+                                                <td class="text-center">{{i.name}}</td>
+                                                <td class="text-center">{{i.description}}</td>
                                                 <td class="text-center">
-                                               
-                                                    <a class="primary-button button-sm" data-izimodal-open="#modal3">
-                                                        <button type="button" class="btn btn-primary btn-sm">Start</button>
-                                                    </a>
+                                                  <button task_id="{{i.pk}}" type="button" class="btn btn-primary btn-sm start_button">Start</button>
+
+                                                    <!-- <a class="primary-button button-sm" data-izimodal-open="#modal3"> -->
+                                                    <!-- {% if i.status == 'pending' %} -->
+                                                    <!-- {% else %}
+                                                        <button type="button" class="btn btn-warning btn-sm">Pause</button>
+                                                        <button type="button" class="btn btn-info btn-sm">Resume</button>
+                                                        <button type="button" class="btn btn-danger btn-sm">terminate</button>
+
+                                                    {% endif %} -->
+                                                    <!-- </a> -->
                                                 </td>
                                             </tr>
+                                          {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -71,19 +82,23 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                          {% for i in object_list %}
+                                            {% if i.tasktracker.status != 'terminate' %}
+                                              <tr>
                                                 <td>
-                                                   <h2><a href="#">Task title</h2>
+                                                   <h2><a href="#">{{ i.task_id }}</h2>
                                                 </td>
-                                                <td>8.00am</td>
-                                                <td>Project Title</td>
-                                                <td>00:00:01 </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-warning btn-sm">Pause</button>
-                                                    <button type="button" class="btn btn-info btn-sm">Resume</button>
-                                                    <button type="button" class="btn btn-danger btn-sm">terminate</button>
+                                                <td class="start_time"></td>
+                                                <td>{{ i.project.name }}</td>
+                                                <td class="timer" condition="{{i.tasktracker.status}}" task_id = "{{i.pk}}" time_spent = "{{i.tasktracker.task_duration}}" ></td>
+                                                <td class="text-center statuses" task_id = "{{i.pk}}">
+                                                    <button type="button" class="pause btn btn-warning btn-sm">Pause</button>
+                                                    <button type="button" class="resume btn btn-info btn-sm">Resume</button>
+                                                    <button type="button" class="terminate btn btn-danger btn-sm">terminate</button>
                                                 </td>
-                                                </tr>
+                                              </tr>
+                                            {% endif %}
+                                          {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
@@ -91,28 +106,30 @@
                                     <table class="table custom-table m-b-0 datatable">
                                         <thead>
                                             <tr>
-                                                <th>Title</th>
+                                                <th>Task ID</th>
                                                 <th>Project</th>
                                                 <th>Time Spent</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                          {% for i in object_list %}
+                                            {% if i.tasktracker.status == 'terminate' %}
+                                              <tr>
                                                 <td>
-                                                   <h2><a href="#">Task title</h2>
+                                                   <h2><a href="#">{{ i.task_id }}</h2>
                                                 </td>
-                                                <td>Project Title</td>
-                                                <td>00:00:01 </td>
-                                                <td class="text-center">
-                                                    Completed
-                                                </td>
-                                                </tr>
+                                                <td>{{ i.project.name }}</td>
+                                                <td>{{i.get_mins}}</td>
+                                                <td class="text-center">Completed</td>
+                                              </tr>
+                                            {% endif %}
+                                          {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -131,11 +148,119 @@
             <div class="modal-heading">
                 <h4>Are you ready to start this task now?</h4>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing </p>
             <button class="btn btn-primary">Start</button>
         </div>
         <!-- Modal Body End -->
     </div>
 
 </div>
+
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
+<script type="text/javascript" src="{% static 'js/easytimer.min.js' %}"></script>
+
+<script type="text/javascript">
+  async function getTime(pk) {
+    var res;
+    await $.ajax({
+      url:"{% url 'tasks:get_time' %}",data:{"pk":pk,csrfmiddlewaretoken:"{{csrf_token}}"},type:"POST",
+      success:(data)=>{
+        res=data
+      }
+    })
+    console.log(res);
+    return res
+
+  }
+
+  $(document).ready(function(){
+
+    let all_timers = []
+    $(".timer").map(function () {
+
+      getTime(($(this).attr('task_id'))).then((data)=>{
+        let stated_at = moment(data['start_time'])
+
+        $(this).siblings('.start_time').html(stated_at.format("LTS"))
+
+        if($(this).attr('condition') == 'working'){
+          var timer = new easytimer.Timer();
+          timer.start({startValues: { seconds: parseFloat($(this).attr("time_spent"))+((moment() - stated_at)/1000)}});
+        }
+
+        else if ($(this).attr('condition') == 'pause') {
+          var timer = new easytimer.Timer({startValues: { seconds: $(this).attr("time_spent") }});
+          $(this).html(timer.getTimeValues().toString());
+        }
+        timer.addEventListener("secondsUpdated",(e)=>{
+          $(this).html(timer.getTimeValues().toString());
+        })
+
+        all_timers[$(this).attr('task_id')] = timer
+      });
+
+    })
+    $(".pause").click(function(){
+      let timer = all_timers[$(this).parent().attr('task_id')]
+
+      timer.pause()
+      $.ajax({
+        type:"POST",url:"/task/end_task/",
+        data:{
+          pk:$(this).parent().attr('task_id'),
+          end_time:moment().format(),
+          csrfmiddlewaretoken:"{{csrf_token}}"
+        }
+      })
+    })
+
+    $('.resume').click(function(){
+      let timer = all_timers[$(this).parent().attr('task_id')]
+
+      timer.start()
+      $.ajax({
+        type:"POST",url:"/task/start_task/",
+        data:{
+          pk:$(this).parent().attr('task_id'),
+          start_time:moment().format(),
+          csrfmiddlewaretoken:"{{csrf_token}}"
+        }
+      })
+    })
+    $('.terminate').click(function(){
+      let timer = all_timers[$(this).parent().attr('task_id')]
+
+      timer.stop()
+      $.ajax({
+        type:"POST",url:"/task/terminate_task/",
+        data:{
+          pk:$(this).parent().attr('task_id'),
+          csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success:()=>{
+          location.reload()
+        }
+      })
+    })
+
+    console.log(all_timers);
+    $(".start_button").click(function(){
+      $.ajax({
+        type:"POST",url:"/task/start_task/",
+        data:{
+          pk:$(this).attr('task_id'),
+          start_time:moment().format(),
+          csrfmiddlewaretoken:"{{csrf_token}}"
+        },
+        success:()=>{
+          let timer = all_timers[$(this).attr('task_id')]
+
+          timer.start()
+        }
+      })
+    })
+  })
+
+
+</script>
 {% endblock content%}

@@ -1,6 +1,9 @@
 {% extends 'backend/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
 
 {% block content %}
 <div class="main-wrapper">
@@ -18,6 +21,9 @@
                     <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal" data-target="#add_ticket"><i class="fa fa-plus"></i> Add New Task</a>
                 </div>
             </div>
+            <!-- {{form|crispy}} -->
+
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -31,30 +37,55 @@
                                     <th>Expiring Date</th>
                                     <th>Priority</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-right">Start Task</th>
-                                    <th class="text-right">Time Spent</th>
+                                    <th class="text-center">Time Spent</th>
                                 </tr>
                             </thead>
                             <tbody>
+                              {% for i in tasks %}
                                 <tr>
-                                    <td><a href="{% url 'tasks:detail' %}">#TKT-0001</a></td>
-                                    <td>Laptop Issue</td>
-                                    <td>John Smith</td>
-                                    <td>5 May 2017 07:21 AM</td>
-                                    <td>5 May 2017 11.12 AM</td>
-                                    
-                                    <td>High </td>
+                                    <td><a href="{% url 'tasks:detail' i.pk %}">{{i.task_id}}</a></td>
+                                    <td>{{i.name}}</td>
+                                    <td>{{i.assign_to.user.username}}</td>
+                                    <td>{{i.start_date}}</td>
+                                    <td>{{i.end_date}}</td>
+
+                                    <td>
+                                        <div class="dropdown action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle priority_task" task_id="{{i.pk}}" data-toggle="dropdown" aria-expanded="false">
+                                              {% if i.priority == 'high' %}
+                                                <i class="fa fa-dot-circle-o text-danger"></i> High
+                                              {% elif i.priority == 'medium' %}
+                                                <i class="fa fa-dot-circle-o text-warning"></i> Medium
+                                              {% else %}
+                                                <i class="fa fa-dot-circle-o text-success"></i> Low
+                                              {% endif %}
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" onclick="change_priority('high',this)"><i class="fa fa-dot-circle-o text-danger"></i> High</a>
+                                                <a class="dropdown-item" href="#" onclick="change_priority('medium',this)"><i class="fa fa-dot-circle-o text-warning"></i> Medium</a>
+                                                <a class="dropdown-item" href="#" onclick="change_priority('low',this)"><i class="fa fa-dot-circle-o text-success"></i> Low</a>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td class="text-center">
                                         <div class="dropdown action-label">
-                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa fa-dot-circle-o text-danger"></i> New
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle status_task" task_id="{{i.pk}}" data-toggle="dropdown" aria-expanded="false">
+                                              {% if i.status == 'active' %}
+                                                <i class="fa fa-dot-circle-o text-danger"></i> Active
+                                              {% else %}
+                                                <i class="fa fa-dot-circle-o text-warning"></i> Inactive
+                                              {% endif %}
+
                                             </a>
-                                          </div>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" onclick="change_status('active',this)"><i class="fa fa-dot-circle-o text-danger">Active</i> </a>
+                                                <a class="dropdown-item" href="#" onclick="change_status('inactive',this)"><i class="fa fa-dot-circle-o text-warning"></i> Inactive</a>
+                                           </div>
+                                        </div>
                                     </td>
-                                    <td class="text-center">
-                                        <i class="fa fa-play"></i>
-                                    </td>
-                                </tr>
+                                    <td class="text-center">{{i.get_mins}}</td>
+                                  </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -62,26 +93,27 @@
             </div>
         </div>
     </div>
-    <div id="add_ticket" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
+    <div id="add_ticket" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content modal-lg">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add New Ticket</h4>
+                    <h4 class="modal-title">Add New Task</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <!-- <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Ticket Subject</label>
-                                    <input class="form-control" type="text">
+                                    <input class="form-control" type="text" name="ticket_subject">
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Ticket Id</label>
-                                    <input class="form-control" type="text">
+                                    <input class="form-control" type="text" name="ticket_id">
                                 </div>
                             </div>
                         </div>
@@ -89,20 +121,15 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Assign Staff</label>
-                                    <select class="select">
-                                        <option>-</option>
-                                        <option>Mike Litorus</option>
-                                        <option>John Smith</option>
+                                    <select class="select" id="staff_select" style="width:100%" name="ticket_staff">
+
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Client</label>
-                                    <select class="select">
-                                        <option>-</option>
-                                        <option>Delta Infotech</option>
-                                        <option>International Software Inc</option>
+                                    <select class="select" style="width:100%" id="client_select" name="ticket_clients">
                                     </select>
                                 </div>
                             </div>
@@ -111,7 +138,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Priority</label>
-                                    <select class="select">
+                                    <select class="select" name="ticket_priority">
                                         <option>High</option>
                                         <option>Medium</option>
                                         <option>Low</option>
@@ -121,25 +148,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>CC</label>
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Assign</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Ticket Assignee</label>
-                                    <div class="project-members">
-                                        <a title="John Smith" data-placement="top" data-toggle="tooltip" href="#">
-                                            <img width="20" height="20" alt="John Smith" class="avatar" src="assets/img/user.jpg">
-                                        </a>
-                                    </div>
+                                    <input class="form-control" type="text" name="ticket_cc">
                                 </div>
                             </div>
                         </div>
@@ -147,27 +156,12 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Add Followers</label>
-                                    <input type="text" class="form-control">
+                                    <select class="select" style="width:100%" id="followers_select" multiple name="ticket_followers">
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Ticket Followers</label>
-                                    <div class="project-members">
-                                        <a title="Richard Miles" data-toggle="tooltip" href="#">
-                                            <img width="20" height="20" alt="Richard Miles" class="avatar" src="assets/img/user.jpg">
-                                        </a>
-                                        <a title="John Smith" data-toggle="tooltip" href="#">
-                                            <img width="20" height="20" alt="John Smith" class="avatar" src="assets/img/user.jpg">
-                                        </a>
-                                        <a title="Mike Litorus" data-toggle="tooltip" href="#">
-                                            <img width="20" height="20" alt="Mike Litorus" class="avatar" src="assets/img/user.jpg">
-                                        </a>
-                                        <a title="Wilmer Deluna" data-toggle="tooltip" href="#">
-                                            <img width="20" height="20" alt="Wilmer Deluna" class="avatar" src="assets/img/user.jpg">
-                                        </a>
-                                        <span class="all-team">+2</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -175,17 +169,31 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea class="form-control"></textarea>
+                                    <textarea class="form-control" name="ticket_description"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Upload Files</label>
-                                    <input class="form-control" type="file">
+                                    <input class="form-control" type="file" name="ticket_file">
                                 </div>
                             </div>
                         </div>
                         <div class="m-t-20 text-center">
-                            <button class="btn btn-primary btn-lg">Create Ticket</button>
+                            <button class="btn btn-primary btn-lg" type="submit">Create Ticket</button>
                         </div>
+                    </form> -->
+                    <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      {% for field in form %}
+                        {{ field|as_crispy_field }}
+                        {% if field.errors %}
+                          {% for error in field.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                          {% endfor %}
+                        {% endif %}
+                      {% endfor %}
+                      <div class="m-t-20 text-center">
+                          <button class="btn btn-primary btn-lg" type="submit">Create Task</button>
+                      </div>
                     </form>
                 </div>
             </div>
@@ -337,7 +345,72 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+      function change_priority(pr,ele) {
+        $.ajax({
+          url:'/task/change_priority/',data:{"pk":$(ele).parent().siblings("a").attr("task_id"),"pr":pr,"csrfmiddlewaretoken":"{{csrf_token}}"},
+          type:"POST",
+          success:(res)=>{
+            if(res.priority == 'high'){
+              $(ele).parent().siblings(".priority_task").html('<i class="fa fa-dot-circle-o text-danger"></i> High')
+            }
+            else if(res.priority == 'medium'){
+              $(ele).parent().siblings(".priority_task").html('<i class="fa fa-dot-circle-o text-warning"></i> Medium')
+            }
+            else{
+              $(ele).parent().siblings(".priority_task").html('<i class="fa fa-dot-circle-o text-success"></i> Low')
+            }
 
+          }
+        })
+      }
+      function change_status(pr,ele) {
+        $.ajax({
+          url:'/task/change_status/',data:{"pk":$(ele).parent().siblings("a").attr("task_id"),"status":pr,"csrfmiddlewaretoken":"{{csrf_token}}"},
+          type:"POST",
+          success:(res)=>{
+            if(res.status == 'active'){
+              $(ele).parent().siblings(".status_task").html('<i class="fa fa-dot-circle-o text-danger"></i> Active')
+            }
+            else{
+              $(ele).parent().siblings(".priority_task").html('<i class="fa fa-dot-circle-o text-warning"></i> Inactive')
+            }
+
+          }
+        })
+
+      }
+      $(document).ready(function(){
+        $("#id_start_date").datetimepicker({
+          format: 'YYYY-MM-DD'
+        });
+
+        $("#id_end_date").datetimepicker({
+           format: 'YYYY-MM-DD'
+        })
+
+        $("#id_assign_to").select2({
+          ajax: {
+              url: '/employees/staff_ac',
+              dataType: 'json'
+          },
+        })
+
+        $("#id_client").select2({
+          ajax: {
+              url: '/project/clients_autocomplete/',
+              dataType: 'json'
+          },
+        })
+
+        $("#id_task_followers").select2({
+          ajax: {
+              url: '/project/user_autocomplete/',
+              dataType: 'json'
+          },
+        })
+      })
+    </script>
 
 </div>
 {% endblock content%}

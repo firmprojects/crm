@@ -138,6 +138,7 @@ class UsersAutocompletesView(autocomplete.Select2QuerySetView):
         qs = CustomUser.objects.all().order_by('-id')
         if self.q:
             qs = qs.filter(username__istartswith=self.q)
+        print(qs)
         return qs
 
 
@@ -147,6 +148,14 @@ class ClientAutocompletesView(autocomplete.Select2QuerySetView):
         qs = Clients.objects.all().order_by('-company_name')
         if self.q:
             qs = qs.filter(company_name__istartswith=self.q)
+        return qs
+
+class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
+
+    def get_queryset(self):
+        qs = Projects.objects.all().order_by('name')
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
         return qs
 
 

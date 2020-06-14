@@ -18,12 +18,12 @@
                             <div class="navbar">
                                 <div class="pull-left ticket-view-details">
                                     <div class="ticket-header">
-                                        <span>Status: </span> <span class="badge badge-warning">New</span> <span class="m-l-15 text-muted">Client: </span>
-                                        <a href="#">Delta Infotech</a>
+                                        <span>Status: </span> <span class="badge badge-warning">{{object.status}}</span> <span class="m-l-15 text-muted">Client: </span>
+                                        <a href="#">{{object.client.company_name}}</a>
                                         <span class="m-l-15 text-muted">Created: </span>
-                                        <span>5 May 2017 07:21 AM </span>
+                                        <span>{{object.start_date}}</span>
                                         <span class="m-l-15 text-muted">Created by:</span>
-                                        <span><a href="profile.html">John Doe</a></span>
+                                        <span><a href="profile.html">{{object.assign_to}}</a></span>
                                     </div>
                                 </div>
                                 <a class="task-chat profile-rightbar pull-right" href="#chat_sidebar"><i class="fa fa fa-comment"></i></a>
@@ -38,13 +38,19 @@
                                                 <div class="card-body">
                                                     <div class="project-title">
                                                         <div class="m-b-20">
-                                                            <span class="h5 card-title ">Laptop Issue</span>
+                                                            <span class="h5 card-title ">{{i.name}}</span>
                                                             <div class="pull-right ticket-priority"><span>Priority:</span>
                                                                 <div class="btn-group">
-                                                                    <a href="#" class="badge badge-danger dropdown-toggle" data-toggle="dropdown">Highest</a>
+                                                                  {% if object.priority == 'high'%}
+                                                                    <a href="#" class="badge badge-danger dropdown-toggle" data-toggle="dropdown">Highest priority</a>
+                                                                  {% elif object.priority == 'medium'%}
+                                                                    <a href="#" class="badge badge-primary dropdown-toggle" data-toggle="dropdown">Normal priority</a>
+                                                                  {% else %}
+                                                                    <a href="#" class="badge badge-success dropdown-toggle" data-toggle="dropdown">Low priority</a>
+                                                                  {% endif %}
+                                                                    <a href="#" class="badge badge-danger dropdown-toggle" data-toggle="dropdown"></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i> Highest priority</a>
-                                                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-info"></i> High priority</a>
                                                                         <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-primary"></i> Normal priority</a>
                                                                         <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-success"></i> Low priority</a>
                                                                     </div>
@@ -52,106 +58,79 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel elit neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum sollicitudin libero vitae est consectetur, a molestie tortor consectetur. Aenean tincidunt interdum ipsum, id pellentesque diam suscipit ut. Vivamus massa mi, fermentum eget neque eget, imperdiet tristique lectus. Proin at purus ut sem pellentesque tempor sit amet ut lectus. Sed orci augue, placerat et pretium ac, hendrerit in felis. Integer scelerisque libero non metus commodo, et hendrerit diam aliquet. Proin tincidunt porttitor ligula, a tincidunt orci pellentesque nec. Ut ultricies maximus nulla id consequat. Fusce eu consequat mi, eu euismod ligula. Aliquam porttitor neque id massa porttitor, a pretium velit vehicula. Morbi volutpat tincidunt urna, vel ullamcorper ligula fermentum at. </p>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel elit neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum sollicitudin libero vitae est consectetur, a molestie tortor consectetur. Aenean tincidunt interdum ipsum, id pellentesque diam suscipit ut. Vivamus massa mi, fermentum eget neque eget, imperdiet tristique lectus. Proin at purus ut sem pellentesque tempor sit amet ut lectus. Sed orci augue, placerat et pretium ac, hendrerit in felis. Integer scelerisque libero non metus commodo, et hendrerit diam aliquet. Proin tincidunt porttitor ligula, a tincidunt orci pellentesque nec. Ut ultricies maximus nulla id consequat. Fusce eu consequat mi, eu euismod ligula. Aliquam porttitor neque id massa porttitor, a pretium velit vehicula. Morbi volutpat tincidunt urna, vel ullamcorper ligula fermentum at. </p>
+                                                    <p>{{object.description}}</p>
                                                 </div>
                                             </div>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title m-b-20">Uploaded image files</h5>
+                                                  <div class="card-title d-flex">
+                                                    <h5 class="m-b-20">Uploaded image files</h5>
+                                                    <form class="m-b-20 form-inline ml-auto" method="post" action="{% url 'tasks:upload_image' object.pk%}" enctype="multipart/form-data">
+                                                      {% csrf_token %}
+                                                      <div class="custom-file">
+                                                        <label class="custom-file-label">Choose Image</label>
+                                                        <input type="file" name="image" accept="image/*" class="custom-file-input" placeholder="Choose Image">
+                                                      </div>
+                                                      <input type="submit"class="btn btn-primary ml-auto mt-2" value="Upload">
+                                                    </form>
+                                                  </div>
                                                     <div class="row">
-                                                        <div class="col-md-3 col-sm-6">
-                                                            <div class="uploaded-box">
-                                                                <div class="uploaded-img">
-                                                                    <img src="assets/img/placeholder.jpg" class="img-fluid" alt="">
-                                                                </div>
-                                                                <div class="uploaded-img-name">
-                                                                    demo.png
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-6">
-                                                            <div class="uploaded-box">
-                                                                <div class="uploaded-img">
-                                                                    <img src="assets/img/placeholder.jpg" class="img-fluid" alt="">
-                                                                </div>
-                                                                <div class="uploaded-img-name">
-                                                                    demo.png
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3 col-sm-6">
-                                                            <div class="uploaded-box">
-                                                                <div class="uploaded-img">
-                                                                    <img src="assets/img/placeholder.jpg" class="img-fluid" alt="">
-                                                                </div>
+                                                      {% for i in object.imagetask_set.all %}
 
-                                                                <div class="uploaded-img-name">
-                                                                    demo.png
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-md-3 col-sm-6">
                                                             <div class="uploaded-box">
                                                                 <div class="uploaded-img">
-                                                                    <img src="assets/img/placeholder.jpg" class="img-fluid" alt="">
+                                                                  <a href="{{i.url}}">  <img src="{{i.image.url}}" class="img-fluid" alt=""></a>
                                                                 </div>
                                                                 <div class="uploaded-img-name">
-                                                                    demo.png
+                                                                    {{i.image.name}}
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                      {% endfor %}
+
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title m-b-20">Uploaded files</h5>
+                                                  <div class="card-title d-flex">
+                                                    <h5 class="m-b-20">Uploaded files</h5>
+                                                    <form class="m-b-20 form-inline ml-auto" method="post" action="{% url 'tasks:upload_doc' object.pk%}" enctype="multipart/form-data">
+                                                      {% csrf_token %}
+                                                      <div class="custom-file">
+                                                        <label class="custom-file-label">Choose Doc</label>
+                                                        <input type="file" name="document" class="custom-file-input" placeholder="Choose Image">
+                                                      </div>
+                                                      <input type="submit"class="btn btn-primary ml-auto mt-2" value="Upload">
+                                                    </form>
+                                                  </div>
                                                     <ul class="files-list">
+                                                      {% for i in object.doctask_set.all %}
+
                                                         <li>
                                                             <div class="files-cont">
                                                                 <div class="file-type">
                                                                     <span class="files-icon"><i class="fa fa-file-pdf-o"></i></span>
                                                                 </div>
                                                                 <div class="files-info">
-                                                                    <span class="file-name text-ellipsis"><a href="#">Ticket_document.xls</a></span>
-                                                                    <span class="file-author"><a href="#">John Doe</a></span> <span class="file-date">May 5th at 8:21 PM</span>
-                                                                    <div class="file-size">Size: 14.8Mb</div>
+                                                                    <span class="file-name text-ellipsis"><a href="#">{{i.doc.name }}</a></span>
+                                                                    <div class="file-size">Size: {{i.doc.size}}</div>
                                                                 </div>
                                                                 <ul class="files-action">
                                                                     <li class="dropdown dropdown-action">
                                                                         <a href="" class="dropdown-toggle btn btn-link" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            <a class="dropdown-item" href="javascript:void(0)">Download</a>
+                                                                            <a class="dropdown-item" href="{{i.doc.url}}">Download</a>
                                                                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#share_files">Share</a>
-                                                                            <a class="dropdown-item" href="javascript:void(0)">Delete</a>
                                                                         </div>
                                                                     </li>
                                                                 </ul>
                                                             </div>
                                                         </li>
-                                                        <li>
-                                                            <div class="files-cont">
-                                                                <div class="file-type">
-                                                                    <span class="files-icon"><i class="fa fa-file-pdf-o"></i></span>
-                                                                </div>
-                                                                <div class="files-info">
-                                                                    <span class="file-name text-ellipsis"><a href="#">Issue_report.xls</a></span>
-                                                                    <span class="file-author"><a href="#">John Doe</a></span> <span class="file-date">May 5th at 5:41 PM</span>
-                                                                    <div class="file-size">Size: 14.8Mb</div>
-                                                                </div>
-                                                                <ul class="files-action">
-                                                                    <li class="dropdown dropdown-action">
-                                                                        <a href="" class="dropdown-toggle btn btn-link" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
-                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                            <a class="dropdown-item" href="javascript:void(0)">Download</a>
-                                                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#share_files">Share</a>
-                                                                            <a class="dropdown-item" href="javascript:void(0)">Delete</a>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </li>
+                                                      {% endfor %}
+
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -174,8 +153,8 @@
                             <div class="navbar">
                                 <div class="task-assign">
                                     <span class="assign-title">Assigned to </span>
-                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="John Doe">
-                                        <img src="assets/img/user.jpg" class="avatar" alt="" height="20" width="20">
+                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="{{object.assign_to.user}}">
+                                        <img src="{% static 'img/user.jpg' %}" class="avatar" alt="" height="20" width="20">
                                     </a>
                                     <a href="#" class="followers-add" title="Add Assignee" data-toggle="modal" data-target="#assignee"><i class="material-icons">add</i></a>
                                 </div>
@@ -190,7 +169,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="chat-contents task-chat-contents">
+                        <!-- <div class="chat-contents task-chat-contents">
                             <div class="chat-content-wrap">
                                 <div class="chat-wrap-inner">
                                     <div class="chat-box">
@@ -275,9 +254,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="chat-footer">
-                            <div class="message-bar">
+                            <!-- <div class="message-bar">
                                 <div class="message-inner">
                                     <a class="link attach-icon" href="#"><img src="assets/img/attachment.png" alt=""></a>
                                     <div class="message-area">
@@ -289,13 +268,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="project-members task-followers">
-                                <span class="followers-title">Followers</span>
-                                <a href="#" data-toggle="tooltip" title="Richard Miles">
-                                    <img src="assets/img/user.jpg" class="avatar" alt="Richard Miles" height="20" width="20">
+                              <span class="followers-title">Followers</span>
+
+                              {% for i in object.task_followers.all %}
+                                <a href="#" data-toggle="tooltip" title="{{i.username}}">
+                                    <img src="{% static 'img/user.jpg' %}" class="avatar" height="20" width="20">
                                 </a>
-                                <a href="#" data-toggle="tooltip" title="John Smith">
+                                <!-- <a href="#" data-toggle="tooltip" title="John Smith">
                                     <img src="assets/img/user.jpg" class="avatar" alt="John Smith" height="20" width="20">
                                 </a>
                                 <a href="#" data-toggle="tooltip" title="Mike Litorus">
@@ -304,219 +285,11 @@
                                 <a href="#" data-toggle="tooltip" title="Wilmer Deluna">
                                     <img src="assets/img/user.jpg" class="avatar" alt="Wilmer Deluna" height="20" width="20">
                                 </a>
-                                <a href="#" class="followers-add" data-toggle="modal" data-target="#task_followers"><i class="material-icons">add</i></a>
+                                <a href="#" class="followers-add" data-toggle="modal" data-target="#task_followers"><i class="material-icons">add</i></a> -->
+                              {% endfor %}
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="notification-box">
-            <div class="msg-sidebar notifications msg-noti">
-                <div class="topnav-dropdown-header">
-                    <span>Messages</span>
-                </div>
-                <div class="drop-scroll msg-list-scroll">
-                    <ul class="list-box">
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">R</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Richard Miles </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item new-message">
-                                    <div class="list-left">
-                                        <span class="avatar">J</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">John Doe</span>
-                                        <span class="message-time">1 Aug</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">T</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Tarah Shropshire </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">M</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Mike Litorus</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">C</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Catherine Manseau </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">D</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Domenic Houston </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">B</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Buster Wigton </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">R</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Rolland Webber </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">C</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author"> Claire Mapes </span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">M</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Melita Faucher</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">J</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Jeffery Lalor</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">L</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Loren Gatlin</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="chat.html">
-                                <div class="list-item">
-                                    <div class="list-left">
-                                        <span class="avatar">T</span>
-                                    </div>
-                                    <div class="list-body">
-                                        <span class="message-author">Tarah Shropshire</span>
-                                        <span class="message-time">12:28 AM</span>
-                                        <div class="clearfix"></div>
-                                        <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="topnav-dropdown-footer">
-                    <a href="chat.html">See all messages</a>
                 </div>
             </div>
         </div>

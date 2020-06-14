@@ -5,12 +5,15 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.forms import modelformset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm)
-from .models import ( Education, Experience, Skill, Department, Designation, Holidays, LeaveRequest, LeaveType, Staff,Attendance)
+from .models import *
 from allauth.account.views import SignupView
 from users.models import Clocking
 from django.utils import timezone
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
+from users.models import CustomUser
+
+from dal import autocomplete
 
 class StaffCreateView(SignupView):
     model = Staff
@@ -132,6 +135,7 @@ class DeleteLeaveType(DeleteView):
 
 def attendance(request):
     staffs = Staff.objects.all()
+    # staffs = CustomUser.objects.all()
 
     for i in staffs:
         try:
@@ -266,3 +270,12 @@ def filter_objects(date,month=None,year=None):
         return False
     else:
         return True
+
+
+class StaffAC(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Staff.objects.all().order_by('user__username')
+        print(qs)
+        if self.q:
+            qs = qs.filter(user__username__istartswith=self.q)
+        return qs
