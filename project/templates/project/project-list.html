@@ -30,7 +30,7 @@
                 <table class="table table-striped custom-table datatable">
                     <thead>
                         <tr>
-                            <th>Project</th>
+                            <th>Project ID</th>
                             <th>Client</th>
                             <th>Progress</th>
                             <th>Leader</th>
@@ -43,14 +43,14 @@
                     </thead>
                     <tbody>
                         {% for item in data %}
+                         {{item.pk}}
                         <tr>
                             <td>
-                                <h2><a href="{% url 'project:project_detail' item.id %}">{{ item.name }}</a></h2>
+                                <h2><a href="{% url 'project:project_detail' item.id %}">{{ item.project_id }}</a></h2>
                             </td>
                             <td>{{ item.clients }}</td>
                             <td> <div class="progress progress-xs m-b-0">
-                                <div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="40%"
-                                    style="width: 40%"></div>
+                                <div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="{{ item.get_progress }}%" style="width: {{ item.get_progress }}%"></div>
                             </div></td>
                             <td>
                                 <ul class="team-members">
@@ -118,9 +118,9 @@
                             </td>
 
                                 <td class="text-right">
-                                    <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
+                                    <!-- <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
                                       <span class="fa fa-pencil"></span>
-                                    </a>
+                                    </a> -->
                                     <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
                                       <span class="fa fa-trash"></span>
                                     </a>

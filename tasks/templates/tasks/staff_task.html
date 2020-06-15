@@ -53,8 +53,11 @@
                                                 <td class="text-center">{{i.name}}</td>
                                                 <td class="text-center">{{i.description}}</td>
                                                 <td class="text-center">
-                                                  <button task_id="{{i.pk}}" type="button" class="btn btn-primary btn-sm start_button">Start</button>
-
+                                                  {% if i.status == 'active' %}
+                                                    <button task_id="{{i.pk}}" type="button" class="btn btn-primary btn-sm">Ongoing</button>
+                                                  {% else %}
+                                                    <button task_id="{{i.pk}}" type="button" class="btn btn-primary btn-sm start_button">Start</button>
+                                                  {% endif %}
                                                     <!-- <a class="primary-button button-sm" data-izimodal-open="#modal3"> -->
                                                     <!-- {% if i.status == 'pending' %} -->
                                                     <!-- {% else %}
@@ -94,7 +97,7 @@
                                                 <td class="text-center statuses" task_id = "{{i.pk}}">
                                                     <button type="button" class="pause btn btn-warning btn-sm">Pause</button>
                                                     <button type="button" class="resume btn btn-info btn-sm">Resume</button>
-                                                    <button type="button" class="terminate btn btn-danger btn-sm">terminate</button>
+                                                    <button type="button" class="terminate btn btn-danger btn-sm">Mark as complete</button>
                                                 </td>
                                               </tr>
                                             {% endif %}
@@ -253,6 +256,10 @@
           csrfmiddlewaretoken:"{{csrf_token}}"
         },
         success:()=>{
+          $(this).removeClass("start_button")
+          $(this).html("Ongoing")
+
+
           let timer = all_timers[$(this).attr('task_id')]
 
           timer.start()

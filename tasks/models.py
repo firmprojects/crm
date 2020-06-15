@@ -5,11 +5,16 @@ from employees.models import Staff
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.utils.crypto import get_random_string
+
+def generate_task_id():
+    id = get_random_string(length=4)
+    return "TK-"+str(id)
 
 class Task(models.Model):
     PRIORITY = ( ('high', 'High'), ('medium', 'Medium'), ('low', 'Low'), )
     STATUS = ( ('active', 'Active'), ('inactive', 'Inactive'))
-    task_id = models.CharField(unique=True,max_length=100,blank=True, null=True)
+    task_id = models.CharField(unique=True,max_length=10,default=generate_task_id)
 
     project = models.ForeignKey(Projects,  on_delete=models.CASCADE,blank=True, null=True)
     name = models.CharField(max_length=200)

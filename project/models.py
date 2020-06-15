@@ -3,16 +3,23 @@ from django.conf import settings
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.postgres import fields
+from django.utils import timezone
+from django.utils.crypto import get_random_string
 
+def generate_project_id():
+    id = get_random_string(length=4)
+    return "PR-"+str(id)
 
-
+def generate_client_id():
+    id = get_random_string(length=4)
+    return "CL-"+str(id)
 
 class Clients(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     company_name = models.CharField(max_length=20, blank=False, null=False)
     phone_number = PhoneNumberField(blank=True, null=True)
     photo = models.ImageField(default='default.jpg', upload_to='clients_pics')
-    clients_id = models.CharField(max_length=20, blank=False, null=False)
+    clients_id = models.CharField(max_length=20, unique=True,default=generate_client_id)
     address = models.CharField(max_length=200, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
@@ -26,6 +33,7 @@ class Clients(models.Model):
 
     def get_absolute_url(self):
         return reverse('project:clients')
+
 
 
 
@@ -48,6 +56,7 @@ class Projects(models.Model):
 
 
     description = models.TextField()
+    project_id = models.CharField(unique=True,default=generate_project_id,max_length=10)
 
     def __str__(self):
         return self.name
@@ -59,6 +68,9 @@ class Projects(models.Model):
         complete = self.milestone_set.all().filter(completed=True)
         in_complete = self.milestone_set.all().filter(completed=False)
         return {"complete":len(complete),"in_complete":len(in_complete)}
+
+    def get_progress(self):
+        return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
 
 
 class ImageUpload(models.Model):

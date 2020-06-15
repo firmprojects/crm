@@ -50,13 +50,41 @@ def delete_project(request,pk):
 class ProjectDetail(DetailView):
     model = Projects
     template_name = 'project/project_detail.html'
+    def get(self,request,pk):
+        self.object = self.get_object()
+        form = ProjectForm(instance=self.object)
+        context = self.get_context_data()
+        context["form"] = form
+        return render(request, 'project/project_detail.html', context)
+
     def post(self, request,pk):
 
-        staff = CustomUser.objects.get(pk=pk)
-        self.object = self.get_object()
-        if staff not in self.object.team_member.all():
-            self.object.team_member.add(staff)
-            print("ok")
+        if 'team_member' in request.POST:
+            staff = CustomUser.objects.get(pk=int(request.POST['team_member']))
+            self.object = self.get_object()
+            if staff not in self.object.team_member.all():
+                self.object.team_member.add(staff)
+
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            ins = form.save(commit=False)
+            self.object.name=form.cleaned_data['name']
+            self.object.start_date=form.cleaned_data['start_date']
+            self.object.end_date=form.cleaned_data['end_date']
+            self.object.project_cost = form.cleaned_data['project_cost']
+            self.object.priority = form.cleaned_data['priority']
+            self.object.project_leader = form.cleaned_data['project_leader']
+            self.object.team_member.set(form.cleaned_data['team_member'])
+            self.object.description = form.cleaned_data['description']
+
+            self.object.save()
+
+        else:
+            print(form.errors)
+            context = self.get_context_data()
+            context["form"] = form
+            return render(request, 'project/project_detail.html', context)
+
         return redirect(request.build_absolute_uri())
 
 def upload_image(request,pk):
@@ -162,15 +190,19 @@ class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
 # class Milestones(TemplateView):
 #     template_name =
 def milestone_list(request,pk):
+    print(pk)
     return render(request,'project/milestones.html',{"pk":pk,"project":Projects.objects.get(pk=pk)})
 
 def add_milestone(request):
-    data = request.POST
-    project = Projects.objects.get(pk=data['id'])
+    print("ok")
+    if request.POST:
+        print(request.POST)
+        data = request.POST
+        project = Projects.objects.get(pk=data['id'])
 
-    milestone = Milestone(project=project,task=data['newTask'],completed=False)
-    milestone.save()
-    return JsonResponse({"success":"success"})
+        milestone = Milestone(project=project,task=data['newTask'],completed=False)
+        milestone.save()
+        return JsonResponse({"success":"success"})
 
 def delete_milestone(request):
     data = request.POST

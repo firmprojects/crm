@@ -357,6 +357,8 @@ $(document).ready(function($) {
             $('.task-list-body').animate({
                 scrollTop: todoListScrollHeight
             }, 1000);
+            console.log(id);
+
             $.ajax({
               type:"POST",url:`/project/milestones/add/`,
               data:{"id":id,"newTask":newTask,csrfmiddlewaretoken:csrf_token}
