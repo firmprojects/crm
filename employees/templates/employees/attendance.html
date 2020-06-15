@@ -1,11 +1,10 @@
 {% extends 'backend/base.html' %}
+
 {% load static %}
 
 
 {% block content %}
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js">
 </script>
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 
 <style media="screen">
   .tooltip-inner {
@@ -15,9 +14,14 @@
 </style>
 <div class="main-wrapper">
       {% include 'backend/navbar.html' %}
-      <div class="sidebar" id="sidebar">
-      {% include 'backend/sidebar.html' %}
-        </div>
+      <!-- <div class="sidebar" id="sidebar">
+
+      </div>
+      {% include 'backend/sidebar.html' %} -->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js">
+
+      <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
 
 
 

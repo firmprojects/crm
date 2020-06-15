@@ -48,20 +48,20 @@ def create_staff(sender,instance,created,**kwargs):
             except ObjectDoesNotExist:
                 staff = Staff(user=instance)
                 staff.save()
-
-def create_client(sender,instance,created,**kwargs):
-    if created:
-        if instance.is_client:
-            client = Clients(user=instance)
-            client.save()
-    else:
-        if instance.is_client:
-            try:
-                client = Clients.objects.get(user=instance)
-            except ObjectDoesNotExist:
-                client = Clients(user=instance)
-                client.save()
+# 
+# def create_client(sender,instance,created,**kwargs):
+#     if created:
+#         if instance.is_client:
+#             client = Clients(user=instance)
+#             client.save()
+#     else:
+#         if instance.is_client:
+#             try:
+#                 client = Clients.objects.get(user=instance)
+#             except ObjectDoesNotExist:
+#                 client = Clients(user=instance)
+#                 client.save()
 
 post_save.connect(create_clocking,sender=CustomUser)
 post_save.connect(create_staff,sender=CustomUser)
-post_save.connect(create_client,sender=CustomUser)
+# post_save.connect(create_client,sender=CustomUser)
