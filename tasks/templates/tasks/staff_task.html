@@ -238,6 +238,7 @@
         type:"POST",url:"/task/terminate_task/",
         data:{
           pk:$(this).parent().attr('task_id'),
+          end_time:moment().format(),
           csrfmiddlewaretoken:"{{csrf_token}}"
         },
         success:()=>{
