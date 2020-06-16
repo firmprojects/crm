@@ -72,6 +72,12 @@ class Projects(models.Model):
     def get_progress(self):
         return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
 
+class Comment(models.Model):
+    text = models.TextField()
+    commented_by = models.ForeignKey(to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    commented_on = models.DateTimeField(auto_now_add=True)
+
+    project = models.ForeignKey(to=Projects,on_delete=models.CASCADE)
 
 class ImageUpload(models.Model):
     project = models.ForeignKey(to=Projects,on_delete=models.CASCADE)

@@ -55,8 +55,12 @@
                                                 <td class="text-center">
                                                   {% if i.status == 'active' %}
                                                     <button task_id="{{i.pk}}" type="button" class="btn btn-primary btn-sm">Ongoing</button>
-                                                  {% else %}
+                                                  {% elif i.status == 'inactive' %}
                                                     <button task_id="{{i.pk}}" type="button" class="btn btn-primary btn-sm start_button">Start</button>
+                                                  {% else %}
+                                                    COMPLETED
+
+
                                                   {% endif %}
                                                     <!-- <a class="primary-button button-sm" data-izimodal-open="#modal3"> -->
                                                     <!-- {% if i.status == 'pending' %} -->

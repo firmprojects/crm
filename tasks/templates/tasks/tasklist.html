@@ -72,14 +72,17 @@
                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle status_task" task_id="{{i.pk}}" data-toggle="dropdown" aria-expanded="false">
                                               {% if i.status == 'active' %}
                                                 <i class="fa fa-dot-circle-o text-danger"></i> Active
-                                              {% else %}
+                                              {% elif i.status == 'inactive' %}
                                                 <i class="fa fa-dot-circle-o text-warning"></i> Inactive
+                                              {% else %}
+                                                <i class="fa fa-dot-circle-o text-success"></i> Complete
                                               {% endif %}
 
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item" href="#" onclick="change_status('active',this)"><i class="fa fa-dot-circle-o text-danger">Active</i> </a>
                                                 <a class="dropdown-item" href="#" onclick="change_status('inactive',this)"><i class="fa fa-dot-circle-o text-warning"></i> Inactive</a>
+                                                <a class="dropdown-item" href="#" onclick="change_status('complete',this)"><i class="fa fa-dot-circle-o text-success"></i> Complete</a>
                                            </div>
                                         </div>
                                     </td>
@@ -369,11 +372,15 @@
           url:'/task/change_status/',data:{"pk":$(ele).parent().siblings("a").attr("task_id"),"status":pr,"csrfmiddlewaretoken":"{{csrf_token}}"},
           type:"POST",
           success:(res)=>{
+            console.log(res);
             if(res.status == 'active'){
               $(ele).parent().siblings(".status_task").html('<i class="fa fa-dot-circle-o text-danger"></i> Active')
             }
+            else if(res.status == 'inactive'){
+              $(ele).parent().siblings(".status_task").html('<i class="fa fa-dot-circle-o text-warning"></i> Inactive')
+            }
             else{
-              $(ele).parent().siblings(".priority_task").html('<i class="fa fa-dot-circle-o text-warning"></i> Inactive')
+              $(ele).parent().siblings(".status_task").html('<i class="fa fa-dot-circle-o text-success"></i> Complete')
             }
 
           }

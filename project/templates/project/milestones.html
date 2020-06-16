@@ -21,10 +21,13 @@
                                 </div>
                                 <a class="task-chat profile-rightbar pull-right" href="#chat_sidebar"><i class="fa fa fa-comment"></i></a>
                                 <ul class="nav pull-right custom-menu">
+                                  <form class="form-inline" method="get">
                                     <div class="input-group m-b-10">
-                                        <input placeholder="Search" class="form-control search-input" id="btn-input" type="text">
+                                        <input placeholder="Search" class="form-control" type="text" name="search" value="{{ request.GET.search }}">
                                     </div>
-                                                   </ul>
+                                    <input type="submit" class="btn btn-outline-success" value="Submit">
+                                  </form>
+                                </ul>
                             </div>
                         </div>
                         <div class="chat-contents">
@@ -35,7 +38,7 @@
                                             <div class="task-list-container">
                                                 <div class="task-list-body">
                                                     <ul id="task-list">
-                                                      {% for i in project.milestone_set.all %}
+                                                      {% for i in milestones %}
                                                       <li class="task">
                                                         <div class="task-container">
                                                             <span class="task-action-btn task-check">
@@ -221,10 +224,20 @@
                                 <div class="chat-wrap-inner">
                                     <div class="chat-box">
                                         <div class="chats">
-                                            <h4>Hospital Administration Phase 1</h4>
+                                            <h4>{{project.name}}</h4>
                                             <hr class="task-line">
-
+                                            {% for i in comments %}
+                                            <div class="card">
+                                              <div class="card-header">
+                                                <h4><small>Commented by: </small>{{ i.commented_by }}</h4>
+                                              </div>
+                                              <div class="card-body">
+                                                {{ i.text }}
+                                              </div>
+                                            </div>
+                                            {% endfor %}
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -232,14 +245,16 @@
                         <div class="chat-footer">
                             <div class="message-bar">
                                 <div class="message-inner">
-                                    <a class="link attach-icon" href="#"><img src="assets/img/attachment.png" alt=""></a>
+
                                     <div class="message-area">
-                                        <div class="input-group">
-                                            <textarea class="form-control" placeholder="Type message..."></textarea>
-                                            <span class="input-group-append">
-                                                <button class="btn btn-primary" type="button"><i class="fa fa-send"></i></button>
-                                            </span>
-                                        </div>
+                                        <form class="form-inline" action="{% url 'project:milestones' pk%}" method="post" style="width:100%">
+                                          {% csrf_token %}
+                                          <textarea class="form-control" name="comment" placeholder="Type message..." style="width:90%" cols="1"></textarea>
+                                          <button class="btn btn-primary" type="submit"><i class="fa fa-send"></i></button>
+
+                                        </form>
+
+
                                     </div>
                                 </div>
                             </div>

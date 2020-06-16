@@ -190,8 +190,18 @@ class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
 # class Milestones(TemplateView):
 #     template_name =
 def milestone_list(request,pk):
-    print(pk)
-    return render(request,'project/milestones.html',{"pk":pk,"project":Projects.objects.get(pk=pk)})
+    pr = Projects.objects.get(pk=pk)
+    milestones = pr.milestone_set.all()
+    if "search" in request.GET:
+        milestones = milestones.filter(task__contains = request.GET['search'])
+    if request.method == 'POST':
+        comment_ = request.POST['comment']
+        obj = Comment(text=comment_,commented_by=request.user,project=pr)
+        obj.save()
+
+        return HttpResponseRedirect(reverse('project:milestones',args=(pk,)))
+
+    return render(request,'project/milestones.html',{"pk":pk,"project":pr,"milestones":milestones,"comments":pr.comment_set.all().order_by('commented_on')})
 
 def add_milestone(request):
     print("ok")

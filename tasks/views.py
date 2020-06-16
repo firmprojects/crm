@@ -106,6 +106,7 @@ def end_task(request):
             tracker.status = 'pause'
             tracker.save()
 
+            task.status = "inactive"
             task.save()
             return JsonResponse({"success":"Success"})
 
@@ -124,7 +125,7 @@ def terminate_task(request):
             tracker.status = 'terminate'
             tracker.save()
 
-            task.status = "inactive"
+            task.status = "completed"
             task.save()
             return JsonResponse({"success":"Success"})
 

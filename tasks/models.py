@@ -13,7 +13,7 @@ def generate_task_id():
 
 class Task(models.Model):
     PRIORITY = ( ('high', 'High'), ('medium', 'Medium'), ('low', 'Low'), )
-    STATUS = ( ('active', 'Active'), ('inactive', 'Inactive'))
+    STATUS = ( ('active', 'Active'), ('inactive', 'Inactive'),('completed',"Completed"))
     task_id = models.CharField(unique=True,max_length=10,default=generate_task_id)
 
     project = models.ForeignKey(Projects,  on_delete=models.CASCADE,blank=True, null=True)
@@ -35,7 +35,7 @@ class Task(models.Model):
     def get_mins(self):
         try:
             duration = self.tasktracker.task_duration
-            return "~ "+str(int((float(duration)/60)/5)*5) + " mins"
+            return "~ "+str(int((float(duration)/60)/1)*1) + " mins"
         except TypeError:
             return "0 mins"
 
