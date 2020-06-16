@@ -70,7 +70,10 @@ class Projects(models.Model):
         return {"complete":len(complete),"in_complete":len(in_complete)}
 
     def get_progress(self):
-        return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
+        try:
+            return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
+        except ZeroDivisionError:
+            return 0
 
 class Comment(models.Model):
     text = models.TextField()
