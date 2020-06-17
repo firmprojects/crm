@@ -17,7 +17,9 @@ class Tasks(TemplateView):
     def post(self,request):
         form = TaskForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
+            save = form.save(commit=False)
+            save.status = 'inactive'
+            save.save()
             return redirect("tasks:tasks")
 
         return render(request, self.template_name,{"form":form})
@@ -116,12 +118,14 @@ def terminate_task(request):
             task = Task.objects.get(pk=request.POST['pk'])
             tracker = task.tasktracker
             tracker.end_time = parse_datetime(value=request.POST['end_time']).isoformat()
-            if tracker.task_duration is None: tracker.task_duration = 0.0
+            try:
+                if tracker.task_duration is None: tracker.task_duration = 0.0
 
-            if type(tracker.task_duration) is str: tracker.task_duration = float(tracker.task_duration)
+                if type(tracker.task_duration) is str: tracker.task_duration = float(tracker.task_duration)
 
-            tracker.task_duration += (parse_datetime(tracker.end_time) - parse_datetime(tracker.start_time)).total_seconds()
-
+                tracker.task_duration += (parse_datetime(tracker.end_time) - parse_datetime(tracker.start_time)).total_seconds()
+            except TypeError:
+                tracker.task_duration = 0
             tracker.status = 'terminate'
             tracker.save()
 

@@ -64,115 +64,6 @@
                                                         </div>
                                                         </li>
                                                       {% endfor %}
-
-                                                        <!-- <li class="task">
-                                                            <div class="task-container">
-                                                                <span class="task-action-btn task-check">
-                                                                    <span class="action-circle large complete-btn" title="Mark Complete">
-                                                                        <i class="material-icons">check</i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="task-label" contenteditable="true">Patient appointment booking</span>
-                                                                <span class="task-action-btn task-btn-right">
-                                                                    <span class="action-circle large" title="Assign">
-                                                                        <i class="material-icons">person_add</i>
-                                                                    </span>
-                                                                    <span class="action-circle large delete-btn" title="Delete Task">
-                                                                        <i class="material-icons">delete</i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="task">
-                                                            <div class="task-container">
-                                                                <span class="task-action-btn task-check">
-                                                                    <span class="action-circle large complete-btn" title="Mark Complete">
-                                                                        <i class="material-icons">check</i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="task-label" contenteditable="true">Appointment booking with payment gateway</span>
-                                                                <span class="task-action-btn task-btn-right">
-                                                                    <span class="action-circle large" title="Assign">
-                                                                        <i class="material-icons">person_add</i>
-                                                                    </span>
-                                                                    <span class="action-circle large delete-btn" title="Delete Task">
-                                                                        <i class="material-icons">delete</i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="completed task">
-                                                            <div class="task-container">
-                                                                <span class="task-action-btn task-check">
-                                                                    <span class="action-circle large complete-btn" title="Mark Complete">
-                                                                        <i class="material-icons">check</i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="task-label">Doctor available module</span>
-                                                                <span class="task-action-btn task-btn-right">
-                                                                    <span class="action-circle large" title="Assign">
-                                                                        <i class="material-icons">person_add</i>
-                                                                    </span>
-                                                                    <span class="action-circle large delete-btn" title="Delete Task">
-                                                                        <i class="material-icons">delete</i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="task">
-                                                            <div class="task-container">
-                                                                <span class="task-action-btn task-check">
-                                                                    <span class="action-circle large complete-btn" title="Mark Complete">
-                                                                        <i class="material-icons">check</i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="task-label" contenteditable="true">Patient and Doctor video conferencing</span>
-                                                                <span class="task-action-btn task-btn-right">
-                                                                    <span class="action-circle large" title="Assign">
-                                                                        <i class="material-icons">person_add</i>
-                                                                    </span>
-                                                                    <span class="action-circle large delete-btn" title="Delete Task">
-                                                                        <i class="material-icons">delete</i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="task">
-                                                            <div class="task-container">
-                                                                <span class="task-action-btn task-check">
-                                                                    <span class="action-circle large complete-btn" title="Mark Complete">
-                                                                        <i class="material-icons">check</i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="task-label" contenteditable="true">Private chat module</span>
-                                                                <span class="task-action-btn task-btn-right">
-                                                                    <span class="action-circle large" title="Assign">
-                                                                        <i class="material-icons">person_add</i>
-                                                                    </span>
-                                                                    <span class="action-circle large delete-btn" title="Delete Task">
-                                                                        <i class="material-icons">delete</i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="task">
-                                                            <div class="task-container">
-                                                                <span class="task-action-btn task-check">
-                                                                    <span class="action-circle large complete-btn" title="Mark Complete">
-                                                                        <i class="material-icons">check</i>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="task-label" contenteditable="true">Patient Profile add</span>
-                                                                <span class="task-action-btn task-btn-right">
-                                                                    <span class="action-circle large" title="Assign">
-                                                                        <i class="material-icons">person_add</i>
-                                                                    </span>
-                                                                    <span class="action-circle large delete-btn" title="Delete Task">
-                                                                        <i class="material-icons">delete</i>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </li> -->
                                                     </ul>
                                                 </div>
                                                 <div class="task-list-footer">
@@ -203,9 +94,12 @@
                             <div class="navbar">
                                 <div class="task-assign">
                                     <span class="assign-title">Assigned to </span>
-                                    <a href="#" data-toggle="tooltip" data-placement="bottom" title="John Doe">
-                                        <img src="assets/img/user.jpg" class="avatar" alt="" height="20" width="20">
-                                    </a>
+                                    {% for i in milestones %}
+                                      <a href="#" data-toggle="tooltip" data-placement="bottom" title="{{i.assigned_to}} ">
+                                        <img src="assets/img/user.jpg" class="avatar" height="20" width="20">
+
+                                      </a>
+                                    {% endfor %}
                                     <a href="#" class="followers-add" title="Add Assignee" data-toggle="modal" data-target="#assignee"><i class="material-icons">add</i></a>
                                 </div>
                                 <!-- <ul class="nav pull-right custom-menu">
@@ -260,19 +154,12 @@
                             </div>
                             <div class="project-members task-followers">
                                 <span class="followers-title">Followers</span>
-                                <a href="#" data-toggle="tooltip" title="Jeffery Lalor">
-                                    <img src="assets/img/user.jpg" class="avatar" alt="Jeffery Lalor" height="20" width="20">
-                                </a>
-                                <a href="#" data-toggle="tooltip" title="Richard Miles">
-                                    <img src="assets/img/user.jpg" class="avatar" alt="Richard Miles" height="20" width="20">
-                                </a>
-                                <a href="#" data-toggle="tooltip" title="John Smith">
-                                    <img src="assets/img/user.jpg" class="avatar" alt="John Smith" height="20" width="20">
-                                </a>
-                                <a href="#" data-toggle="tooltip" title="Mike Litorus">
-                                    <img src="assets/img/user.jpg" class="avatar" alt="Mike Litorus" height="20" width="20">
-                                </a>
-                                <a href="#" class="followers-add" data-toggle="modal" data-target="#task_followers"><i class="material-icons">add</i></a>
+                                {% for i in milestones %}
+                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="{{i.followers_to}} ">
+                                    <img src="assets/img/user.jpg" class="avatar" height="20" width="20">
+
+                                  </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -287,17 +174,21 @@
 
                     </div>
                     <div class="modal-body">
+                      <form method="post" action="{% url 'project:assign_' pk %}">
+                        {% csrf_token %}
                         <div class="input-group m-b-10">
-                            <input placeholder="Search to add" class="form-control search-input" type="text">
+                          <select placeholder="select to add" style='width:100%' class="form-control select_staff" id="" name='staff'></select>
                         </div>
                         <div class="input-group m-b-30">
-                            <input placeholder="Select milestone" class="form-control search-input" type="text">
-                               </div>
+                          <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
+                        </div>
                         <div class="m-t-50 text-center">
                             <button class="btn btn-primary btn-lg">Assign</button>
                             <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
 
                         </div>
+                      </form>
+
                     </div>
                 </div>
             </div>
@@ -309,17 +200,21 @@
                         <h3 class="modal-title">Add team members to this milestone</h3>
                     </div>
                     <div class="modal-body">
+                      <form method="post" action="{% url 'project:assign_' pk %}">
+                        {% csrf_token %}
                         <div class="input-group m-b-10">
-                            <input placeholder="Search to add" class="form-control search-input" id="btn-input" type="text">
+                          <select placeholder="select to add" style='width:100%' class="form-control select_follower" id="" name='staff'></select>
                         </div>
                         <div class="input-group m-b-30">
-                            <input placeholder="Select milestone" class="form-control search-input" id="btn-input" type="text">
+                          <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
                         </div>
                         <div class="m-t-50 text-center">
-                            <button class="btn btn-primary btn-lg">Add</button>
+                            <button class="btn btn-primary btn-lg">Assign</button>
                             <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
 
                         </div>
+                      </form>
+
                     </div>
                 </div>
             </div>
@@ -331,6 +226,33 @@
   var id="{{pk}}"
   var csrf_token = "{{ csrf_token }}"
   // console.log("");
+  $(document).ready(()=>{
+    $(".select_milestone").select2({
+      placeholder: "Milestones",
+      minimumInputLength: 1,
+      ajax: {
+          url: '/project/milestones/auto_/{{pk}}/',
+          dataType: 'json'
+      },
+    })
+    $(".select_staff").select2({
+      minimumInputLength: 1,
+      placeholder: "Milestone assignee*",
+      ajax: {
+          url: '/project/user_autocomplete',
+          dataType: 'json'
+      },
+    })
+    $(".select_follower").select2({
+      minimumInputLength: 1,
+      placeholder: "Milestone Followers",
+      multiple:true,
+      ajax: {
+          url: '/project/user_autocomplete',
+          dataType: 'json'
+      },
+    })
+  })
 
 </script>
 

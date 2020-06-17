@@ -50,6 +50,7 @@
                             </td>
                             <td>{{ item.clients }}</td>
                             <td> <div class="progress progress-xs m-b-0">
+                          
                                 <div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="{{ item.get_progress }}%" style="width: {{ item.get_progress }}%"></div>
                             </div></td>
                             <td>
@@ -118,9 +119,9 @@
                             </td>
 
                                 <td class="text-right">
-                                    <!-- <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
+                                    <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
                                       <span class="fa fa-pencil"></span>
-                                    </a> -->
+                                    </a>
                                     <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
                                       <span class="fa fa-trash"></span>
                                     </a>

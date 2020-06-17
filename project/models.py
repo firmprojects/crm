@@ -71,6 +71,7 @@ class Projects(models.Model):
 
     def get_progress(self):
         try:
+
             return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
         except ZeroDivisionError:
             return 0
@@ -94,3 +95,21 @@ class Milestone(models.Model):
     project = models.ForeignKey(Projects,on_delete=models.CASCADE)
     assigned_to = models.OneToOneField(to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)
     completed = models.BooleanField(default=False)
+    milestone_followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='milestone_followers', blank=True,null=True)
+    milestone_assignes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='milestone_assignes', blank=True,null=True)
+
+    def __str__(self):
+        return self.task
+
+    def assigned_to(self):
+        name = f'{self.task} assigned to: '
+        for i in self.milestone_assignes.all():
+            name += f"{i.username}  "
+        print(name)
+        return name
+    def followers_to(self):
+        name = f'{self.task} followed by: '
+        for i in self.milestone_followers.all():
+            name += f"{i.username}  "
+        print(name)
+        return name

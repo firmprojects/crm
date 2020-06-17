@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from allauth.account.views import LoginView
-from django.http import HttpResponseRedirect,JsonResponse
+from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime,parse_date
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import FormView
+
 from .models import *
+from .forms import *
 import json
 import datetime
 
@@ -16,6 +19,26 @@ import datetime
 WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Saturday',6:'Sunday'}
 class Users(TemplateView):
     template_name = 'users/users.html'
+    form_class = UserCreate
+    success_url = '/all'
+    def get(self,request):
+        super().get(request)
+        context = super().get_context_data()
+        context['users'] = CustomUser.objects.all()
+        context['form'] = UserCreate
+        context['change_form'] = UserChangeForm
+        return render(request,self.template_name,context=context)
+
+    def post(self,request):
+
+        context = super().get_context_data()
+        form = UserCreate(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.build_absolute_uri())
+        context['users'] = CustomUser.objects.all()
+        context['form'] = form
+        return render(request,self.template_name,context=context)
 
 
 class Contacts(TemplateView):
@@ -130,6 +153,14 @@ def get_weekly_report(request):
         except Clocking.DoesNotExist:
             return JsonResponse({})
 
+def delete_user(request,pk):
+    if request.user.is_authenticated:
+        if request.user.is_admin or request.user.is_superuser:
+            CustomUser.objects.get(pk=pk).delete()
+            print("ok")
+            return HttpResponseRedirect('/all')
+
+    return HttpResponse("NOT ALLOWED")
 # def home(request):
 #     if request.user.is_authenticated:
 #         if request.user.is_employee:

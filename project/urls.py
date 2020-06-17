@@ -21,6 +21,9 @@ urlpatterns = [
     path('<pk>/milestones/', milestone_list, name='milestones'),
     path('milestones/add/',add_milestone,name="add_milestone"),
     path('milestones/delete/',delete_milestone,name="delete_milestone"),
-    path('milestones/mark_complete/',mark_complete,name='mark_complete')
+    path('milestones/mark_complete/',mark_complete,name='mark_complete'),
+    path('milestones/auto_/<pk>/',MilestoneAuto.as_view(),name='milestone_auto'),
+    path('milestones/assign_/<pk>/',assign_,name='assign_'),
+    path('milestones/followers_/<pk>/',followers_,name='followers_')
 
 ]

@@ -16,7 +16,7 @@ class Task(models.Model):
     STATUS = ( ('active', 'Active'), ('inactive', 'Inactive'),('completed',"Completed"))
     task_id = models.CharField(unique=True,max_length=10,default=generate_task_id)
 
-    project = models.ForeignKey(Projects,  on_delete=models.CASCADE,blank=True, null=True)
+    # project = models.ForeignKey(Projects,  on_delete=models.CASCADE,blank=True, null=True)
     name = models.CharField(max_length=200)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)

@@ -12,5 +12,6 @@ urlpatterns = [
     path('clock_in/',clock_in,name='clock_in'),
     path('clock_out/',clock_out,name='clock_out'),
     path('get_date_on_refresh/',get_date_on_refresh,name='get_date_on_refresh'),
-    path('get_weekly_report/',get_weekly_report,name='get_weekly_report')
+    path('get_weekly_report/',get_weekly_report,name='get_weekly_report'),
+    path('delete_user/<pk>/',delete_user,name='delete_user')
 ]

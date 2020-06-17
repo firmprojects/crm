@@ -1,6 +1,6 @@
 from dal import autocomplete
 from django.shortcuts import render,reverse
-from django.http import HttpResponseRedirect,JsonResponse
+from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, View
 from django.shortcuts import redirect
@@ -186,6 +186,14 @@ class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__istartswith=self.q)
         return qs
 
+class MilestoneAuto(autocomplete.Select2QuerySetView):
+    model = Projects
+    def get_queryset(self):
+        print(self.kwargs)
+        qs = self.model.objects.get(pk=self.kwargs.get('pk')).milestone_set.all()
+        if self.q:
+            qs = qs.filter(task__istartswith=self.q)
+        return qs
 
 # class Milestones(TemplateView):
 #     template_name =
@@ -244,3 +252,42 @@ def change_status(request):
     print("ok")
     # return JsonResponse({"success":"success"})
     return JsonResponse({"status":project.status})
+
+def assign_(request,pk):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            data = request.POST
+            milestone = Milestone.objects.get(pk=data['milestones'])
+            user = CustomUser.objects.get(pk=data['staff'])
+            print(user)
+
+            if user not in milestone.milestone_assignes.all():
+                milestone.milestone_assignes.add(user)
+            else:
+                 pass
+            milestone.save()
+
+            return HttpResponseRedirect(reverse('project:milestones',args=(pk,)))
+
+    return HttpResponse("NOT ALLOWED")
+
+
+def followers_(request,pk):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            data = request.POST
+            milestone = Milestone.objects.get(pk=data['milestones'])
+            # user = CustomUser.objects.get(pk=)
+            # print(user)
+
+            for i in data.getlist('staff'):
+                user = CustomUser.objects.get(pk=i)
+                if user not in milestone.milestone_followers.all():
+                    milestone.milestone_followers.add(user)
+            else:
+                 pass
+            milestone.save()
+
+            return HttpResponseRedirect(reverse('project:milestones',args=(pk,)))
+
+    return HttpResponse("NOT ALLOWED")
