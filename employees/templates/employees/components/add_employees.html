@@ -1,0 +1,72 @@
+{% load crispy_forms_tags %}
+
+<div id="add_employee" class="modal custom-modal fade" role="dialog">
+  <div class="modal-dialog">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Staff</h4>
+      </div>
+      <div class="modal-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.first_name|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.last_name|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.password1|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.email|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.phone_number|as_crispy_field }}
+                    </div>
+                </div>
+                 <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.staff_id|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.designation|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.branch|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        {{ form.address|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        {{ form.photo|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+            <div class="m-t-20 text-center">
+                <button class="btn btn-primary btn-lg" type="submit">Create Client</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

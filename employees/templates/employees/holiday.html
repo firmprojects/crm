@@ -1,0 +1,12 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'employees/components/holiday_table.html' %}
+    {% include 'employees/components/add_holiday.html' %}
+
+</div>
+{% endblock content%}

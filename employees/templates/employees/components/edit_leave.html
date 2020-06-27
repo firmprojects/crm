@@ -1,0 +1,48 @@
+<div id="edit_leave" class="modal custom-modal fade" role="dialog">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="modal-dialog">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Leave</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Leave Type <span class="text-danger">*</span></label>
+                        <select class="select">
+                            <option>Select Leave Type</option>
+                            <option>Casual Leave 12 Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>From <span class="text-danger">*</span></label>
+                        <div class="cal-icon">
+                            <input class="form-control datetimepicker" value="01-01-2017" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>To <span class="text-danger">*</span></label>
+                        <div class="cal-icon">
+                            <input class="form-control datetimepicker" value="01-01-2017" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of days <span class="text-danger">*</span></label>
+                        <input class="form-control" readonly="" type="text" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>Remaining Leaves <span class="text-danger">*</span></label>
+                        <input class="form-control" readonly="" value="12" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Leave Reason <span class="text-danger">*</span></label>
+                        <textarea rows="4" cols="5" class="form-control">Going to hospital</textarea>
+                    </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary btn-lg">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

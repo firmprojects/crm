@@ -1,0 +1,181 @@
+{% extends 'backend/base.html '%}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/sidebar.html' %}
+    </div>
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-8 col-6">
+                    <h4 class="page-title">Taxes</h4>
+                </div>
+                <div class="col-sm-4 col-6 text-right m-b-30">
+                    <a href="#" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#add_tax"><i
+                            class="fa fa-plus"></i> Add Tax</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table m-b-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tax Name </th>
+                                    <th>Tax Percentage (%) </th>
+                                    <th>Status</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in taxes %}
+                                <tr>
+                                    <td>{{ forloop.counter}}</td>
+                                    <td>{{ item.tax_name }}</td>
+                                    <td>{{ item.tax_percentage }}%</td>
+                                    <td>
+                                        <div class="dropdown action-label">
+                                            <a class="dropdown-item" href="#"><i
+                                                    class="fa fa-dot-circle-o text-success"></i>
+                                                {{ item.get_tax_status_display }}</a>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                    <a type="button" class="btn btn-sm btn-primary delete" href="" data-id="{{ item.id }}"  data-toggle="modal" data-target="#edit_tax"><span class="fa fa-pencil"></span>
+                                      </a>
+                                      <a type="button" class="btn btn-sm btn-danger update" href="" data-id2="{{ item.id }}"   data-toggle="modal" data-target="#delete_tax" >
+                                        <span class="fa fa-trash"></span>
+                                      </a>
+                                   </td>
+                                   </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% include 'backend/notifications.html' %}
+    </div>
+    <div id="add_tax" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Tax</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.tax_name|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.tax_percentage|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                          
+                               {{ form.tax_status|as_crispy_field }}
+                           
+                        </div>
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-primary btn-lg" type="submit">Create Tax</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="edit_tax" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Tax</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.tax_name|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.tax_percentage|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                          
+                               {{ form.tax_status|as_crispy_field }}
+                           
+                        </div>
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-primary btn-lg" type="submit">Edit Tax</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="delete_tax" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Tax</h4>
+                </div>
+                <div class="modal-body card-box">
+                    <p>Are you sure want to delete this?</p>
+                    <div class="m-t-20 text-left">
+                        <a href="#" class="btn btn-white delete" data-dismiss="modal">Close</a>
+                        <button id="delete-item" type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" data-reff=""></div>
+</div>
+{% endblock content%}
+
+{% block js %}
+<script>
+      $(document).ready(function () {
+    $(".delete").on('click', function(){
+        console.log("Hey")
+        let id = $(this).attr("data-id");
+        console.log(id)
+        $("#delete-item").on('click', function(){
+           window.location.href = `/crm_accounts/taxes/${id}/delete`
+        })
+    })
+});
+</script>
+
+<script>
+    $(document).ready(function () {
+        table = $('#exp').DataTable({
+            paging: false
+        });
+
+        $('#exp').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        })
+    })
+
+</script>
+{% endblock %}

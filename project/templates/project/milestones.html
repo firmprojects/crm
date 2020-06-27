@@ -1,0 +1,259 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/project_sidebar.html' %}
+    </div>
+    <div class="page-wrapper">
+        <div class="chat-main-row">
+            <div class="chat-main-wrapper">
+                <div class="col-lg-7 message-view task-view task-left-sidebar">
+                    <div class="chat-window">
+                        <div class="fixed-header">
+                            <div class="navbar">
+                                <div class="pull-left mr-auto">
+                                    <div class="add-task-btn-wrapper">
+                                        <span class="add-task-btn btn btn-info btn-sm">Add Milestone</span>
+                                    </div>
+                                </div>
+                                <a class="task-chat profile-rightbar pull-right" href="#chat_sidebar"><i class="fa fa fa-comment"></i></a>
+                                <ul class="nav pull-right custom-menu">
+                                  <form class="form-inline" method="get">
+                                    <div class="input-group m-b-10">
+                                        <input placeholder="Search" class="form-control" type="text" name="search" value="{{ request.GET.search }}">
+                                    </div>
+                                    <input type="submit" class="btn btn-outline-success" value="Submit">
+                                  </form>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="chat-contents">
+                            <div class="chat-content-wrap">
+                                <div class="chat-wrap-inner">
+                                    <div class="chat-box">
+                                        <div class="task-wrapper">
+                                            <div class="task-list-container">
+                                                <div class="task-list-body">
+                                                    <ul id="task-list">
+                                                      {% for i in milestones %}
+                                                      <li class="task">
+                                                        <div class="task-container">
+                                                            <span class="task-action-btn task-check">
+                                                              {% if i.completed %}
+                                                                <span class="action-circle large complete-btn completed" milestone_id="{{i.pk}}" title="Mark Complete">
+                                                                    <i class="material-icons">check</i>
+                                                                </span>
+                                                              {% else %}
+                                                                <span class="action-circle large complete-btn" milestone_id="{{i.pk}}" title="Mark Complete">
+                                                                    <i class="material-icons">check</i>
+                                                                </span>
+                                                              {% endif %}
+                                                            </span>
+                                                            <span class="task-label" contenteditable="true">{{ i.task }}</span>
+                                                            <span class="task-action-btn task-btn-right">
+                                                                <span class="action-circle large" title="Assign">
+                                                                    <i class="material-icons">person_add</i>
+                                                                </span>
+                                                                <span class="action-circle large delete-btn" milestone_id="{{i.pk}}" title="Delete Task">
+                                                                    <i class="material-icons">delete</i>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        </li>
+                                                      {% endfor %}
+                                                    </ul>
+                                                </div>
+                                                <div class="task-list-footer">
+                                                    <div class="new-task-wrapper">
+                                                        <textarea id="new-task" placeholder="Enter new task here. . ."></textarea>
+                                                        <span class="error-message hidden">You need to enter a task first</span>
+                                                        <span class="add-new-task-btn btn" id="add-task">Add Task</span>
+                                                        <span class="cancel-btn btn" id="close-task-panel">Close</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="notification-popup hide">
+                                            <p>
+                                                <span class="task"></span>
+                                                <span class="notification-text"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 message-view task-chat-view task-right-sidebar" id="chat_sidebar">
+                    <div class="chat-window">
+                        <div class="fixed-header">
+                            <div class="navbar">
+                                <div class="task-assign">
+                                    <span class="assign-title">Assigned to </span>
+                                    {% for i in milestones %}
+                                      <a href="#" data-toggle="tooltip" data-placement="bottom" title="{{i.assigned_to}} ">
+                                        <img src="assets/img/user.jpg" class="avatar" height="20" width="20">
+
+                                      </a>
+                                    {% endfor %}
+                                    <a href="#" class="followers-add" title="Add Assignee" data-toggle="modal" data-target="#assignee"><i class="material-icons">add</i></a>
+                                </div>
+                                <!-- <ul class="nav pull-right custom-menu">
+                                    <li class="dropdown dropdown-action">
+                                        <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="javascript:void(0)">Delete Task</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Settings</a>
+                                        </div>
+                                    </li>
+                                </ul> -->
+                            </div>
+                        </div>
+                        <div class="chat-contents task-chat-contents">
+                            <div class="chat-content-wrap">
+                                <div class="chat-wrap-inner">
+                                    <div class="chat-box">
+                                        <div class="chats">
+                                            <h4>{{project.name}}</h4>
+                                            <hr class="task-line">
+                                            {% for i in comments %}
+                                            <div class="card">
+                                              <div class="card-header">
+                                                <h4><small>Commented by: </small>{{ i.commented_by }}</h4>
+                                              </div>
+                                              <div class="card-body">
+                                                {{ i.text }}
+                                              </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-footer">
+                            <div class="message-bar">
+                                <div class="message-inner">
+
+                                    <div class="message-area">
+                                        <form class="form-inline" action="{% url 'project:milestones' pk%}" method="post" style="width:100%">
+                                          {% csrf_token %}
+                                          <textarea class="form-control" name="comment" placeholder="Type message..." style="width:90%" cols="1"></textarea>
+                                          <button class="btn btn-primary" type="submit"><i class="fa fa-send"></i></button>
+
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="project-members task-followers">
+                                <span class="followers-title">Followers</span>
+                                {% for i in milestones %}
+                                  <a href="#" data-toggle="tooltip" data-placement="bottom" title="{{i.followers_to}} ">
+                                    <img src="assets/img/user.jpg" class="avatar" height="20" width="20">
+
+                                  </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="assignee" class="modal custom-modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Assign this Milestone</h3>
+
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" action="{% url 'project:assign_' pk %}">
+                        {% csrf_token %}
+                        <div class="input-group m-b-10">
+                          <select placeholder="select to add" style='width:100%' class="form-control select_staff" id="" name='staff'></select>
+                        </div>
+                        <div class="input-group m-b-30">
+                          <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
+                        </div>
+                        <div class="m-t-50 text-center">
+                            <button class="btn btn-primary btn-lg">Assign</button>
+                            <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
+
+                        </div>
+                      </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="task_followers" class="modal custom-modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Add team members to this milestone</h3>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" action="{% url 'project:assign_' pk %}">
+                        {% csrf_token %}
+                        <div class="input-group m-b-10">
+                          <select placeholder="select to add" style='width:100%' class="form-control select_follower" id="" name='staff'></select>
+                        </div>
+                        <div class="input-group m-b-30">
+                          <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
+                        </div>
+                        <div class="m-t-50 text-center">
+                            <button class="btn btn-primary btn-lg">Assign</button>
+                            <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
+
+                        </div>
+                      </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+  var id="{{pk}}"
+  var csrf_token = "{{ csrf_token }}"
+  // console.log("");
+  $(document).ready(()=>{
+    $(".select_milestone").select2({
+      placeholder: "Milestones",
+      minimumInputLength: 1,
+      ajax: {
+          url: '/project/milestones/auto_/{{pk}}/',
+          dataType: 'json'
+      },
+    })
+    $(".select_staff").select2({
+      minimumInputLength: 1,
+      placeholder: "Milestone assignee*",
+      ajax: {
+          url: '/project/user_autocomplete',
+          dataType: 'json'
+      },
+    })
+    $(".select_follower").select2({
+      minimumInputLength: 1,
+      placeholder: "Milestone Followers",
+      multiple:true,
+      ajax: {
+          url: '/project/user_autocomplete',
+          dataType: 'json'
+      },
+    })
+  })
+
+</script>
+
+{% endblock content%}

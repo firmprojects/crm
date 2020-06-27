@@ -1,0 +1,453 @@
+{% extends 'backend/staff_base.html' %}
+{% load static %}
+
+
+{% block content %}
+<script type="text/javascript" src="{% static 'js/easytimer.min.js' %}"></script>
+<script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
+<script type="text/javascript" src="{% static 'js/weekly_report_and_timer.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+
+<style media="screen">
+  .tooltip-inner {
+    max-width: 400px !important;
+}
+
+</style>
+<script type="text/javascript">
+  var timer = new easytimer.Timer();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+
+  $(document).ready(function () {
+
+
+
+    $("#today_").html(`${moment().format("dddd, MMMM DD")}`)
+    $.ajax({
+      type:'GET',
+      url:"{% url 'users:get_date_on_refresh' %}",
+      success:(res)=>{
+        if(res['time'] == 'No'){
+          $("#clock_in_time").html("--:--:--")
+        }
+        else {
+          let clocked_in = new Date(res['time']);
+
+          $("#clock_in_time").html(`${formatAMPM(clocked_in)}`)
+          console.log((Date.now() - clocked_in)/1000);
+          timer.start({startValues: {seconds: (Date.now() - clocked_in)/1000}});
+          timer.addEventListener('secondsUpdated', function (e) {
+              $('#timer').html(timer.getTimeValues().toString());
+          });
+
+        }
+
+      }
+    })
+
+    getWeeklyReport()
+  })
+  // function getWeeklyReport() {
+  //   let start = moment().subtract(7, 'days').format('YYYY-MM-DD')
+  //   let end = moment().format('YYYY-MM-DD')
+  //   $("#from_to_week").html(`${start} to ${end}`)
+  //   $.ajax({
+  //     type:'POST',url:"/get_weekly_report/",data:{"start":start,"end":end,"csrfmiddlewaretoken":"{{ csrf_token }}"},
+  //     success:(res)=>{
+  //       $("#weekly_report").html('')
+  //       for(let day of Object.keys(res['report'])){
+  //         let row_data = ''
+  //         let total_time = 0
+  //         res['report'][day].map((item,i)=>{
+  //           let data = ''
+  //           if(i===0){
+  //             let current = new Date(day)
+  //             console.log(current);
+  //             data+=`
+  //             <th rowspan=${res['report'][day].length}>${moment(day,'YYYY-MM-DD').format('dddd, MMMM DD')}</th>
+  //             <th rowspan=${res['report'][day].length}>${sec_to_hrs_min(res['hours_spent'][day])}</th>
+  //             `
+  //           }
+  //           let clock_in = new Date(item['clock_in'])
+  //           if(item['clock_out'] === undefined){
+  //
+  //             data+=`<td>${formatAMPM(clock_in)}</td><td>--</td>`
+  //           }
+  //           else{
+  //             let clock_out = new Date(item['clock_out'])
+  //             total_time+=clock_out - clock_in
+  //
+  //             data+=`<td>${formatAMPM(clock_in)}</td><td>${formatAMPM(clock_out)}</td>`
+  //           }
+  //
+  //           row_data+=`<tr>${data}</tr>`
+  //
+  //         })
+  //
+  //         $("#weekly_report").append(`<tr>${row_data}</tr>`)
+  //       }
+  //     }
+  //   })
+  // }
+  function getWeeklyReport(){
+      let start = moment().subtract(7, 'days').format('YYYY-MM-DD')
+      let end = moment().format('YYYY-MM-DD')
+      $("#from_to_week").html(`${start} to ${end}`)
+      $.ajax({
+        type:'POST',url:"/get_weekly_report/",data:{"start":start,"end":end,"csrfmiddlewaretoken":"{{ csrf_token }}"},
+        success:(res)=>{
+          $("#weekly_report").html('')
+          console.log(res);
+          for(let day of Object.keys(res['report'])){
+            let row_data = ''
+
+            let tooltop_data = ''
+            res['report'][day].map((item,i)=>{
+                let clock_in = new Date(item['clock_in'])
+                if(item['clock_out'] === undefined){
+
+                  tooltop_data+=`<strong>${formatAMPM(clock_in)}</strong><strong>--</strong></br>`
+                }
+                else{
+                  let clock_out = new Date(item['clock_out'])
+
+                  tooltop_data+=`<small><b>Clock in</b>: <i>${formatAMPM(clock_in)}</i>&nbsp;&nbsp;<b>Clock out</b>: <i>${formatAMPM(clock_out)}</i></br></small>`
+                }
+            })
+            row_data+=
+            `
+            <th>${moment(day,'YYYY-MM-DD').format('dddd, MMMM DD')}</th>
+            <th>${sec_to_hrs_min(res['hours_spent'][day])}</th>
+            <th><button class='btn btn-white' data-toggle="tooltip" data-placement="left" data-html="true" title="${tooltop_data}">View</a></th>
+
+            `
+
+            $("#weekly_report").append(`<tr>${row_data}</tr>`)
+            $('[data-toggle="tooltip"]').tooltip()
+          }
+        }
+      })
+  }
+
+  function clockIn(){
+    navigator.geolocation.getCurrentPosition(pos=>{
+
+
+      $.ajax({
+        type:'POST',
+        data:{"data":JSON.stringify({'date':moment().format(),'today':`${moment().format("YYYY-MM-DD")}`,'pos':`${pos.coords.latitude},${pos.coords.longitude}`})},
+        url:"{% url 'users:clock_in' %}",
+        success: (res)=>{
+          date = new Date(res['time_now'])
+          $("#clock_in_time").html(formatAMPM(date))
+          timer.start();
+          timer.addEventListener('secondsUpdated', function (e) {
+              $('#timer').html(timer.getTimeValues().toString());
+          });
+        }
+      })
+    })
+
+  }
+  function clockOut(){
+    let today = new Date()
+    $.ajax({
+      type:'POST',
+      data:{"data":JSON.stringify({'today':`${moment().format("YYYY-MM-DD")}`})},
+      url:"{% url 'users:clock_out' %}",
+      success: (res)=>{
+        timer.stop();
+        getWeeklyReport()
+      }
+    })
+  }
+</script>
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card task-panel">
+                    <div class="card-header bg-white">
+                        <h5>Good morning, {{ request.user.username}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="clocking">
+                        <div class="dash-widget dash-widget4"><button class="btn btn-white" onclick="clockIn()">Clock In </button></div>
+                        <div class="">
+                            <span class="dash-widget-icon bg-light"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="dash-widget dash-widget4"><button class="btn btn-white" onclick="clockOut()">Clock Out </button></div>
+                    </div>
+                    <div class="clocking-time">
+                    <h4>{{ request.user.username}} Clocked In at </h4>
+                    <h1 id="clock_in_time"> --:--:-- </h1>
+                    <p id="timer">--:--:--</p>
+                    <p id="today_">Mon, June 1</p>
+                </div>
+                    </div>
+                    <div class="card-footer text-center bg-white">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card member-panel">
+                    <div class="card-header bg-white">
+                        <h4 class="card-title m-b-0 text-center">Your Weekly Attendance Report</h4>
+                        <h6 class="text-center" id="from_to_week"> Monday June 6th - Friday June 10th</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped custom-table m-b-0">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time Spent</th>
+                                        <th>Clock In and Out</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="weekly_report">
+                                    <!-- <tr>
+                                        <td><a href="invoice-view.html">Monday</a></td>
+                                        <td>
+                                            <h2><a href="#">8.00am</a></h2>
+                                        </td>
+                                        <td>5.00pm</td>
+                                        <td>8 hours</td>
+                                        <td>
+                                            <span class="badge badge-warning-border">approved</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="invoice-view.html">Tuesday</a></td>
+                                        <td>
+                                            <h2><a href="#">8.00am</a></h2>
+                                        </td>
+                                        <td>5.00pm</td>
+                                        <td>8 hours</td>
+                                        <td>
+                                            <span class="badge badge-warning-border">approved</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="invoice-view.html">Wednesday</a></td>
+                                        <td>
+                                            <h2><a href="#">8.00am</a></h2>
+                                        </td>
+                                        <td>5.00pm</td>
+                                        <td>8 hours</td>
+                                        <td>
+                                            <span class="badge badge-warning-border">approved</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="invoice-view.html">Thursday</a></td>
+                                        <td>
+                                            <h2><a href="#">8.00am</a></h2>
+                                        </td>
+                                        <td>5.00pm</td>
+                                        <td>8 hours</td>
+                                        <td>
+                                            <span class="badge badge-warning-border">approved</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="invoice-view.html">Friday</a></td>
+                                        <td>
+                                            <h2><a href="#">8.00am</a></h2>
+                                        </td>
+                                        <td>5.00pm</td>
+                                        <td>8 hours</td>
+                                        <td>
+                                            <span class="badge badge-warning-border">approved</span>
+                                        </td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center bg-white">
+                        <!-- <a href="invoices.html" class="text-muted">Monthly Attendance</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+            <div class="col-md-6">
+                <div class="card task-panel">
+                    <div class="card-header bg-white">
+                        <div class="pull-left">
+                            <h4>Ongoing Tasks</h4>
+                        </div>
+                                            </div>
+                    <div class="card-body">
+                        <div class="task-wrapper">
+                            <div class="task-list-container">
+                                <div class="task-list-body">
+                                    <ul id="task-list">
+                                        <li class="task">
+                                            <div class="task-container">
+                                               <span class="task-label" contenteditable="false">Patient appointment booking</span>
+                                                <span class="task-action-btn task-btn-right">
+                                                        <span class="action-circle large" title="Assign">
+                                                            <i class="material-icons">person_add</i>
+                                                        </span>
+                                                 </span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card member-panel">
+                    <div class="card-header bg-white">
+                        <h4 class="card-title m-b-0">Contacts</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="contact-list">
+                            <li>
+                                <div class="contact-cont">
+                                    <div class="pull-left user-img m-r-10">
+                                        <a href="profile.html" title="John Doe"><img src="assets/img/user.jpg" alt="" class="w-40 rounded-circle"><span class="status online"></span></a>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span class="contact-name text-ellipsis">John Doe</span>
+                                        <span class="contact-date">Web Developer</span>
+                                    </div>
+                                    <div class="contact-action">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="" class="dropdown-toggle action-icon" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-cont">
+                                    <div class="pull-left user-img m-r-10">
+                                        <a href="profile.html" title="Richard Miles"><img src="assets/img/user.jpg" alt="" class="w-40 rounded-circle"><span class="status offline"></span></a>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span class="contact-name text-ellipsis">Richard Miles</span>
+                                        <span class="contact-date">Web Developer</span>
+                                    </div>
+                                    <div class="contact-action">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="" class="dropdown-toggle action-icon" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-cont">
+                                    <div class="pull-left user-img m-r-10">
+                                        <a href="profile.html" title="John Doe"><img src="assets/img/user.jpg" alt="" class="w-40 rounded-circle"><span class="status away"></span></a>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span class="contact-name text-ellipsis">John Doe</span>
+                                        <span class="contact-date">Web Developer</span>
+                                    </div>
+                                    <div class="contact-action">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="" class="dropdown-toggle action-icon" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-cont">
+                                    <div class="pull-left user-img m-r-10">
+                                        <a href="profile.html" title="Richard Miles"><img src="assets/img/user.jpg" alt="" class="w-40 rounded-circle"><span class="status online"></span></a>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span class="contact-name text-ellipsis">Richard Miles</span>
+                                        <span class="contact-date">Web Developer</span>
+                                    </div>
+                                    <div class="contact-action">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="" class="dropdown-toggle action-icon" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-cont">
+                                    <div class="pull-left user-img m-r-10">
+                                        <a href="profile.html" title="John Doe"><img src="assets/img/user.jpg" alt="" class="w-40 rounded-circle"><span class="status offline"></span></a>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span class="contact-name text-ellipsis">John Doe</span>
+                                        <span class="contact-date">Web Developer</span>
+                                    </div>
+                                    <div class="contact-action">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="" class="dropdown-toggle action-icon" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="contact-cont">
+                                    <div class="pull-left user-img m-r-10">
+                                        <a href="profile.html" title="Richard Miles"><img src="assets/img/user.jpg" alt="" class="w-40 rounded-circle"><span class="status away"></span></a>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span class="contact-name text-ellipsis">Richard Miles</span>
+                                        <span class="contact-date">Web Developer</span>
+                                    </div>
+                                    <div class="contact-action">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="" class="dropdown-toggle action-icon" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center bg-white">
+                        <a href="users.html" class="text-muted">View all members</a>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js %}
+
+{% endblock %}

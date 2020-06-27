@@ -1,0 +1,11 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'employees/components/add_employees.html' %}
+    {% include 'employees/components/employees_display.html' %}
+    {% include 'employees/components/delete_employees.html' %}
+</div>
+{% endblock content%}

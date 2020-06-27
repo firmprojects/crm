@@ -1,0 +1,40 @@
+{% extends 'backend/base.html '%}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/sidebar.html' %}
+    </div>
+    <div>
+
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="row">
+                    <div class="col-md-8 offset-2">
+                        <div class="col-sm-5 col-5">
+                            <h4 class="page-title">Delete Estimate</h4>
+                        </div>
+                        <div>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="modal-body card-box">
+                                    <p>Are you sure want to delete this {{ object.name}}?</p>
+                                    <div class="m-t-20 text-left">
+                                        <a href="{% url 'crm_accounts:estimates'%}" class="btn btn-white">Close</a>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        {% endblock content%}
