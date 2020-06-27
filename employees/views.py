@@ -1,11 +1,19 @@
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import reverse
+from django.http import JsonResponse,HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404,reverse
+
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.forms import modelformset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm)
-from .models import ( Education, Experience, Skill, Department, Designation, Holidays, LeaveRequest, LeaveType, Staff)
+from .models import *
 from allauth.account.views import SignupView
+from users.models import Clocking
+from django.utils import timezone
+import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from users.models import CustomUser
+
+from dal import autocomplete
 
 class StaffCreateView(SignupView):
     model = Staff
@@ -126,7 +134,38 @@ class DeleteLeaveType(DeleteView):
 
 
 def attendance(request):
+    staffs = Staff.objects.all()
+    # staffs = CustomUser.objects.all()
+
+    for i in staffs:
+        try:
+            clock_in_data = Clocking.objects.get(user=i.user).clockin_data
+            report = {}
+            clockins = {}
+            for date,data in clock_in_data.items():
+                report[date] = "present" if data.__len__() > 0 else "absent"
+                clockins[date] = data
+
+            attend = Attendance.objects.get(staff=i)
+
+
+            attend.attendance = report
+            attend.clock_ins = clockins
+            attend.save()
+        except Clocking.DoesNotExist:
+            pass
+
     return render(request, 'employees/attendance.html')
+
+def getAttendance(request):
+    print(request.POST)
+    if request.method == "POST":
+        year,month = int(request.POST['year']),int(request.POST['month'])
+        print(year,month)
+        data1 = present_absent(month=month,year=year)
+        data2 = clockin_out(month=month,year=year)
+        return JsonResponse({"present_absent":data1,"clockin_out":data2})
+    return HttpResponseRedirect(reverse('employees:attendance'))
 
 
 def tasks(request):
@@ -163,3 +202,80 @@ def voice_call(request):
 
 def chat(request):
     return render(request, 'employees/chat.html')
+
+def present_absent(month=None,year=None):
+    month = month if month else datetime.date.today().month
+    year = year if year else datetime.date.today().year
+
+    data = {}
+    date_start= datetime.date(int(year), int(month), 1)
+    date_end= last_day_of_month(datetime.date(int(year), int(month), 1))
+    for i in Staff.objects.all():
+        attend = i.attendance
+        data[i.user.username] = []
+        for single_date in (date_start + datetime.timedelta(n) for n in range((date_end-date_start).days)):
+            if str(single_date) in attend.attendance:
+                data[i.user.username].append(attend.attendance[str(single_date)])
+            else:
+                data[i.user.username].append("N/A")
+    return data
+
+def clockin_out(month=None,year=None):
+    month = month if month else datetime.date.today().month
+    year = year if year else datetime.date.today().year
+    print(month,year)
+
+    data = {}
+    date_start= datetime.date(int(year), int(month), 1)
+    date_end= last_day_of_month(datetime.date(int(year), int(month), 1))
+    for i in Staff.objects.all():
+        attend = i.attendance
+        data[i.user.username] = []
+        for single_date in (date_start + datetime.timedelta(n) for n in range((date_end-date_start).days)):
+            if str(single_date) in attend.attendance:
+                data[i.user.username].append(attend.clock_ins[str(single_date)])
+            else:
+                data[i.user.username].append("N/A")
+
+    return data
+
+
+
+
+def last_day_of_month(date):
+    if date.month == 12:
+        return date.replace(day=31)
+    return date.replace(month=date.month+1, day=1) - datetime.timedelta(days=1)
+
+        # date_e
+def filter_objects(date,month=None,year=None):
+
+    if year and month:
+        date = datetime.date.fromisoformat(date)
+
+        if date.year == int(year) and date.month == int(month):
+            return True
+
+        return False
+
+    elif month:
+        date = datetime.date.fromisoformat(date)
+        if date.month == int(month):
+            return True
+        return False
+    elif year:
+        date = datetime.date.fromisoformat(date)
+        if date.year == int(year):
+            return True
+        return False
+    else:
+        return True
+
+
+class StaffAC(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Staff.objects.all().order_by('user__username')
+        print(qs)
+        if self.q:
+            qs = qs.filter(user__username__istartswith=self.q)
+        return qs

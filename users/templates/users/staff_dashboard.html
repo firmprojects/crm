@@ -3,6 +3,168 @@
 
 
 {% block content %}
+<script type="text/javascript" src="{% static 'js/easytimer.min.js' %}"></script>
+<script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
+<script type="text/javascript" src="{% static 'js/weekly_report_and_timer.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+
+<style media="screen">
+  .tooltip-inner {
+    max-width: 400px !important;
+}
+
+</style>
+<script type="text/javascript">
+  var timer = new easytimer.Timer();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+
+  $(document).ready(function () {
+
+
+
+    $("#today_").html(`${moment().format("dddd, MMMM DD")}`)
+    $.ajax({
+      type:'GET',
+      url:"{% url 'users:get_date_on_refresh' %}",
+      success:(res)=>{
+        if(res['time'] == 'No'){
+          $("#clock_in_time").html("--:--:--")
+        }
+        else {
+          let clocked_in = new Date(res['time']);
+
+          $("#clock_in_time").html(`${formatAMPM(clocked_in)}`)
+          console.log((Date.now() - clocked_in)/1000);
+          timer.start({startValues: {seconds: (Date.now() - clocked_in)/1000}});
+          timer.addEventListener('secondsUpdated', function (e) {
+              $('#timer').html(timer.getTimeValues().toString());
+          });
+
+        }
+
+      }
+    })
+
+    getWeeklyReport()
+  })
+  // function getWeeklyReport() {
+  //   let start = moment().subtract(7, 'days').format('YYYY-MM-DD')
+  //   let end = moment().format('YYYY-MM-DD')
+  //   $("#from_to_week").html(`${start} to ${end}`)
+  //   $.ajax({
+  //     type:'POST',url:"/get_weekly_report/",data:{"start":start,"end":end,"csrfmiddlewaretoken":"{{ csrf_token }}"},
+  //     success:(res)=>{
+  //       $("#weekly_report").html('')
+  //       for(let day of Object.keys(res['report'])){
+  //         let row_data = ''
+  //         let total_time = 0
+  //         res['report'][day].map((item,i)=>{
+  //           let data = ''
+  //           if(i===0){
+  //             let current = new Date(day)
+  //             console.log(current);
+  //             data+=`
+  //             <th rowspan=${res['report'][day].length}>${moment(day,'YYYY-MM-DD').format('dddd, MMMM DD')}</th>
+  //             <th rowspan=${res['report'][day].length}>${sec_to_hrs_min(res['hours_spent'][day])}</th>
+  //             `
+  //           }
+  //           let clock_in = new Date(item['clock_in'])
+  //           if(item['clock_out'] === undefined){
+  //
+  //             data+=`<td>${formatAMPM(clock_in)}</td><td>--</td>`
+  //           }
+  //           else{
+  //             let clock_out = new Date(item['clock_out'])
+  //             total_time+=clock_out - clock_in
+  //
+  //             data+=`<td>${formatAMPM(clock_in)}</td><td>${formatAMPM(clock_out)}</td>`
+  //           }
+  //
+  //           row_data+=`<tr>${data}</tr>`
+  //
+  //         })
+  //
+  //         $("#weekly_report").append(`<tr>${row_data}</tr>`)
+  //       }
+  //     }
+  //   })
+  // }
+  function getWeeklyReport(){
+      let start = moment().subtract(7, 'days').format('YYYY-MM-DD')
+      let end = moment().format('YYYY-MM-DD')
+      $("#from_to_week").html(`${start} to ${end}`)
+      $.ajax({
+        type:'POST',url:"/get_weekly_report/",data:{"start":start,"end":end,"csrfmiddlewaretoken":"{{ csrf_token }}"},
+        success:(res)=>{
+          $("#weekly_report").html('')
+          console.log(res);
+          for(let day of Object.keys(res['report'])){
+            let row_data = ''
+
+            let tooltop_data = ''
+            res['report'][day].map((item,i)=>{
+                let clock_in = new Date(item['clock_in'])
+                if(item['clock_out'] === undefined){
+
+                  tooltop_data+=`<strong>${formatAMPM(clock_in)}</strong><strong>--</strong></br>`
+                }
+                else{
+                  let clock_out = new Date(item['clock_out'])
+
+                  tooltop_data+=`<small><b>Clock in</b>: <i>${formatAMPM(clock_in)}</i>&nbsp;&nbsp;<b>Clock out</b>: <i>${formatAMPM(clock_out)}</i></br></small>`
+                }
+            })
+            row_data+=
+            `
+            <th>${moment(day,'YYYY-MM-DD').format('dddd, MMMM DD')}</th>
+            <th>${sec_to_hrs_min(res['hours_spent'][day])}</th>
+            <th><button class='btn btn-white' data-toggle="tooltip" data-placement="left" data-html="true" title="${tooltop_data}">View</a></th>
+
+            `
+
+            $("#weekly_report").append(`<tr>${row_data}</tr>`)
+            $('[data-toggle="tooltip"]').tooltip()
+          }
+        }
+      })
+  }
+
+  function clockIn(){
+    navigator.geolocation.getCurrentPosition(pos=>{
+
+
+      $.ajax({
+        type:'POST',
+        data:{"data":JSON.stringify({'date':moment().format(),'today':`${moment().format("YYYY-MM-DD")}`,'pos':`${pos.coords.latitude},${pos.coords.longitude}`})},
+        url:"{% url 'users:clock_in' %}",
+        success: (res)=>{
+          date = new Date(res['time_now'])
+          $("#clock_in_time").html(formatAMPM(date))
+          timer.start();
+          timer.addEventListener('secondsUpdated', function (e) {
+              $('#timer').html(timer.getTimeValues().toString());
+          });
+        }
+      })
+    })
+
+  }
+  function clockOut(){
+    let today = new Date()
+    $.ajax({
+      type:'POST',
+      data:{"data":JSON.stringify({'today':`${moment().format("YYYY-MM-DD")}`})},
+      url:"{% url 'users:clock_out' %}",
+      success: (res)=>{
+        timer.stop();
+        getWeeklyReport()
+      }
+    })
+  }
+</script>
 
 <div class="page-wrapper">
     <div class="content container-fluid">
@@ -14,21 +176,21 @@
                     </div>
                     <div class="card-body">
                         <div id="clocking">
-                        <div class="dash-widget dash-widget4"> <h3 class="">Clock In </h3></div>
+                        <div class="dash-widget dash-widget4"><button class="btn btn-white" onclick="clockIn()">Clock In </button></div>
                         <div class="">
                             <span class="dash-widget-icon bg-light"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
                         </div>
-                        <div class="dash-widget dash-widget4"> <h3>Clock Out </h3></div>
+                        <div class="dash-widget dash-widget4"><button class="btn btn-white" onclick="clockOut()">Clock Out </button></div>
                     </div>
                     <div class="clocking-time">
                     <h4>{{ request.user.username}} Clocked In at </h4>
-                    <h1> 8.00AM </h1>
-                    <p id="timer">00:00:00</p>
-                    <p>Mon, June 1</p>
+                    <h1 id="clock_in_time"> --:--:-- </h1>
+                    <p id="timer">--:--:--</p>
+                    <p id="today_">Mon, June 1</p>
                 </div>
                     </div>
                     <div class="card-footer text-center bg-white">
-                    
+
                     </div>
                 </div>
             </div>
@@ -36,7 +198,7 @@
                 <div class="card member-panel">
                     <div class="card-header bg-white">
                         <h4 class="card-title m-b-0 text-center">Your Weekly Attendance Report</h4>
-                        <h6 class="text-center"> Monday June 6th - Friday June 10th</h6>
+                        <h6 class="text-center" id="from_to_week"> Monday June 6th - Friday June 10th</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -44,14 +206,13 @@
                                 <thead>
                                     <tr>
                                         <th>Day</th>
-                                        <th>Clock In</th>
-                                        <th>Clock Out</th>
-                                        <th>Hours Spent</th>
+                                        <th>Time Spent</th>
+                                        <th>Clock In and Out</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
+                                <tbody id="weekly_report">
+                                    <!-- <tr>
                                         <td><a href="invoice-view.html">Monday</a></td>
                                         <td>
                                             <h2><a href="#">8.00am</a></h2>
@@ -105,7 +266,7 @@
                                         <td>
                                             <span class="badge badge-warning-border">approved</span>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -285,9 +446,8 @@
 </div>
 
 
-
 {% endblock content %}
-    
+
 {% block js %}
 
 {% endblock %}

@@ -1,35 +1,7 @@
 from django.urls import path, include
 
 # from users.views import users_list
-from .views import(
-    StaffCreateView,
-#     edit_employee,
-    attendance,
-    tasks,
-    leads,
-    assets,
-    activities,
-    users,
-    incoming_calls,
-    voice_call,
-    video_call,
-    chat,
-    HolidayCreate,
-    HolidayUpdate,
-    HolidayDelete,
-    CreateDepartment,
-    UpdateDepartment,
-    DeleteDepartment,
-    CreateDesignation,
-    UpdateDesignation,
-    DeleteDesignation,
-    CreateLeave,
-    UpdateLeave,
-    DeleteLeave,
-    CreateLeaveType,
-    UpdateLeaveType,
-    DeleteLeaveType,
-)
+from .views import *
 app_name = 'employees'
 
 urlpatterns = [
@@ -64,5 +36,9 @@ urlpatterns = [
     path('voice_call/', voice_call, name='voice_call'),
     path('video_call/', video_call, name='video_call'),
     path('chat/', chat, name='chat'),
+
+    path('get_attendance/',getAttendance,name='getAttendance'),
+
+    path('staff_ac',StaffAC.as_view(),name='staff_ac')
 
 ]

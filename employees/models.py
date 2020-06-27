@@ -1,8 +1,11 @@
+import django
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-
-
+from django.contrib.postgres import fields
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 
 class Staff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
@@ -14,11 +17,30 @@ class Staff(models.Model):
     branch = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}"
+        return self.user.username
 
     def get_absolute_url(self):
         return reverse('employees:staff')
 
+class Attendance(models.Model):
+    staff = models.OneToOneField(Staff,on_delete=models.CASCADE)
+    attendance = fields.JSONField(encoder=django.core.serializers.json.DjangoJSONEncoder)
+    clock_ins = fields.JSONField(encoder=django.core.serializers.json.DjangoJSONEncoder)
+
+
+def create_attendance(sender, instance, created, **kwargs):
+    if created:
+        attendace = Attendance(staff=instance,attendance={},clock_ins={})
+        attendace.save()
+    else:
+        try:
+            attendace = Attendance.objects.get(staff=instance)
+
+        except ObjectDoesNotExist:
+            attendace = Attendance(staff=instance,attendance={},clock_ins={})
+            attendace.save()
+
+post_save.connect(create_attendance,sender=Staff)
 
 class Education(models.Model):
     institution = models.CharField(max_length=300, blank=True, null=True)

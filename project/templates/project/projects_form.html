@@ -1,12 +1,14 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-<div id="create_project" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-lg">
+
+<div id="create_project" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
             <div class="modal-header">
                 <h4 class="modal-title">Create Project</h4>
+
             </div>
             <div class="modal-body">
                 <form method="POST" enctype="multipart/form-data">
@@ -20,7 +22,7 @@
                         <div class="col-sm-6">
                             <label for="id_label_clients" style="width: 100%">
                                 Clients*
-                                <select name="clients" style="width: 100%" class="project_clients js-states form-control" id="id_label_clients"></select>
+                                <select required name="clients" style="width: 100%" class="project_clients js-states form-control" id="id_label_clients"></select>
                             </label>
                         </div>
                     </div>
@@ -52,7 +54,7 @@
                         <div class="col-sm-6">
                             <label for="id_label_project_leader" style="width: 100%">
                                 Project leader*
-                                <select name="project_leader" style="width: 100%" class="project_leader js-states col-sm-12 form-control" id="id_label_project_leader"></select>
+                                <select required name="project_leader" style="width: 100%" class="project_leader col-sm-12 form-control" id="id_label_project_leader"></select>
                             </label>
                         </div>
                         <div class="col-sm-6">
@@ -69,7 +71,7 @@
                             <div class="form-group">
                             <label for="id_label_team_member" style="width: 100%">
                                 Team member
-                                <select style="width: 100%" name="team_member" class="team_member js-states col-sm-12 form-control" id="id_label_team_member"></select>
+                                <select required style="width: 100%" name="team_member" class="team_member js-states col-sm-12 form-control" id="id_label_team_member"></select>
                             </label>
                             </div>
                         </div>
@@ -85,11 +87,12 @@
                     <div class="form-group">
                         {{ form.description|as_crispy_field }}
                     </div>
-                    <div class="form-group">
-                        {{ form.image|as_crispy_field }}
-                    </div>
+
                     <div class="m-t-20 text-center">
                         <button class="btn btn-primary btn-lg" type="submit">Create Project</button>
+                        <button class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">
+                          Close
+                        </button>
                     </div>
                 </form>
             </div>

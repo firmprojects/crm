@@ -1,4 +1,6 @@
 import os
+import pytz
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
 
 
 
-    
+
 
 ]
 
@@ -93,8 +95,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'NAME': 'crm',
-        'PASSWORD': 'enternow',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'vihas',
+        'HOST': 'localhost',
         'PORT': '5432'
     },
 }
@@ -111,9 +113,9 @@ MAINTENANCE_IGNORE_URLS = (
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
@@ -146,7 +148,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -154,6 +156,7 @@ MEDIA_URL = "/media/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR,'static')
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -188,4 +191,3 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
 LOGIN_REDIRECT_URL  = 'users:staff_dashboard'
-

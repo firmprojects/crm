@@ -1,0 +1,302 @@
+{% extends 'backend/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/sidebar.html' %}
+    </div>
+
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-4 col-4">
+                    <h4 class="page-title">Projects</h4>
+                </div>
+                <div class="col-sm-8 col-8 text-right m-b-30">
+                    <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
+                        data-target="#create_project"><i class="fa fa-plus"></i> Create Project</a>
+                    <div class="view-icons">
+                        <a href="{% url 'project:projects' %}" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
+                        <a href="{% url 'project:project-list' %}" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <table class="table table-striped custom-table datatable">
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Client</th>
+                            <th>Progress</th>
+                            <th>Leader</th>
+                            <th style="width:130px;">Team</th>
+                            <th>Deadline</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in data %}
+                         {{item.pk}}
+                        <tr>
+                            <td>
+                                <h2><a href="{% url 'project:project_detail' item.id %}">{{ item.project_id }}</a></h2>
+                            </td>
+                            <td>{{ item.clients }}</td>
+                            <td> <div class="progress progress-xs m-b-0">
+                          
+                                <div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="{{ item.get_progress }}%" style="width: {{ item.get_progress }}%"></div>
+                            </div></td>
+                            <td>
+                                <ul class="team-members">
+                                    <li>
+                                        <a href="#" data-toggle="tooltip" title="{{ item.project_leader.username }}"><img
+                                                src="{% static 'img/user.jpg' %}" alt={{ item.project_leader.username }}></a>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="team-members">
+
+                                    {% for i in item.team_member.all  %}
+                                    <li>
+                                        <a href="#" data-toggle="tooltip" title="{{ i.username }}"><img
+                                                src="{% static 'img/user.jpg' %}" alt="{{ i.username }}"></a>
+                                    </li>
+                                    {% endfor %}
+
+
+
+                                </ul>
+                            </td>
+                            <td>  {{ item.end_date }} </td>
+                            <td>
+                                <div class="dropdown action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current" data-toggle="dropdown" aria-expanded="false">
+                                      {% if item.priority == 'high' %}
+                                        <i class="fa fa-dot-circle-o text-danger"></i> High
+                                      {% elif item.priority == 'medium' %}
+                                        <i class="fa fa-dot-circle-o text-warning"></i> Medium
+                                      {% else %}
+                                        <i class="fa fa-dot-circle-o text-success"></i> Low
+                                      {% endif %}
+                                    </a>
+                                    <div class="dropdown-menu" project_id="{{item.pk}}">
+                                        <a class="dropdown-item change_priority" priority='high' href="#"><i class="fa fa-dot-circle-o text-danger"></i> High</a>
+                                        <a class="dropdown-item change_priority" priority='medium' href="#"><i class="fa fa-dot-circle-o text-warning"></i> Medium</a>
+                                        <a class="dropdown-item change_priority" priority='low' href="#"><i class="fa fa-dot-circle-o text-success"></i> Low</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="dropdown action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current_status" data-toggle="dropdown" aria-expanded="false">
+                                      {% if item.status == 'cancelled' %}
+                                        <i class="fa fa-dot-circle-o text-danger"></i> Cancelled
+                                      {% elif item.status == 'pending' %}
+                                        <i class="fa fa-dot-circle-o text-warning"></i> Pending
+                                      {% elif item.status == 'suspended' %}
+                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspended
+                                      {% else %}
+                                        <i class="fa fa-dot-circle-o text-success"></i> Working
+                                      {% endif %}
+                                     </a>
+                                    <div class="dropdown-menu" project_id="{{item.pk}}">
+                                        <a class="dropdown-item change_status" status='working' href="#"><i class="fa fa-dot-circle-o text-success"></i> Working</a>
+                                        <a class="dropdown-item change_status" status='pending' href="#"><i class="fa fa-dot-circle-o text-warning"></i> Pending</a>
+                                        <a class="dropdown-item change_status" status='suspended' href="#"><i class="fa fa-dot-circle-o text-danger"></i> Suspended</a>
+                                        <a class="dropdown-item change_status" status='cancelled' href="#"><i class="fa fa-dot-circle-o text-danger"></i> Cancelled</a>
+
+
+                                    </div>
+                                </div>
+                            </td>
+
+                                <td class="text-right">
+                                    <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
+                                      <span class="fa fa-pencil"></span>
+                                    </a>
+                                    <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
+                                      <span class="fa fa-trash"></span>
+                                    </a>
+                                 </td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+    </div>
+    {% include 'project/projects_form.html' %}
+    {% include 'project/projects_edit_form.html' %}
+    {% include 'project/projects_delete.html' %}
+
+
+
+
+
+</div>
+{% endblock content%}
+
+    {% block js %}
+        <script>
+$( document ).ready(function() {
+        $(".change_priority").click(function () {
+
+          $.ajax({
+            type:"POST",url:"/project/change_priority/",
+            data:{"id":$(this).parent().attr("project_id"),"priority":$(this).attr("priority"),"csrfmiddlewaretoken":"{{csrf_token}}"},
+            success:function(res){
+              console.log(res);
+              if(res['priority'] === 'high'){
+                $(".current").html(`<i class="fa fa-dot-circle-o text-danger"></i> High`)
+              }
+              else if(res['priority'] === 'medium'){
+                $(".current").html(`<i class="fa fa-dot-circle-o text-warning"></i> Mediun`)
+              }
+              else{
+                $(".current").html(`<i class="fa fa-dot-circle-o text-success"></i> Low`)
+              }
+            }
+          })
+        })
+        $(".change_status").click(function () {
+
+          $.ajax({
+            type:"POST",url:"/project/change_status/",
+            data:{"id":$(this).parent().attr("project_id"),"status":$(this).attr("status"),"csrfmiddlewaretoken":"{{csrf_token}}"},
+            success:function(res){
+              console.log(res);
+              if(res['status'] === 'working'){
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-success"></i> Working`)
+              }
+              else if(res['status'] === 'pending'){
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-warning"></i> Pending`)
+              }
+              else if(res['status'] === 'suspended'){
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Suspended`)
+              }
+
+              else{
+                $(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Cancelled`)
+              }
+            }
+          })
+        })
+
+        $("#delete_project").on('show.bs.modal',function(event){
+          var button = $(event.relatedTarget)
+          console.log()
+          $(this).find("#delete").attr("href",`/project/delete_project/${button.attr("proj_id")}`)
+        })
+
+        // select client area
+         $('.project_clients').select2({
+            minimumInputLength: 1,
+
+            placeholder: "Project Clients*",
+            multiple: true,
+            ajax: {
+                url: '/project/clients_autocomplete/',
+                dataType: 'json'
+            },
+        });
+
+        // select project member
+        $('.project_leader').select2({
+            minimumInputLength: 1,
+            placeholder: "Project leader*",
+            multiple:true,
+            ajax: {
+                url: '/project/user_autocomplete/',
+                dataType: 'json'
+            },
+            select : function (e) {
+                console.log('select event', e);
+            },
+        }).on("select2:select", function(e) {
+              const member = ' <a href="#" data-toggle="tooltip"  title="'+ e.params.data.text +'"> <img  src="{% static 'img/user.jpg' %}" class="avatar" alt="'+ e.params.data.text +'" height="20"  width="20"></a>'
+              $(".project-members").html(member);
+            });
+        // $('.project_leader').select2()
+
+        // select Team member
+
+        $('.team_member').select2({
+            minimumInputLength: 1,
+            placeholder: "Team member",
+            multiple: true,
+            ajax: {
+                url: '/project/user_autocomplete/',
+                dataType: 'json'
+            }
+        }).on("select2:select", function(e) {
+
+             // update thumbnail for team member
+
+                let container = $('<div />');
+                const member_list = $(this).find(':selected').get()
+                let more_member = null
+                let more_member_title = []
+
+                for ( let i = 0, l = member_list.length; i < l; i++ ) {
+                    let item = '';
+                    let display_item = 2;
+                      if (i < display_item){
+                           item = ' <a href="#" data-toggle="tooltip"  title="'+ member_list[i].text +'"> <img  src="{% static 'img/user.jpg' %}" class="avatar" alt="'+ member_list[i].text +'" height="20"  width="20"></a>';
+                      } else {
+                          more_member_title.push( member_list[i].text)
+                          let title = more_member_title.join()
+                          more_member = '<span class="all-team" title="'+ title +'"> +' + ((i +1) - display_item) + ' </span>'
+                      }
+                    container.append(item)
+                }
+                if (more_member){
+                    container.append(more_member)
+                }
+            $(".team-members-list").html(container);
+
+
+        }).on('select2:unselect', function (e) {
+
+            // update thumbnail when we remove team member
+
+                $(".team-members-list").html('');
+                 let container = $('<div />');
+                const member_list = $(this).find(':selected').get()
+                let more_member = null
+                let more_member_title = []
+
+                for ( let i = 0, l = member_list.length; i < l; i++ ) {
+                    let item = '';
+                    let display_item = 2;
+                      if (i < display_item){
+                           item = ' <a href="#" data-toggle="tooltip"  title="'+ member_list[i].text +'"> <img  src="{% static 'img/user.jpg' %}" class="avatar" alt="'+ member_list[i].text +'" height="20"  width="20"></a>';
+                      } else {
+                          more_member_title.push( member_list[i].text)
+                          let title = more_member_title.join()
+                          more_member = '<span class="all-team" title="'+ title +'"> +' + ((i +1) - display_item) + ' </span>'
+                      }
+                    container.append(item)
+                }
+                if (more_member){
+                    container.append(more_member)
+                }
+                $(".team-members-list").html(container);
+
+            });
+        });
+
+
+
+        </script>
+    {% endblock %}

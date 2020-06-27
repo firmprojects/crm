@@ -1,9 +1,66 @@
 from django import forms
-        # Add your own processing here.
+from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+from django.contrib.auth import get_user_model
 
-        # You must return the original result.
+class UserCreate(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('username','first_name','last_name','email','password1','password2','is_client','is_employee','is_admin')
 
+    def __init__(self,*args,**kwargs):
+        super(UserCreate,self).__init__(*args,**kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
+        self.fields['username'].required = True
 
+    def clean(self):
+        cleaned_data = super().clean()
+        print(cleaned_data)
+        if not cleaned_data['is_client'] and not cleaned_data['is_admin'] and not cleaned_data['is_employee']:
+            raise forms.ValidationError({'is_admin':'Select atleast one of is_client or is_admin or is_employee'})
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super(UserCreate, self).save(commit=False)
+        data = self.clean()
+        if data['is_admin']:
+            user.is_superuser = True
+
+        # Create client or staff here if you want to
+        user.save()
+        print(user)
+        return user
+
+# class UserChange(UserChangeForm):
+#     class Meta:
+#         model = get_user_model()
+#         fields = ('username','first_name','last_name','email','password1','password2','is_client','is_employee','is_admin')
+#
+#     def __init__(self,*args,**kwargs):
+#         super(UserCreate,self).__init__(*args,**kwargs)
+#         self.fields['first_name'].required = True
+#         self.fields['email'].required = True
+#         self.fields['username'].required = True
+#
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         print(cleaned_data)
+#         if not cleaned_data['is_client'] and not cleaned_data['is_admin'] and not cleaned_data['is_employee']:
+#             raise forms.ValidationError({'is_admin':'Select atleast one of is_client or is_admin or is_employee'})
+#
+#         return cleaned_data
+#
+#     def save(self, commit=True):
+#         user = super(UserCreate, self).save(commit=False)
+#         data = self.clean()
+#         if data['is_admin']:
+#             user.is_superuser = True
+#
+#         # Create client or staff here if you want to
+#         user.save()
+#         print(user)
+#         return user
 
 # class ClientForm(UserCreationForm):
 #     first_name = forms.CharField(required=True)
@@ -36,7 +93,3 @@ from django import forms
 #         client.phote = self.cleaned_data.get('address')
 #         client.save()
 #         return client
-        
-        
-    
-

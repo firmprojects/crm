@@ -29,11 +29,11 @@
 {% include 'backend/header.html' %}
 {% include 'backend/staff_sidebar.html' %}
  {% block content %}{% endblock %}
- {% block js %}{% endblock %}
+
 
 </div>
 
-
+    
     <div class="sidebar-overlay" data-reff=""></div>
     <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
@@ -50,7 +50,7 @@
     <script type="text/javascript" src="{% static 'plugins/morris/morris.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'plugins/raphael/raphael-min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
-   
+    {% block js %}{% endblock %}
 
 
 </body>

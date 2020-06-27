@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Experience, Education, Skill, LeaveRequest, LeaveType, Holidays, Staff
+from .models import Experience, Education, Skill, LeaveRequest, LeaveType, Holidays, Staff,Attendance
 
 
 class EducationAdmin(admin.ModelAdmin):
@@ -15,6 +15,12 @@ class StaffAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Staff, StaffAdmin)
+
+class AttendanceAdmin(admin.ModelAdmin):
+    list_display = ['staff','attendance']
+
+
+admin.site.register(Attendance, AttendanceAdmin)
 
 class ExperienceAdmin(admin.ModelAdmin):
     list_display = ['organisation', 'title',

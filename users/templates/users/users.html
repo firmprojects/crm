@@ -54,35 +54,44 @@
                             <tr>
                                 <th style="width:30%;">Name</th>
                                 <th>Email</th>
-                                <th>Company</th>
-                                <th>Created Date</th>
+
+                                <th>Last login</th>
                                 <th>Role</th>
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                          {% for i in users %}
                             <tr>
                                 <td>
-                                    <a href="profile.html" class="avatar">D</a>
-                                    <h2><a href="profile.html">Daniel Porter <span>Admin</span></a></h2>
+                                    <a href="profile.html" class="avatar"></a>
+                                    <h2><a href="profile.html">{{i.first_name}} {{i.last_name}} <span>Admin</span></a></h2>
                                 </td>
-                                <td>danielporter@example.com</td>
-                                <td>Preadmin</td>
-                                <td>1 Jan 2013</td>
+                                <td>{{i.email}}</td>
+                                <td>{{i.last_login}}</td>
                                 <td>
-                                    <span class="badge badge-danger-border">Admin</span>
+                                    {% if i.is_admin %}
+                                      <span class="badge badge-danger-border">Admin</span>
+                                    {% endif %}
+                                    {% if i.is_employee %}
+                                      <span class="badge badge-success-border">Employee</span>
+                                    {% endif %}
+                                    {% if i.is_client %}
+                                      <span class="badge badge-info-border">Client</span>
+                                    {% endif %}
                                 </td>
                                 <td class="text-right">
                                     <div class="dropdown dropdown-action">
                                         <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                            <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a> -->
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_user" user_id="{{i.pk}}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
+                          {% endfor %}
+                            <!-- <tr>
                                 <td>
                                     <a href="profile.html" class="avatar">J</a>
                                     <h2><a href="profile.html">John Doe <span>Web Designer</span></a></h2>
@@ -207,7 +216,7 @@
                                         </div>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -224,7 +233,7 @@
                 <h4 class="modal-title">Add User</h4>
             </div>
             <div class="modal-body">
-                <form class="m-b-30">
+                <!-- <form class="m-b-30">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -398,6 +407,23 @@
                     <div class="m-t-20 text-center">
                         <button class="btn btn-primary btn-lg">Create User</button>
                     </div>
+                </form> -->
+
+                <form  method="post">
+                  {% csrf_token %}
+
+                  {% for field in form %}
+                  <div class="form-group">
+                    {{field.label_tag}}
+                    {{field}}
+                    <small>{{field.help_text}}</small>
+                    {% for i in field.errors %}
+                      <p class="text-danger">{{ i }}</p>
+                    {% endfor %}
+                  </div>
+
+                  {% endfor %}
+                  <input type="submit" name="" value="Create user">
                 </form>
             </div>
         </div>
@@ -449,12 +475,7 @@
                                 <input class="form-control" type="password">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Phone </label>
-                                <input class="form-control" value="9876543210" type="text">
-                            </div>
-                        </div>
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Role</label>
@@ -465,122 +486,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Company</label>
-                                <select class="select">
-                                    <option>Global Technologies</option>
-                                    <option>Delta Infotech</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Employee ID <span class="text-danger">*</span></label>
-                                <input type="text" value="FT-0001" class="form-control floating">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive m-t-15">
-                        <table class="table table-striped custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Module Permission</th>
-                                    <th class="text-center">Read</th>
-                                    <th class="text-center">Write</th>
-                                    <th class="text-center">Create</th>
-                                    <th class="text-center">Delete</th>
-                                    <th class="text-center">Import</th>
-                                    <th class="text-center">Export</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Employee</td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Holidays</td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Leave Request</td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Events</td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                    <td class="text-center">
-                                        <input checked="" type="checkbox">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+
                     </div>
                     <div class="m-t-20 text-center">
                         <button class="btn btn-primary btn-lg">Edit User</button>
@@ -600,13 +507,25 @@
                 <div class="modal-body card-box">
                     <p>Are you sure want to delete this?</p>
 
-                    <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                    <div class="m-t-20">
+                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                        <a role="button" id="delete_user_link" type="submit" class="btn">Delete</a>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+  $(document).ready(()=>{
+    $("#delete_user").on('show.bs.modal',function(event){
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.attr('user_id')
+      console.log(recipient);
+      $("#delete_user_link").attr({'href':`/delete_user/${recipient}`})
+      console.log($("#delete_user_link"));
+    })
+  })
+
+</script>
 {% endblock content %}
-    
