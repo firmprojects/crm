@@ -50,11 +50,11 @@
                                                             </span>
                                                             <span class="task-label" contenteditable="true">{{ i.task }}</span>
                                                             <span class="task-action-btn task-btn-right">
-                                                                <span class="action-circle large" title="Assign">
-                                                                    <i class="material-icons">person_add</i>
+                                                                <span data-izimodal-open="#modal_assign_miles" class="action-circle large" title="Assign">
+                                                                    <i class="material-icons text-primary" >person_add</i>
                                                                 </span>
                                                                 <span class="action-circle large delete-btn" milestone_id="{{i.pk}}" title="Delete Task">
-                                                                    <i class="material-icons">delete</i>
+                                                                    <i class="material-icons text-danger">delete</i>
                                                                 </span>
                                                             </span>
                                                         </div>
@@ -96,7 +96,7 @@
 
                                       </a>
                                     {% endfor %}
-                                    <button href="#" class="followers-add" title="Add Assignee" data-izimodal-open="#modal_assign_miles"><i class="material-icons">add</i></button>
+                                    <!-- <button href="#" class="followers-add" title="Add Assignee" data-izimodal-open="#modal_assign_miles"><i class="material-icons">add</i></button> -->
                                 </div>
                                 <!-- <ul class="nav pull-right custom-menu">
                                     <li class="dropdown dropdown-action">
@@ -109,7 +109,7 @@
                                 </ul> -->
                             </div>
                         </div>
-                        <div class="chat-contents task-chat-contents">
+                        <div class="chat-contents custom-chat task-chat-contents">
                             <div class="chat-content-wrap">
                                 <div class="chat-wrap-inner">
                                     <div class="chat-box">
@@ -117,12 +117,18 @@
                                             <h4>{{project.name}}</h4>
                                             <hr class="task-line">
                                             {% for i in comments %}
-                                            <div class="task-information">
-                                                <span class="task-info-line"><a class="task-user"><span class="text-success">{{ i.commented_by }}</span></a> <span class="task-info-subject"> {{ i.text }}</span></span>
-                                                <div class="task-time text-warning">{{ i.commented_on }}</div>
+                                            <div class="chat chat-left">
+                                                <div class="chat-body">
+                                                    <div class="chat-bubble">
+                                                        <div class="chat-content">
+                                                            <div class="text-primary">{{ i.commented_by }}</div></a></span>
+                                                            <div>{{ i.text  }}</div></a></span>
+                                                            <span class="chat-time text-danger">{{ i.commented_on }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <hr class="task-line">
-                                            {% endfor %}
+                                             {% endfor %}
                                         </div>
 
                                     </div>
