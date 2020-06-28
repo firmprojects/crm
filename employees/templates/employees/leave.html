@@ -1,12 +1,140 @@
 {% extends 'backend/base.html' %}
 {% load static %}
-
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block content %}
 <div class="main-wrapper">
     <div class="page-wrapper">
-        {% include 'employees/components/leave_table.html' %}
-        {% include 'employees/components/add_leave.html' %}
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-8 col-6">
+                    <h4 class="page-title">Leave Request</h4>
+                </div>
+                <div class="col-sm-4 col-6 text-right m-b-30">
+                    <button class="btn btn-primary btn-rounded"  data-izimodal-open="#modal3"><i
+                        class="fa fa-plus"></i>Add Leave</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table m-b-0 datatable">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Leave Type</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>No of Days</th>
+                                    <th>Remaining Days</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in leave %}
+                                <tr>
+                                    <td>
+                                        <a href="profile.html" class="avatar">J</a>
+                                        <h2><a> {{ user.username}}</a></h2>
+                                    </td>
+                                    <td>{{item.leave_type }}</td>
+                                    <td>{{ item.leave_start_date}}</td>
+                                    <td>{{ item.leave_end_date }}</td>
+                                    <td>{{ item.number_of_days }}</td>
+                                    <td>{{ item.remaining_days }}</td>
+                                    <td class="text-center">
+                                        <div class="dropdown action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#"
+                                                data-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-dot-circle-o text-success"></i> Approved
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-purple"></i>
+                                                    New</a>
+                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-info"></i>
+                                                    Pending</a>
+                                                <a class="dropdown-item" href="#"><i
+                                                        class="fa fa-dot-circle-o text-success"></i> Approved</a>
+                                                <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i>
+                                                    Declined</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <a type="button" class="btn btn-sm btn-primary" href="{% url 'employees:update_leave' item.id %}">
+                                          <span class="fa fa-pencil"></span>
+                                        </a>
+                                        <a type="button" class="btn btn-sm btn-danger" href="{% url 'employees:delete_leave' item.id %}">
+                                          <span class="fa fa-trash"></span>
+                                        </a>
+                                     </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+
+    <!-- 
+---------------------------------------------
+Leave Request Form
+-------------------------------------------- -->
+<div class="mt-20">
+    <!-- Modal Start -->
+    <div class="izimodal" id="modal3" data-iziModal-width="600px" data-iziModal-fullscreen="true"
+        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+        <!-- Close Button Start -->
+        <div class="close-modal">
+            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
+        </div>
+        <!-- Close Button Start -->
+        <!-- Modal Body Start -->
+        <div class="modal-inside inner-30">
+            <div class="modal-heading">
+                <h4 class="modal-title center-holder">Add Leave Request</h4>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        {{ form.employee|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    {{ form.leave_type|as_crispy_field }}
+                </div>
+            </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                    {{ form.leave_start_date|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form.leave_end_date |as_crispy_field }}
+                </div>
+            </div>
+            </div>
+            <div class="form-group">
+              {{ form.leave_reason|attr:"rows:3"|as_crispy_field }}
+            </div>
+                  <div class="m-t-20 text-center">
+                    <button class="btn btn-primary btn-lg">Send Leave Request</button>
+                </div>
+            </form>
+        </div>
+        <!-- Modal Body End -->
+    </div>
+    <!-- Modal End -->
+</div>
+
     </div>
 </div>
 {% endblock content%}

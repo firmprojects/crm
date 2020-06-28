@@ -53,7 +53,7 @@ admin.site.register(LeaveType, LeaveTypeAdmin)
 
 class LeaveRequestAdmin(admin.ModelAdmin):
     list_display = ['leave_type', 'leave_start_date', 'leave_end_date',
-                    'number_of_days', 'leave_reason']
+                    'number_of_days', 'remaining_days', 'leave_reason']
 
 
 admin.site.register(LeaveRequest, LeaveRequestAdmin)

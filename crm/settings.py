@@ -190,4 +190,6 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-LOGIN_REDIRECT_URL  = 'users:staff_dashboard'
+LOGIN_REDIRECT_URL  = 'dashboard:home'
+
+ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'

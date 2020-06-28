@@ -95,8 +95,8 @@ class Milestone(models.Model):
     project = models.ForeignKey(Projects,on_delete=models.CASCADE)
     assigned_to = models.OneToOneField(to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE,blank=True, null=True)
     completed = models.BooleanField(default=False)
-    milestone_followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='milestone_followers', blank=True,null=True)
-    milestone_assignes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='milestone_assignes', blank=True,null=True)
+    milestone_followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='milestone_followers',)
+    milestone_assignes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='milestone_assignes',)
 
     def __str__(self):
         return self.task

@@ -78,10 +78,12 @@ class LeaveType(models.Model):
 
 
 class LeaveRequest(models.Model):
+    employee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     leave_type = models.ForeignKey(LeaveType, on_delete=models.CASCADE)
     leave_start_date = models.DateTimeField(auto_now_add=False)
     leave_end_date = models.DateTimeField(auto_now_add=False)
     number_of_days = models.IntegerField()
+    remaining_days = models.IntegerField()
     leave_reason = models.TextField()
 
 

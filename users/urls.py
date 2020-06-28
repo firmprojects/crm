@@ -8,6 +8,7 @@ urlpatterns = [
     path('contacts', Contacts.as_view(), name='contacts'),
     path('add_contacts', AddContacts.as_view(), name='add_contacts'),
     path('staff/dashboard', StaffDashboard.as_view(), name='staff_dashboard'),
+    path('client/dashboard', ClientDashboard.as_view(), name='client_dashboard'),
     path('', LoginPage.as_view(), name="home"),
     path('clock_in/',clock_in,name='clock_in'),
     path('clock_out/',clock_out,name='clock_out'),

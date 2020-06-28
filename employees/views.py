@@ -92,8 +92,8 @@ class DeleteDesignation(DeleteView):
 class CreateLeave(CreateView):
     model = LeaveRequest
     template_name = "employees/leave.html"
-    fields = ['leave_type', 'leave_start_date', 'leave_end_date',
-              'number_of_days', 'leave_reason']
+    fields = ['employee','leave_type', 'leave_start_date', 'leave_end_date',
+              'number_of_days', 'remaining_days', 'leave_reason']
 
     def get_context_data(self, **kwargs):
         context = super(CreateLeave, self).get_context_data(**kwargs)
@@ -275,6 +275,7 @@ def filter_objects(date,month=None,year=None):
 class StaffAC(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Staff.objects.all().order_by('user__username')
+        print(qs)
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs

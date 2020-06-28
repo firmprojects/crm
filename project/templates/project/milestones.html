@@ -3,10 +3,6 @@
 
 {% block content %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/project_sidebar.html' %}
-    </div>
     <div class="page-wrapper">
         <div class="chat-main-row">
             <div class="chat-main-wrapper">
@@ -22,10 +18,10 @@
                                 <a class="task-chat profile-rightbar pull-right" href="#chat_sidebar"><i class="fa fa fa-comment"></i></a>
                                 <ul class="nav pull-right custom-menu">
                                   <form class="form-inline" method="get">
-                                    <div class="input-group m-b-10">
-                                        <input placeholder="Search" class="form-control" type="text" name="search" value="{{ request.GET.search }}">
+                                    <div class="form-group  m-b-10">
+                                        <input placeholder="Search"  class="form-control mr-2 mt-2" type="text" name="search" value="{{ request.GET.search }}">
                                     </div>
-                                    <input type="submit" class="btn btn-outline-success" value="Submit">
+                                    <input type="submit" class="btn btn-success" value="Submit">
                                   </form>
                                 </ul>
                             </div>
@@ -100,7 +96,7 @@
 
                                       </a>
                                     {% endfor %}
-                                    <a href="#" class="followers-add" title="Add Assignee" data-toggle="modal" data-target="#assignee"><i class="material-icons">add</i></a>
+                                    <button href="#" class="followers-add" title="Add Assignee" data-izimodal-open="#modal_assign_miles"><i class="material-icons">add</i></button>
                                 </div>
                                 <!-- <ul class="nav pull-right custom-menu">
                                     <li class="dropdown dropdown-action">
@@ -166,33 +162,39 @@
                 </div>
             </div>
         </div>
-        <div id="assignee" class="modal custom-modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Assign this Milestone</h3>
 
+        <div class="mt-20">
+            <!-- Modal Start -->
+            <div class="izimodal" id="modal_assign_miles" data-iziModal-width="600px" data-iziModal-fullscreen="true"
+                data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+                <!-- Close Button Start -->
+                <div class="close-modal">
+                    <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
+                </div>
+                <!-- Close Button Start -->
+                <!-- Modal Body Start -->
+                <div class="modal-inside inner-30">
+                    <div class="modal-heading">
+                        <h4 class="modal-title center-holder">Assign this Milestone</h4>
                     </div>
-                    <div class="modal-body">
-                      <form method="post" action="{% url 'project:assign_' pk %}">
+                    <form method="post" action="{% url 'project:assign_' pk %}">
                         {% csrf_token %}
                         <div class="input-group m-b-10">
-                          <select placeholder="select to add" style='width:100%' class="form-control select_staff" id="" name='staff'></select>
+                          <select placeholder="select to add" class="form-control select_staff" id="" name='staff'></select>
                         </div>
                         <div class="input-group m-b-30">
                           <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
                         </div>
                         <div class="m-t-50 text-center">
                             <button class="btn btn-primary btn-lg">Assign</button>
-                            <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
-
                         </div>
                       </form>
-
-                    </div>
                 </div>
+                <!-- Modal Body End -->
             </div>
+            <!-- Modal End -->
         </div>
+
         <div id="task_followers" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">

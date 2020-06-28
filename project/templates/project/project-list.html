@@ -4,12 +4,6 @@
 
 {% block content %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/sidebar.html' %}
-    </div>
-
-
     <div class="page-wrapper">
         <div class="content container-fluid">
             <div class="row">
@@ -17,8 +11,8 @@
                     <h4 class="page-title">Projects</h4>
                 </div>
                 <div class="col-sm-8 col-8 text-right m-b-30">
-                    <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
-                        data-target="#create_project"><i class="fa fa-plus"></i> Create Project</a>
+                  <button class="btn btn-primary btn-rounded"  data-izimodal-open="#modal3"><i
+                    class="fa fa-plus"></i>Add Project</button>
                     <div class="view-icons">
                         <a href="{% url 'project:projects' %}" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
                         <a href="{% url 'project:project-list' %}" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
@@ -119,12 +113,11 @@
                             </td>
 
                                 <td class="text-right">
-                                    <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#edit_project" href="">
-                                      <span class="fa fa-pencil"></span>
-                                    </a>
-                                    <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
+                                  <button class="btn btn-sm btn-primary"  data-izimodal-open="#modal4"><i class="fa fa-pencil"></i></button>
+                                  <button class="btn btn-sm btn-primary" proj_id="{{ item.pk }}"  data-izimodal-open="#modal_delete"><i class="fa fa-trash"></i></button>
+                                     <!-- <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
                                       <span class="fa fa-trash"></span>
-                                    </a>
+                                    </a> -->
                                  </td>
                                 </tr>
                         {% endfor %}

@@ -65,7 +65,7 @@ class LeaveRequestForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
         fields = ['leave_type', 'leave_start_date', 'leave_end_date',
-                  'number_of_days', 'leave_reason']
+                  'number_of_days', 'remaining_days', 'leave_reason']
         widgets = {
             'leave_start_date': DateInput(format='%Y-%m-%d'),
             'leave_end_date': DateInput(format='%Y-%m-%d'),

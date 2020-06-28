@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 
 def generate_task_id():
-    id = get_random_string(length=6)
+    id = get_random_string(length=4)
     return "TK-"+str(id)
 
 class Task(models.Model):
