@@ -12,7 +12,7 @@
                             <div class="navbar">
                                 <div class="pull-left mr-auto">
                                     <div class="add-task-btn-wrapper">
-                                        <span class="add-task-btn btn btn-info btn-sm">Add Milestone</span>
+                                        <span class="add-task-btn btn btn-dark btn-sm">Add Milestone</span>
                                     </div>
                                 </div>
                                 <a class="task-chat profile-rightbar pull-right" href="#chat_sidebar"><i class="fa fa fa-comment"></i></a>
@@ -117,14 +117,11 @@
                                             <h4>{{project.name}}</h4>
                                             <hr class="task-line">
                                             {% for i in comments %}
-                                            <div class="card">
-                                              <div class="card-header">
-                                                <h4><small>Commented by: </small>{{ i.commented_by }}</h4>
-                                              </div>
-                                              <div class="card-body">
-                                                {{ i.text }}
-                                              </div>
+                                            <div class="task-information">
+                                                <span class="task-info-line"><a class="task-user"><span class="text-success">{{ i.commented_by }}</span></a> <span class="task-info-subject"> {{ i.text }}</span></span>
+                                                <div class="task-time text-warning">{{ i.commented_on }}</div>
                                             </div>
+                                            <hr class="task-line">
                                             {% endfor %}
                                         </div>
 
