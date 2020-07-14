@@ -126,7 +126,7 @@
         <div class="content container-fluid">
             <div class="row">
                 <div class="col-sm-7 col-5">
-                    <h4 class="page-title">Hospital Admin</h4>
+                    <h4 class="page-title">{{ object.name }}</h4>
                 </div>
                 <div class="col-sm-5 col-7 text-right m-b-30">
                     <a href="{% url 'project:milestones' object.pk %}" class="btn btn-secondary btn-rounded"> Set Milestones</a>
@@ -139,163 +139,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="project-title">
-                                <h5>{{ object.name }}</h5>
-                                <small class="block text-ellipsis m-b-15"><span class="text-xs">{{ object.get_task_number.in_complete }}</span> <span
-                                        class="text-muted">open tasks, </span><span class="text-xs">{{ object.get_task_number.complete }}</span> <span
-                                        class="text-muted">tasks completed</span></small>
+                            <h4>Description</h4>
+                                <small class="block text-ellipsis m-b-15"><span class="text-danger">{{ object.get_task_number.in_complete }}</span> <span
+                                        class="text-danger">open tasks, </span><span class="text-danger">{{ object.get_task_number.complete }}</span> <span
+                                        class="text-danger">tasks completed</span></small>
                             </div>
                             <p>{{ object.description }}</p>
                         </div>
                     </div>
                     <div class="project-task">
-                        <ul class="nav nav-tabs nav-tabs-top nav-justified m-b-0">
-                            <li class="nav-item"><a class="nav-link active" href="#all_tasks" data-toggle="tab"
-                                    aria-expanded="true">All Milestones</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#pending_tasks" data-toggle="tab"
-                                    aria-expanded="false">Pending Milestones</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#completed_tasks" data-toggle="tab"
-                                    aria-expanded="false">Completed Milestones</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane show active" id="all_tasks">
-                                <div class="task-wrapper">
-                                    <div class="task-list-container">
-                                        <div class="task-list-body">
-                                            <ul id="task-list">
-                                              {% for i in object.milestone_set.all %}
-                                                <li class="task">
-                                                    <div class="task-container">
-                                                        <span class="task-action-btn task-check">
-                                                          {% if i.completed %}
-                                                            <span class="action-circle large complete-btn completed"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                          {% else %}
-                                                            <span class="action-circle large complete-btn"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                          {% endif %}
-                                                        </span>
-                                                        <span class="task-label" contenteditable="true">{{ i.task }}</span>
-                                                        <span class="task-action-btn task-btn-right">
-                                                            <span class="action-circle large" title="Assign">
-                                                                <i class="material-icons">person_add</i>
-                                                            </span>
-                                                            <span class="action-circle large delete-btn"
-                                                                title="Delete Task">
-                                                                <i class="material-icons">delete</i>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </li>
-                                              {% endfor %}
-
-                                                <!-- <li class="task">
-                                                    <div class="task-container">
-                                                        <span class="task-action-btn task-check">
-                                                            <span class="action-circle large complete-btn"
-                                                                title="Mark Complete">
-                                                                <i class="material-icons">check</i>
-                                                            </span>
-                                                        </span>
-                                                        <span class="task-label" contenteditable="true">Appointment
-                                                            booking with payment gateway</span>
-                                                        <span class="task-action-btn task-btn-right">
-                                                            <span class="action-circle large" title="Assign">
-                                                                <i class="material-icons">person_add</i>
-                                                            </span>
-                                                            <span class="action-circle large delete-btn"
-                                                                title="Delete Task">
-                                                                <i class="material-icons">delete</i>
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </li> -->
-                                            </ul>
-                                        </div>
-                                        <div class="task-list-footer">
-                                            <div class="new-task-wrapper">
-                                                <textarea id="new-task"
-                                                    placeholder="Enter new task here. . ."></textarea>
-                                                <span class="error-message hidden">You need to enter a task first</span>
-                                                <span class="add-new-task-btn btn" id="add-task">Add Task</span>
-                                                <span class="cancel-btn btn" id="close-task-panel">Close</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="pending_tasks">
-                              <div class="task-wrapper">
-                                  <div class="task-list-container">
-                                    <div class="task-list-body">
-                                      <ul id="task-list">
-                                      {% for i in object.milestone_set.all %}
-                                        {% if not i.completed %}
-                                          <li class="task">
-                                              <div class="task-container">
-                                                  <span class="task-action-btn task-check">
-                                                      <span class="action-circle large complete-btn"
-                                                          title="Mark Complete">
-                                                          <i class="material-icons">check</i>
-                                                      </span>
-                                                  </span>
-                                                  <span class="task-label" contenteditable="true">{{ i.task }}</span>
-                                                  <span class="task-action-btn task-btn-right">
-                                                      <span class="action-circle large" title="Assign">
-                                                          <i class="material-icons">person_add</i>
-                                                      </span>
-                                                      <span class="action-circle large delete-btn"
-                                                          title="Delete Task">
-                                                          <i class="material-icons">delete</i>
-                                                      </span>
-                                                  </span>
-                                              </div>
-                                          </li>
-                                        {% endif %}
-                                      {% endfor %}
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="completed_tasks">
-                              <div class="task-wrapper">
-                                  <div class="task-list-container">
-                                    <div class="task-list-body">
-                                      <ul id="task-list">
-                                      {% for i in object.milestone_set.all %}
-                                        {% if i.completed %}
-                                          <li class="task">
-                                              <div class="task-container">
-                                                  <span class="task-action-btn task-check">
-                                                      <span class="action-circle large complete-btn completed"
-                                                          title="Mark Complete">
-                                                          <i class="material-icons">check</i>
-                                                      </span>
-                                                  </span>
-                                                  <span class="task-label" contenteditable="true">{{ i.task }}</span>
-                                                  <span class="task-action-btn task-btn-right">
-                                                      <span class="action-circle large" title="Assign">
-                                                          <i class="material-icons">person_add</i>
-                                                      </span>
-                                                      <span class="action-circle large delete-btn"
-                                                          title="Delete Task">
-                                                          <i class="material-icons">delete</i>
-                                                      </span>
-                                                  </span>
-                                              </div>
-                                          </li>
-                                      {% endif %}
-                                    {% endfor %}
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="card mt-3">
                         <div class="card-body">
@@ -482,8 +334,8 @@
                     </div>
                     <div class="card project-user">
                         <div class="card-body">
-                            <h6 class="card-title m-b-20">Assigned Leader
-                              <!-- <button type="button" class="pull-right btn btn-primary btn-sm" data-toggle="modal" data-target="#assign_leader"><i class="fa fa-plus"></i> Add</button> -->
+                            <h6 class="card-title m-b-20">Project Manager
+                              <button type="button" class="pull-right btn btn-primary btn-sm"  data-izimodal-open="#modal_project_manager"><i class="fa fa-plus"></i> Add</button>
                             </h6>
                             <ul class="list-box">
                                 <li>
@@ -519,9 +371,8 @@
                     </div>
                     <div class="card project-user">
                         <div class="card-body">
-                            <h6 class="card-title">Assigned users <button type="button"
-                                    class="pull-right btn btn-primary btn-sm" data-toggle="modal"
-                                    data-target="#assign_user"><i class="fa fa-plus"></i> Add</button></h6>
+                            <h6 class="card-title">Project Team Members 
+                            <button type="button" class="pull-right btn btn-primary btn-sm" data-izimodal-open="#modal_add_team_member"><i class="fa fa-plus"></i> Add</button></h6>
                             <ul class="list-box">
                               {% for i in object.team_member.all %}
                                 <li>
@@ -590,15 +441,60 @@
     </div>
 
 
-    <div id="assign_user" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Assign team members to this project</h3>
+    <div class="mt-20">
+    <!-- Modal Start -->
+    <div class="izimodal" id="modal_project_manager" data-iziModal-width="600px" data-iziModal-fullscreen="true"
+        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+        <!-- Close Button Start -->
+        <div class="close-modal">
+            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
+        </div>
+        <!-- Close Button Start -->
+        <!-- Modal Body Start -->
+        <div class="modal-inside inner-30">
+            <div class="modal-heading">
+                <h4 class="modal-title center-holder">Add Project Manager</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="input-group m-b-10">
+                        <input placeholder="Search staff" class="form-control search-input" type="text">
+                    </div>
+                    <div class="input-group m-b-10">
+                        <input placeholder="Search milestone" class="form-control search-input mt-2" type="text">
+
+                    </div>
+
+
+                    <div>
+
+                    </div>
+                    <div class="m-t-50 text-center">
+                        <button class="btn btn-primary btn-lg">Add</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <form method="post">
+        </div>
+        <!-- Modal Body End -->
+    </div>
+    <!-- Modal End -->
+</div>
+
+
+
+    <div class="mt-20">
+    <!-- Modal Start -->
+    <div class="izimodal" id="modal_add_team_member" data-iziModal-width="600px" data-iziModal-fullscreen="true"
+        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+        <!-- Close Button Start -->
+        <div class="close-modal">
+            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
+        </div>
+        <!-- Close Button Start -->
+        <!-- Modal Body Start -->
+        <div class="modal-inside inner-30">
+            <div class="modal-heading">
+                <h4 class="modal-title center-holder">Add Team Members</h4>
+            </div>
+            <form method="post">
                     {% csrf_token %}
                     <div class="input-group m-b-10">
                         <select placeholder="Search staff" name="team_member" id="add_team_member" style="width: 100%" class="form-control"></select>
@@ -608,10 +504,12 @@
                         <button class="btn btn-primary btn-lg" type="submit">Add</button>
                     </div>
                   </form>
-                </div>
-            </div>
         </div>
+        <!-- Modal Body End -->
     </div>
+    <!-- Modal End -->
+</div>
+
     {% include 'project/projects_edit_form.html' %}
 
 </div>
