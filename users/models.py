@@ -13,8 +13,6 @@ class CustomUser(AbstractUser):
     is_client = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
 
-    # phone_number = 
-
     def team_leader(self):
         return self.leader_set.all()
 

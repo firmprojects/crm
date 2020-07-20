@@ -1,4 +1,5 @@
 {% load static%}
+{% load filters %}
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
         <div class="sidebar-menu">
@@ -7,10 +8,11 @@
                     <a href="{% url 'dashboard:home' %}"><i class="fa fa-home back-icon"></i> Back to Home</a>
                 </li>
                 <li>
-                    <a href="{% url 'messaging:inbox' %}">Inbox <span class="mail-count">(21)</span></a>
+                    <a href="{% url 'messaging:compose' %}">Compose</a>
                 </li>
+
                 <li>
-                    <a href="#">Starred</a>
+                    <a href="{% url 'messaging:inbox' %}">Inbox <span class="mail-count">({{request.user.pk|mail_count}})</span></a>
                 </li>
                 <li>
                     <a href="#">Sent Mail</a>
