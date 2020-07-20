@@ -28,7 +28,6 @@
 {% include 'backend/header.html' %}
 {% include 'backend/sidebar2.html' %}
  {% block content %}{% endblock %}
- {% block js %}{% endblock %}
 
 </div>
 
@@ -45,6 +44,8 @@
     <script type="text/javascript" src="{% static 'plugins/raphael/raphael-min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+    {% block js %}{% endblock %}
+
 </body>
 
 </html>

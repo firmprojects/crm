@@ -1,6 +1,6 @@
 {% extends 'backend/base2.html' %}
 {% load static %}
-
+{% load filters %}
 
 {% block content %}
 <div class="page-wrapper">
@@ -16,13 +16,13 @@
                     <div class="email-header">
                         <div class="row">
                             <div class="col-sm-9 col-md-8 col-8 top-action-left">
-                                <div class="pull-left">
+                                <!-- <div class="pull-left">
                                     <div class="btn-group dropdown-action">
                                         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">Select <i class="fa fa-angle-down "></i></button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="#">All</a>
                                             <a class="dropdown-item" href="#">None</a>
-                                            <div class="dropdown-divider"></div> 
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Read</a>
                                             <a class="dropdown-item" href="#">Unread</a>
                                         </div>
@@ -33,10 +33,10 @@
                                             <a class="dropdown-item" href="#">Reply</a>
                                             <a class="dropdown-item" href="#">Forward</a>
                                             <a class="dropdown-item" href="#">Archive</a>
-                                            <div class="dropdown-divider"></div> 
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Mark As Read</a>
                                             <a class="dropdown-item" href="#">Mark As Unread</a>
-                                            <div class="dropdown-divider"></div> 
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Delete</a>
                                         </div>
                                     </div>
@@ -46,10 +46,10 @@
                                             <a class="dropdown-item" href="#">Social</a>
                                             <a class="dropdown-item" href="#">Forums</a>
                                             <a class="dropdown-item" href="#">Updates</a>
-                                            <div class="dropdown-divider"></div> 
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Spam</a>
                                             <a class="dropdown-item" href="#">Trash</a>
-                                            <div class="dropdown-divider"></div> 
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">New</a>
                                         </div>
                                     </div>
@@ -59,7 +59,7 @@
                                             <a class="dropdown-item" href="#">Work</a>
                                             <a class="dropdown-item" href="#">Family</a>
                                             <a class="dropdown-item" href="#">Social</a>
-                                            <div class="dropdown-divider"></div> 
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="#">Primary</a>
                                             <a class="dropdown-item" href="#">Promotions</a>
                                             <a class="dropdown-item" href="#">Forums</a>
@@ -68,11 +68,11 @@
                                 </div>
                                 <div class="pull-left d-none d-sm-block">
                                     <input type="text" placeholder="Search Messages" class="form-control search-message">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-sm-3 col-md-4 col-4 top-action-right">
                                 <div class="text-right">
-                                    <span class="text-muted d-none d-md-inline-block">Showing 10 of 112 </span>
+                                    <span class="text-muted d-none d-md-inline-block">Showing 1 of 1 </span>
                                     <button type="button" title="Refresh" data-toggle="tooltip" class="btn btn-white d-none d-md-inline-block"><i class="fa fa-refresh"></i></button>
                                     <div class="btn-group">
                                         <a class="btn btn-white"><i class="fa fa-angle-left"></i></a>
@@ -87,23 +87,31 @@
                             <table class="table table-inbox table-hover">
                                 <thead>
                                     <tr>
-                                        <th colspan="6">
+                                        <!-- <th colspan="6">
                                             <input type="checkbox" class="checkbox-all">
-                                        </th>
+                                        </th> -->
+                                        <th>--</th>
+                                        <th>--</th>
+                                        <th>From</th>
+                                        <th>Subject</th>
+                                        <th>--</th>
+                                        <th>--</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="unread clickable-row" data-href="mail-view.html">
+                                  {% for mail in mails %}
+                                    <tr class="unread clickable-row" data-href="{% url 'messaging:mail_view' mail.pk %}">
                                         <td>
                                             <input type="checkbox" class="checkmail">
                                         </td>
                                         <td><span class="mail-important"><i class="fa fa-star starred"></i></span></td>
-                                        <td class="name">John Doe</td>
-                                        <td class="subject">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</td>
+                                        <td class="name">{{mail.from_email|get_user}}</td>
+                                        <td class="subject">{{mail.subject}}</td>
                                         <td><i class="fa fa-paperclip"></i></td>
-                                        <td class="mail-date">13:14</td>
+                                        <td class="mail-date">{{mail.date|date:'jS F, h:i A e'}}</td>
                                     </tr>
-                                    <tr class="unread clickable-row" data-href="mail-view.html">
+                                  {% endfor %}
+                                    <!-- <tr class="unread clickable-row" data-href="mail-view.html">
                                         <td>
                                             <input type="checkbox" class="checkmail">
                                         </td>
@@ -192,7 +200,7 @@
                                         <td class="subject">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</td>
                                         <td></td>
                                         <td class="mail-date">10/31/16</td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -202,5 +210,13 @@
         </div>
     </div>
 </div>
+{% block js %}
+<script type="text/javascript">
+  $(function(){
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+  })
+</script>
+{% endblock %}
 {% endblock content %}
-    
