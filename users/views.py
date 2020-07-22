@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
-from allauth.account.views import LoginView
+from allauth.account.views import LoginView,SignupView
+from allauth.account import signals
 from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
@@ -8,15 +9,52 @@ from django.utils.dateparse import parse_datetime,parse_date
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
+
 
 from .models import *
 from .forms import *
 import json
 import datetime
+from django.core.exceptions import PermissionDenied
+from django.utils.decorators import method_decorator
+
+
+def superuser_only(function):
+
+   def _inner(request, *args, **kwargs):
+       if not request.user.is_superuser:
+           raise PermissionDenied
+       return function(request, *args, **kwargs)
+   return _inner
 
 
 WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Saturday',6:'Sunday'}
+# class Users(TemplateView):
+#     template_name = 'users/users.html'
+#     form_class = UserCreate
+#     success_url = '/all'
+#     def get(self,request):
+#         super().get(request)
+#         context = super().get_context_data()
+#         context['users'] = CustomUser.objects.all()
+#         context['form'] = UserCreate
+#         context['change_form'] = UserChangeForm
+#         return render(request,self.template_name,context=context)
+#
+#     def post(self,request):
+#
+#         context = super().get_context_data()
+#         form = UserCreate(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(request.build_absolute_uri())
+#         context['users'] = CustomUser.objects.all()
+#         context['form'] = form
+#         return render(request,self.template_name,context=context)
+#
+
 class Users(TemplateView):
     template_name = 'users/users.html'
     form_class = UserCreate
@@ -34,11 +72,45 @@ class Users(TemplateView):
         context = super().get_context_data()
         form = UserCreate(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(request)
             return HttpResponseRedirect(request.build_absolute_uri())
         context['users'] = CustomUser.objects.all()
         context['form'] = form
         return render(request,self.template_name,context=context)
+
+
+
+
+
+
+@method_decorator(superuser_only, name='dispatch')
+class Users(SignupView):
+    model = CustomUser
+    form_class = UserCreate
+    template_name = 'users/users.html'
+    redirect_field_name = 'next'
+    success_url = '/all'
+
+    def get(self,request):
+        super().get(request)
+        context = super().get_context_data()
+        context['users'] = CustomUser.objects.all()
+        context['change_form'] = UserChangeForm
+        return render(request,self.template_name,context=context)
+
+    def form_valid(self, form):
+        self.user = form.save(self.request)
+        try:
+            signals.user_signed_up.send(
+                sender=self.user.__class__,
+                request=self.request,
+                user=self.user,
+                **{}
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        except ImmediateHttpResponse as e:
+            return e.response
+
 
 
 class Contacts(TemplateView):

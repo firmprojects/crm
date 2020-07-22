@@ -1,17 +1,27 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm
+from allauth.account.forms import SignupForm
+
 from django.contrib.auth import get_user_model
 
-class UserCreate(UserCreationForm):
-    class Meta:
-        model = get_user_model()
-        fields = ('username','first_name','last_name','email','password1','password2','is_client','is_employee','is_admin')
+class UserCreate(SignupForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    is_client = forms.CharField(widget=forms.CheckboxInput,required=False)
+    is_employee = forms.CharField(widget=forms.CheckboxInput,required=False)
+    is_admin = forms.CharField(widget=forms.CheckboxInput,required=False)
+    username = forms.CharField(required=True)
 
-    def __init__(self,*args,**kwargs):
-        super(UserCreate,self).__init__(*args,**kwargs)
-        self.fields['first_name'].required = True
-        self.fields['email'].required = True
-        self.fields['username'].required = True
+    # class Meta:
+        # model = get_user_model()
+    #     fields = ('username','first_name','last_name','email','password1','password2','is_client','is_employee','is_admin')
+
+    # def __init__(self,*args,**kwargs):
+    #     super(UserCreate,self).__init__(*args,**kwargs)
+    #     self.fields['first_name'].required = True
+    #     self.fields['email'].required = True
+    #     self.fields['username'].required = True
 
     def clean(self):
         cleaned_data = super().clean()
@@ -21,15 +31,23 @@ class UserCreate(UserCreationForm):
 
         return cleaned_data
 
-    def save(self, commit=True):
-        user = super(UserCreate, self).save(commit=False)
-        data = self.clean()
-        if data['is_admin']:
-            user.is_superuser = True
-
+    def save(self, request):
+        user = super(UserCreate, self).save(request)
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        print(self.cleaned_data.get('is_admin'))
+        user.is_admin = True if self.cleaned_data.get('is_admin') == 'True' else False
+        user.is_employee = True if self.cleaned_data.get('is_employee') == 'True'else False
+        user.is_client = True if self.cleaned_data.get('is_client') == 'True' else False
+        if user.is_admin: user.is_superuser = True
+        #
+        # user = super(UserCreate, self).save(commit=False)
+        # data = self.clean()
+        # if data['is_admin']:
+        #     user.is_superuser = True
+        #
         # Create client or staff here if you want to
         user.save()
-        print(user)
         return user
 
 # class UserChange(UserChangeForm):
