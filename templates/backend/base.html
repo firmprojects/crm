@@ -18,7 +18,13 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'plugins/morris/morris.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'evokan/css/owl.carousel.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'evokan/css/plugins.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'evokan/css/default.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'evokan/css/styles.css' %}">
+  
+
 
     <!-- <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script> -->
@@ -32,14 +38,21 @@
 <div class="main-wrapper">
 {% include 'backend/header.html' %}
 {% include 'backend/sidebar.html' %}
+
+
+{% block content %}
+  
+{% endblock content %}
+  
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script> -->
 <script type="text/javascript" src="{% static 'js/timer.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.slimscroll.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
@@ -47,10 +60,20 @@
 <script type="text/javascript" src="{% static 'plugins/morris/morris.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'plugins/raphael/raphael-min.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/app000.js' %}"></script>
-{% block js %}{% endblock %}
 
-{% block content %}{% endblock %}
+
+
+<script type="text/javascript" src="{% static 'evokan/js/plugins.js' %}"></script>
+<script type="text/javascript" src="{% static 'evokan/js/navigation.js' %}"></script>
+<script type="text/javascript" src="{% static 'evokan/js/navigation.fixed.js' %}"></script>
+<script type="text/javascript" src="{% static 'evokan/js/map.js' %}"></script>
+<script type="text/javascript" src="{% static 'evokan/js/main.js' %}"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+
+<script type="text/javascript" src="{% static 'js/app000.js' %}"></script>
 
 
 

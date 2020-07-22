@@ -124,6 +124,10 @@ class StaffDashboard(TemplateView):
     template_name = 'users/staff_dashboard.html'
 
 
+class ClientDashboard(TemplateView):
+    template_name = 'users/client_dashboard.html'
+
+
 class LoginPage(LoginView):
     template_name = 'account/login.html'
 

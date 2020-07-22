@@ -3,10 +3,6 @@
 
 {% block content %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/project_sidebar.html' %}
-    </div>
     <div class="page-wrapper">
         <div class="chat-main-row">
             <div class="chat-main-wrapper">
@@ -16,16 +12,16 @@
                             <div class="navbar">
                                 <div class="pull-left mr-auto">
                                     <div class="add-task-btn-wrapper">
-                                        <span class="add-task-btn btn btn-info btn-sm">Add Milestone</span>
+                                        <span class="add-task-btn btn btn-dark btn-sm">Add Milestone</span>
                                     </div>
                                 </div>
                                 <a class="task-chat profile-rightbar pull-right" href="#chat_sidebar"><i class="fa fa fa-comment"></i></a>
                                 <ul class="nav pull-right custom-menu">
                                   <form class="form-inline" method="get">
-                                    <div class="input-group m-b-10">
-                                        <input placeholder="Search" class="form-control" type="text" name="search" value="{{ request.GET.search }}">
+                                    <div class="form-group  m-b-10">
+                                        <input placeholder="Search"  class="form-control mr-2 mt-2" type="text" name="search" value="{{ request.GET.search }}">
                                     </div>
-                                    <input type="submit" class="btn btn-outline-success" value="Submit">
+                                    <input type="submit" class="btn btn-success" value="Submit">
                                   </form>
                                 </ul>
                             </div>
@@ -54,11 +50,11 @@
                                                             </span>
                                                             <span class="task-label" contenteditable="true">{{ i.task }}</span>
                                                             <span class="task-action-btn task-btn-right">
-                                                                <span class="action-circle large" title="Assign">
-                                                                    <i class="material-icons">person_add</i>
+                                                                <span data-izimodal-open="#modal_assign_miles" class="action-circle large" title="Assign">
+                                                                    <i class="material-icons text-primary" >person_add</i>
                                                                 </span>
                                                                 <span class="action-circle large delete-btn" milestone_id="{{i.pk}}" title="Delete Task">
-                                                                    <i class="material-icons">delete</i>
+                                                                    <i class="material-icons text-danger">delete</i>
                                                                 </span>
                                                             </span>
                                                         </div>
@@ -100,7 +96,7 @@
 
                                       </a>
                                     {% endfor %}
-                                    <a href="#" class="followers-add" title="Add Assignee" data-toggle="modal" data-target="#assignee"><i class="material-icons">add</i></a>
+                                    <!-- <button href="#" class="followers-add" title="Add Assignee" data-izimodal-open="#modal_assign_miles"><i class="material-icons">add</i></button> -->
                                 </div>
                                 <!-- <ul class="nav pull-right custom-menu">
                                     <li class="dropdown dropdown-action">
@@ -113,7 +109,7 @@
                                 </ul> -->
                             </div>
                         </div>
-                        <div class="chat-contents task-chat-contents">
+                        <div class="chat-contents custom-chat task-chat-contents">
                             <div class="chat-content-wrap">
                                 <div class="chat-wrap-inner">
                                     <div class="chat-box">
@@ -121,15 +117,18 @@
                                             <h4>{{project.name}}</h4>
                                             <hr class="task-line">
                                             {% for i in comments %}
-                                            <div class="card">
-                                              <div class="card-header">
-                                                <h4><small>Commented by: </small>{{ i.commented_by }}</h4>
-                                              </div>
-                                              <div class="card-body">
-                                                {{ i.text }}
-                                              </div>
+                                            <div class="chat chat-left">
+                                                <div class="chat-body">
+                                                    <div class="chat-bubble">
+                                                        <div class="chat-content">
+                                                            <div class="text-primary">{{ i.commented_by }}</div></a></span>
+                                                            <div>{{ i.text  }}</div></a></span>
+                                                            <span class="chat-time text-danger">{{ i.commented_on }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            {% endfor %}
+                                             {% endfor %}
                                         </div>
 
                                     </div>
@@ -166,33 +165,39 @@
                 </div>
             </div>
         </div>
-        <div id="assignee" class="modal custom-modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Assign this Milestone</h3>
 
+        <div class="mt-20">
+            <!-- Modal Start -->
+            <div class="izimodal" id="modal_assign_miles" data-iziModal-width="600px" data-iziModal-fullscreen="true"
+                data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+                <!-- Close Button Start -->
+                <div class="close-modal">
+                    <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
+                </div>
+                <!-- Close Button Start -->
+                <!-- Modal Body Start -->
+                <div class="modal-inside inner-30">
+                    <div class="modal-heading">
+                        <h4 class="modal-title center-holder">Assign this Milestone</h4>
                     </div>
-                    <div class="modal-body">
-                      <form method="post" action="{% url 'project:assign_' pk %}">
+                    <form method="post" action="{% url 'project:assign_' pk %}">
                         {% csrf_token %}
                         <div class="input-group m-b-10">
-                          <select placeholder="select to add" style='width:100%' class="form-control select_staff" id="" name='staff'></select>
+                          <select placeholder="select to add" class="form-control select_staff" id="" name='staff'></select>
                         </div>
                         <div class="input-group m-b-30">
                           <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
                         </div>
                         <div class="m-t-50 text-center">
                             <button class="btn btn-primary btn-lg">Assign</button>
-                            <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
-
                         </div>
                       </form>
-
-                    </div>
                 </div>
+                <!-- Modal Body End -->
             </div>
+            <!-- Modal End -->
         </div>
+
         <div id="task_followers" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
