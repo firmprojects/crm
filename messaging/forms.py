@@ -11,3 +11,12 @@ class MailForm(forms.ModelForm):
         'to':forms.SelectMultiple(),
         'cc':forms.SelectMultiple(),
         }
+
+class ReplyForm(forms.ModelForm):
+    attachments = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True,'class':'form-control'}),required=False)
+    class Meta:
+        model = MailBody
+        fields = ('cc','subject','body')
+        widgets = {
+        'body':forms.Textarea(),
+        }

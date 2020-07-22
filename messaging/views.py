@@ -3,7 +3,7 @@ from dal import autocomplete
 from django.shortcuts import render,reverse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, View, TemplateView, FormView
-from .forms import MailForm
+from .forms import MailForm,ReplyForm
 from .models import MailBody,Mail,Files
 from users.models import CustomUser
 from django.core.files.storage import default_storage
@@ -24,8 +24,6 @@ class Compose(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-
-
         mail_b = MailBody(to=data['to'],cc=data['cc'],subject=data['subject'],body=data['body'],from_email=self.request.user.pk)
         mail_b.save()
         for file in self.request.FILES.getlist('attachments'):
@@ -37,8 +35,34 @@ class Compose(FormView):
             mail_b.save()
         else:
             mail = Mail.objects.create(body=mail_b,)
-
         return super(Compose, self).form_valid(form)
+
+class ReplyView(FormView):
+    template_name='messaging/reply.html'
+    form_class = ReplyForm
+    success_url = reverse_lazy('messaging:compose')
+    def get(self,request,**kwargs):
+        super().get(request,**kwargs)
+        mail = MailBody.objects.get(pk=int(self.kwargs['pk']))
+        cont = self.get_context_data()
+        cont['mail'] = mail
+        return render(request,self.template_name,cont)
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        mail_body = MailBody.objects.get(pk=int(self.kwargs['pk']))
+        mail = mail_body.mail
+        mail_b = MailBody(to=[mail_body.from_email],cc=data['cc'],subject=data['subject'],body=data['body'],from_email=self.request.user.pk)
+        mail_b.save()
+        for file in self.request.FILES.getlist('attachments'):
+            file_name = default_storage.save(file.name, file)
+            Files.objects.create(file=file_name,mail=mail_b)
+
+        arr = mail.replies
+        arr.append(mail_b.pk)
+        mail.replies = arr
+        mail.save()
+        return super(ReplyView, self).form_valid(form)
 
 class Inbox(TemplateView):
     template_name='messaging/inbox.html'

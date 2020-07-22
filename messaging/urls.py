@@ -12,5 +12,5 @@ urlpatterns = [
     path('blog-edit', EditBlog.as_view(), name='edit_blog'),
     path('blog-add', AddBlog.as_view(), name='add_blog'),
     path('email/',EmailAutocompletesView.as_view(),name='email_ac'),
-
+    path('reply/<pk>/',ReplyView.as_view(),name='reply_view')
     ]
