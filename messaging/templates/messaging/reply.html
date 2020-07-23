@@ -76,9 +76,9 @@
     {% block js %}
     <script type="text/javascript">
       $(function () {
-        $("#draft_button").click(function () {
-          $("#draft").prop('checked','checked')
-          $("#form_mail").submit()
+        $("#form_mail").submit(function () {
+          window.close()
+          console.log('k');
         })
 
         $('#id_to').select2({

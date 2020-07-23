@@ -22,6 +22,7 @@ class Compose(FormView):
     form_class = MailForm
     success_url = reverse_lazy('messaging:compose')
 
+
     def form_valid(self, form):
         data = form.cleaned_data
         mail_b = MailBody(to=data['to'],cc=data['cc'],subject=data['subject'],body=data['body'],from_email=self.request.user.pk)
@@ -51,6 +52,7 @@ class ReplyView(FormView):
     def form_valid(self, form):
         data = form.cleaned_data
         mail_body = MailBody.objects.get(pk=int(self.kwargs['pk']))
+
         mail = mail_body.mail
         mail_b = MailBody(to=[mail_body.from_email],cc=data['cc'],subject=data['subject'],body=data['body'],from_email=self.request.user.pk)
         mail_b.save()
@@ -62,18 +64,24 @@ class ReplyView(FormView):
         arr.append(mail_b.pk)
         mail.replies = arr
         mail.save()
+        mail = Mail.objects.create(body=mail_b,)
         return super(ReplyView, self).form_valid(form)
 
 class Inbox(TemplateView):
     template_name='messaging/inbox.html'
     def get(self,request,*args,**kwargs):
         mails = MailBody.objects.filter(to__contains=[request.user.pk])
-        print(mails)
         return render(request,self.template_name,{'mails':mails})
 
 class MailView(DetailView):
     template_name='messaging/mail_view.html'
     model = MailBody
+    def get(self,request,**kwargs):
+        super().get(request,**kwargs)
+        self.object = self.get_object()
+        cont = self.get_context_data()
+        cont['reply_form'] = ReplyForm
+        return render(request,self.template_name,cont)
 
 
 class Blog(TemplateView):

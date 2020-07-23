@@ -55,28 +55,28 @@ WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Satur
 #         return render(request,self.template_name,context=context)
 #
 
-class Users(TemplateView):
-    template_name = 'users/users.html'
-    form_class = UserCreate
-    success_url = '/all'
-    def get(self,request):
-        super().get(request)
-        context = super().get_context_data()
-        context['users'] = CustomUser.objects.all()
-        context['form'] = UserCreate
-        context['change_form'] = UserChangeForm
-        return render(request,self.template_name,context=context)
-
-    def post(self,request):
-
-        context = super().get_context_data()
-        form = UserCreate(request.POST)
-        if form.is_valid():
-            form.save(request)
-            return HttpResponseRedirect(request.build_absolute_uri())
-        context['users'] = CustomUser.objects.all()
-        context['form'] = form
-        return render(request,self.template_name,context=context)
+# class Users(TemplateView):
+#     template_name = 'users/users.html'
+#     form_class = UserCreate
+#     success_url = '/all'
+#     def get(self,request):
+#         super().get(request)
+#         context = super().get_context_data()
+#         context['users'] = CustomUser.objects.all()
+#         context['form'] = UserCreate
+#         context['change_form'] = UserChangeForm
+#         return render(request,self.template_name,context=context)
+#
+#     def post(self,request):
+#
+#         context = super().get_context_data()
+#         form = UserCreate(request.POST)
+#         if form.is_valid():
+#             form.save(request)
+#             return HttpResponseRedirect(request.build_absolute_uri())
+#         context['users'] = CustomUser.objects.all()
+#         context['form'] = form
+#         return render(request,self.template_name,context=context)
 
 
 
@@ -127,14 +127,14 @@ class StaffDashboard(TemplateView):
 class LoginPage(LoginView):
     template_name = 'account/login.html'
 
-    # def get(self, *args, **kwargs):
-    #     super().get(*args,**kwargs)
-    #     print("ok")
-    #     if self.request.user.is_authenticated:
-    #         if self.request.user.is_employee:
-    #             return redirect('users/staff_dashboard.html')
-    #
-    #     return HttpResponseRedirect(redirect('dashboard/index.html', args=[self.request.user.username]))
+def red(request):
+    if request.user.is_employee:
+        return redirect('employees:staff')
+    elif request.user.is_superuser:
+        return redirect('users:users')
+    else:
+        return redirect('dashboard:home')
+
 
 @csrf_exempt
 def clock_in(request):
