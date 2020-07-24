@@ -16,7 +16,7 @@ import json
 import datetime
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
-from users.decorators import employee_check
+from users.decorators import employee_check, client_check
 
 
 
@@ -123,7 +123,7 @@ class AddContacts(TemplateView):
 class StaffDashboard(TemplateView):
     template_name = 'users/staff_dashboard.html'
 
-
+@method_decorator([client_check, login_required], name='dispatch')
 class ClientDashboard(TemplateView):
     template_name = 'users/client_dashboard.html'
 
@@ -131,13 +131,13 @@ class ClientDashboard(TemplateView):
 class LoginPage(LoginView):
     template_name = 'account/login.html'
 
-def red(request):
-    if request.user.is_employee:
-        return redirect('employees:staff')
-    elif request.user.is_superuser:
-        return redirect('users:users')
-    else:
-        return redirect('dashboard:home')
+# def red(request):
+#     if request.user.is_employee:
+#         return redirect('employees:staff')
+#     elif request.user.is_superuser:
+#         return redirect('users:users')
+#     else:
+#         return redirect('dashboard:home')
 
 
 @csrf_exempt
