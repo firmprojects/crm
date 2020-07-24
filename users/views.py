@@ -6,19 +6,18 @@ from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime,parse_date
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
-
-
 from .models import *
 from .forms import *
 import json
 import datetime
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
+from users.decorators import employee_check
+
 
 
 def superuser_only(function):
@@ -120,6 +119,7 @@ class Contacts(TemplateView):
 class AddContacts(TemplateView):
     template_name = 'users/add_contacts.html'
 
+@method_decorator([employee_check, login_required], name='dispatch')
 class StaffDashboard(TemplateView):
     template_name = 'users/staff_dashboard.html'
 
