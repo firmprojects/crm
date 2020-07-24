@@ -94,8 +94,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
-        'NAME': 'crm2',
-        'PASSWORD': 'enternow',
+        'NAME': 'crm',
+        'PASSWORD': 'vihas',
         'HOST': 'localhost',
         'PORT': '5432'
     },
@@ -190,6 +190,4 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-LOGIN_REDIRECT_URL  = 'dashboard:home'
-
-ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'
+LOGIN_REDIRECT_URL  = 'users:red'

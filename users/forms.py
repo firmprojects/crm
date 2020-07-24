@@ -13,15 +13,6 @@ class UserCreate(SignupForm):
     is_admin = forms.CharField(widget=forms.CheckboxInput,required=False)
     username = forms.CharField(required=True)
 
-    # class Meta:
-        # model = get_user_model()
-    #     fields = ('username','first_name','last_name','email','password1','password2','is_client','is_employee','is_admin')
-
-    # def __init__(self,*args,**kwargs):
-    #     super(UserCreate,self).__init__(*args,**kwargs)
-    #     self.fields['first_name'].required = True
-    #     self.fields['email'].required = True
-    #     self.fields['username'].required = True
 
     def clean(self):
         cleaned_data = super().clean()
@@ -40,13 +31,7 @@ class UserCreate(SignupForm):
         user.is_employee = True if self.cleaned_data.get('is_employee') == 'True'else False
         user.is_client = True if self.cleaned_data.get('is_client') == 'True' else False
         if user.is_admin: user.is_superuser = True
-        #
-        # user = super(UserCreate, self).save(commit=False)
-        # data = self.clean()
-        # if data['is_admin']:
-        #     user.is_superuser = True
-        #
-        # Create client or staff here if you want to
+
         user.save()
         return user
 

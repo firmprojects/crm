@@ -1,6 +1,8 @@
 {% extends 'backend/base2.html' %}
 {% load static %}
 {% load filters %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
 <div class="page-wrapper">
@@ -101,9 +103,10 @@
                         <div class="row">
                             <div class="col-sm-6 left-action">
                                 <!-- <a href="{% url 'messaging:reply_view' object.pk %}" role="button" class="btn btn-white"><i class="fa fa-reply"></i> Reply</a> -->
-                                <a onclick="reply()" role="button" class="btn btn-white"><i class="fa fa-reply"></i> Reply</a>
-
+                                <!-- <a onclick="reply()" role="button" class="btn btn-white"><i class="fa fa-reply"></i> Reply</a> -->
+                                <button data-target='#exampleModal' data-toggle='modal' class="btn btn-white">Reply</button>
                                 <a href="#" type="button" class="btn btn-white"><i class="fa fa-share"></i> Forward</a>
+
                             </div>
                             <div class="col-sm-6 right-action">
                                 <button type="button" class="btn btn-white"><i class="fa fa-print"></i> Print</button>
@@ -116,6 +119,44 @@
         </div>
     </div>
 
+</div>
+<div class="modal" tabindex="-1" role="dialog" id='exampleModal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'messaging:reply_view' object.pk %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+            <div class="form-group">
+                <!-- <input type="text" placeholder="Subject" class="form-control"> -->
+                {{reply_form.subject|as_crispy_field}}
+            </div>
+            <div class="form-group">
+                <!-- <textarea rows="4" cols="5" class="form-control summernote" placeholder="Enter your message here"></textarea> -->
+                {{reply_form.body|as_crispy_field}}
+            </div>
+            <div class="form-group">
+                {{reply_form.attachments|as_crispy_field}}
+            </div>
+
+            <input type="checkbox" name="draft" hidden id='draft'>
+            <div class="form-group m-b-0">
+                <div class="text-center">
+                    <button class="btn btn-primary"><span>Send</span> <i class="fa fa-send m-l-5"></i></button>
+                    <button class="btn btn-success m-l-5" type="reset"><span>Delete</span> <i class="fa fa-trash-o m-l-5"></i></button>
+                </div>
+            </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
 </div>
 <script type="text/javascript">
   function reply(){
