@@ -12,15 +12,6 @@ def get_user(val):
 def mail_count(val):
     return len(MailBody.objects.filter(to__contains=[val]))
 
-@register.filter(name='get_reply')
-def get_reply(mail_body):
-    # print(mail_body)
-    return False
-    # mail = mail_body.mail
-    # print(mail.replies)
-    # if mail.replies.__len__() == 0:
-    #     return False
-    # if mail.replies.__len__() == 1:
-    #     return mail_body
-    # else:
-    #     return MailBody.objects.get(pk=mail.replies[-2])
+@register.filter(name='read')
+def read(mail_body,user):
+    return mail_body.open_ed[str(user)]

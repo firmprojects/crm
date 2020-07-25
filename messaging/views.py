@@ -1,5 +1,5 @@
 from dal import autocomplete
-
+from django.http import HttpResponseRedirect,JsonResponse
 from django.shortcuts import render,reverse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, View, TemplateView, FormView
@@ -7,6 +7,7 @@ from .forms import MailForm,ReplyForm
 from .models import MailBody,Mail,Files
 from users.models import CustomUser
 from django.core.files.storage import default_storage
+from django.contrib.auth.decorators import login_required
 
 class EmailAutocompletesView(autocomplete.Select2QuerySetView):
 
@@ -70,7 +71,7 @@ class ReplyView(FormView):
 class Inbox(TemplateView):
     template_name='messaging/inbox.html'
     def get(self,request,*args,**kwargs):
-        mails = MailBody.objects.filter(to__contains=[request.user.pk])
+        mails = MailBody.objects.filter(to__contains=[request.user.pk]).order_by('-date')
         return render(request,self.template_name,{'mails':mails})
 
 class MailView(DetailView):
@@ -95,3 +96,22 @@ class AddBlog(TemplateView):
 
 class EditBlog(TemplateView):
     template_name='messaging/edit_blog.html'
+
+
+@login_required
+def forward_view(request,pk):
+    if request.method == 'POST':
+        mail_b = MailBody.objects.get(pk=pk)
+        mail__ = MailBody.objects.create(to=request.POST.getlist('to'),subject=mail_b.subject,body=mail_b.body,from_email=request.user.pk)
+
+        for i in mail_b.files_set.all():
+            Files.objects.create(file=i.file,mail=mail__)
+        mail = Mail.objects.create(body=mail__,)
+        return HttpResponseRedirect(reverse('messaging:mail_view',args=(pk,)))
+
+@login_required
+def mark_as_read(request,pk):
+    mail_b = MailBody.objects.get(pk=pk)
+    mail_b.open_ed[str(request.user.pk)] = True
+    mail_b.save()
+    return JsonResponse({})

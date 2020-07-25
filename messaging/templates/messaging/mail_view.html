@@ -14,13 +14,7 @@
             </div>
         </div>
         <div class="row">
-          <div class="col-12">
-            {% with rep=object|get_reply %}
-              {% if rep %}
-                <h4>Reply for: <a href="{% url 'messaging:mail_view' rep.pk %}">{{rep.from_email|get_user}}|{{rep.subject}}</a></h4>
-              {% endif %}
-            {% endwith %}
-          </div>
+
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="mailview-content">
@@ -104,8 +98,8 @@
                             <div class="col-sm-6 left-action">
                                 <!-- <a href="{% url 'messaging:reply_view' object.pk %}" role="button" class="btn btn-white"><i class="fa fa-reply"></i> Reply</a> -->
                                 <!-- <a onclick="reply()" role="button" class="btn btn-white"><i class="fa fa-reply"></i> Reply</a> -->
-                                <button data-target='#exampleModal' data-toggle='modal' class="btn btn-white">Reply</button>
-                                <a href="#" type="button" class="btn btn-white"><i class="fa fa-share"></i> Forward</a>
+                                <button data-target='#reply_modal' data-toggle='modal' class="btn btn-white">Reply</button>
+                                <button data-target='#forwad_modal' data-toggle='modal' class="btn btn-white"><i class="fa fa-share"></i> Forward</button>
 
                             </div>
                             <div class="col-sm-6 right-action">
@@ -120,11 +114,11 @@
     </div>
 
 </div>
-<div class="modal" tabindex="-1" role="dialog" id='exampleModal'>
+<div class="modal" tabindex="-1" role="dialog" id='reply_modal'>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title">Reply:</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -154,13 +148,53 @@
             </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
+
+<div class="modal" tabindex="-1" role="dialog" id='forwad_modal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Forward:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'messaging:forward_view' object.pk %}">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <select class="form-control" id='id_forward'  name="to" style='width:100%'>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% block js %}
 <script type="text/javascript">
   function reply(){
     window.open("{% url 'messaging:reply_view' object.pk %}", '_blank', 'height=600,width=600,location=no');
   }
+  $(function () {
+    $.ajax({url:`/messaging/mark_as_read/{{object.pk}}`,type:'GET'})
+    $('#id_forward').select2({
+       minimumInputLength: 1,
+       placeholder: "Forward to",
+       multiple: true,
+       ajax: {
+           url: '/project/user_autocomplete',
+           dataType: 'json'
+       },
+   });
+  })
 </script>
+{% endblock %}
 {% endblock content %}
