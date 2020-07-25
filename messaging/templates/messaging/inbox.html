@@ -100,16 +100,29 @@
                                 </thead>
                                 <tbody>
                                   {% for mail in mails %}
-                                    <tr class="unread clickable-row" data-href="{% url 'messaging:mail_view' mail.pk %}">
-                                        <td>
-                                            <input type="checkbox" class="checkmail">
-                                        </td>
-                                        <td><span class="mail-important"><i class="fa fa-star starred"></i></span></td>
-                                        <td class="name">{{mail.from_email|get_user}}</td>
-                                        <td class="subject">{{mail.subject}}</td>
-                                        <td><i class="fa fa-paperclip"></i></td>
-                                        <td class="mail-date">{{mail.date|date:'jS F, h:i A e'}}</td>
-                                    </tr>
+                                    {% if mail|read:request.user.pk %}
+                                      <tr class="clickable-row" data-href="{% url 'messaging:mail_view' mail.pk %}">
+                                          <td>
+                                              <input type="checkbox" class="checkmail">
+                                          </td>
+                                          <td><span class="mail-important"><i class="fa fa-star starred"></i></span></td>
+                                          <td class="name">{{mail.from_email|get_user}}</td>
+                                          <td class="subject">{{mail.subject}}</td>
+                                          <td><i class="fa fa-paperclip"></i></td>
+                                          <td class="mail-date">{{mail.date|date:'jS F, h:i A e'}}</td>
+                                      </tr>
+                                    {% else %}
+                                      <tr class="unread clickable-row" data-href="{% url 'messaging:mail_view' mail.pk %}">
+                                          <td>
+                                              <input type="checkbox" class="checkmail">
+                                          </td>
+                                          <td><span class="mail-important"><i class="fa fa-star starred"></i></span></td>
+                                          <td class="name">{{mail.from_email|get_user}}</td>
+                                          <td class="subject">{{mail.subject}}</td>
+                                          <td><i class="fa fa-paperclip"></i></td>
+                                          <td class="mail-date">{{mail.date|date:'jS F, h:i A e'}}</td>
+                                      </tr>
+                                    {% endif %}
                                   {% endfor %}
                                     <!-- <tr class="unread clickable-row" data-href="mail-view.html">
                                         <td>
