@@ -9,8 +9,10 @@ def get_user(val):
     return CustomUser.objects.get(pk=val).username
 
 @register.filter(name='mail_count')
-def mail_count(val):
-    return len(MailBody.objects.filter(to__contains=[val]))
+def mail_count(val,sent=False):
+    if sent:
+        return len(MailBody.objects.filter(from_email=val,draft = False,trash=False))
+    return len(MailBody.objects.filter(to__contains=[val],draft = False,trash=False))
 
 @register.filter(name='read')
 def read(mail_body,user):

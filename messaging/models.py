@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import pre_save
 from django.contrib.postgres import fields
+from django.conf import settings
 
 # Create your models here.
 
@@ -12,6 +13,7 @@ class MailBody(models.Model):
     subject = models.CharField(max_length=100)
     body = models.TextField()
     draft = models.BooleanField(default=False)
+    trash = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     open_ed = fields.JSONField(default=dict)
 
@@ -31,3 +33,7 @@ class Files(models.Model):
 class Mail(models.Model):
     body = models.OneToOneField(to=MailBody,on_delete=models.CASCADE)
     replies = fields.ArrayField(base_field=models.IntegerField(),default=list)
+
+class Trash(models.Model):
+    user = models.OneToOneField(to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    body = models.ManyToManyField(to=MailBody,related_name='mail_body')
