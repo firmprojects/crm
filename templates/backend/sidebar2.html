@@ -15,13 +15,13 @@
                     <a href="{% url 'messaging:inbox' %}">Inbox <span class="mail-count">({{request.user.pk|mail_count}})</span></a>
                 </li>
                 <li>
-                    <a href="#">Sent Mail</a>
+                    <a href="{% url 'messaging:sent_mail' %}">Sent Mail <span class="mail-count">({{request.user.pk|mail_count:True}})</span></a>
                 </li>
                 <li>
-                    <a href="#">Draft <span class="mail-count">(8)</span></a>
+                    <a href="{% url 'messaging:draft_mail' %}">Draft</a>
                 </li>
                 <li>
-                    <a href="#">Trash</a>
+                    <a href="{% url 'messaging:trash_mail' %}"">Trash</a>
                 </li>
                 <li class="menu-title">Label <a href="#" class="add-user-icon"><i class="fa fa-plus"></i></a></li>
                 <li>
