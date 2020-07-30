@@ -20,6 +20,7 @@ urlpatterns = [
     path('sent/',Sent_mail.as_view(),name='sent_mail'),
     path('draft/',Draft.as_view(),name='draft_mail'),
     path('trash/',Trash_.as_view(),name='trash_mail'),
-    path('empty_trash/',empty_trash,name='empty_trash')
+    path('empty_trash/',empty_trash,name='empty_trash'),
+    path('multiple_trash/',move_to_trash_multiple,name='move_to_trash_multiple')
 
 ]

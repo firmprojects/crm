@@ -16,6 +16,8 @@
                     <div class="email-header">
                         <div class="row">
                             <div class="col-sm-9 col-md-8 col-8 top-action-left">
+                              <button data-toggle="modal" class="btn btn-white d-none d-md-inline-block" data-target='#delete_modal'><i class="fa fa-trash"></i></button>
+
                                 <!-- <div class="pull-left">
                                     <div class="btn-group dropdown-action">
                                         <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">Select <i class="fa fa-angle-down "></i></button>
@@ -87,9 +89,9 @@
                             <table class="table table-inbox table-hover">
                                 <thead>
                                     <tr>
-                                        <!-- <th colspan="6">
+                                        <th>
                                             <input type="checkbox" class="checkbox-all">
-                                        </th> -->
+                                        </th>
                                         <th>--</th>
                                         <th>--</th>
                                         <th>From</th>
@@ -101,10 +103,11 @@
                                 <tbody>
                                   {% for mail in mails %}
                                     {% if mail|read:request.user.pk %}
-                                      <tr class="clickable-row" data-href="{% url 'messaging:mail_view' mail.pk %}">
+                                      <tr class="" data-href="{% url 'messaging:mail_view' mail.pk %}">
                                           <td>
-                                              <input type="checkbox" class="checkmail">
+                                              <input type="checkbox" class="checkmail" data-id='{{mail.pk}}'>
                                           </td>
+                                          <td><a href="{% url 'messaging:mail_view' mail.pk %}">-></a></td>
                                           <td><span class="mail-important"><i class="fa fa-star starred"></i></span></td>
                                           <td class="name">{{mail.from_email|get_user}}</td>
                                           <td class="subject">{{mail.subject}}</td>
@@ -112,10 +115,11 @@
                                           <td class="mail-date">{{mail.date|date:'jS F, h:i A e'}}</td>
                                       </tr>
                                     {% else %}
-                                      <tr class="unread clickable-row" data-href="{% url 'messaging:mail_view' mail.pk %}">
+                                      <tr class="unread" data-href="{% url 'messaging:mail_view' mail.pk %}">
                                           <td>
-                                              <input type="checkbox" class="checkmail">
+                                              <input type="checkbox" class="checkmail" data-id='{{mail.pk}}'>
                                           </td>
+                                          <td><a href="{% url 'messaging:mail_view' mail.pk %}">-></a></td>
                                           <td><span class="mail-important"><i class="fa fa-star starred"></i></span></td>
                                           <td class="name">{{mail.from_email|get_user}}</td>
                                           <td class="subject">{{mail.subject}}</td>
@@ -134,12 +138,47 @@
         </div>
     </div>
 </div>
+<div class="modal" tabindex="-1" role="dialog" id='delete_modal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure you want to move this to trash?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary del_button" onclick="deleteMultiple()">Yes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% block js %}
 <script type="text/javascript">
+  function deleteMultiple(){
+    let ids = []
+    for(i of $(".checkmail:checked")){
+      ids.push($(i).data('id'))
+    }
+    console.log(ids);
+    $.ajax({
+      'url':`/messaging/multiple_trash/`,
+      'type':'POST',
+      'data':{'data':JSON.stringify({'data':ids}),'csrfmiddlewaretoken':'{{csrf_token}}'},
+      'error':()=>{
+        alert('Error while deleteing')
+      },
+      'success':()=>{
+        location.reload()
+      }
+    })
+  }
   $(function(){
     $(".clickable-row").click(function() {
         window.location = $(this).data("href");
     });
+    
   })
 </script>
 {% endblock %}
