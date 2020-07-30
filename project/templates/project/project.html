@@ -70,16 +70,16 @@
                         <div class="project-members m-b-15">
                             <div>Team :</div>
                             <ul class="team-members">
-                                
+
                                 {% for i in item.team_member.all  %}
                                 <li>
                                     <a href="#" data-toggle="tooltip" title="{{ i.username }}"><img
                                             src="{% static 'img/user.jpg' %}" alt="{{ i.username }}"></a>
                                 </li>
                                 {% endfor %}
-                                    
-                                
-                               
+
+
+
                             </ul>
                         </div>
                         <p class="m-b-5">Progress <span class="text-success pull-right">40%</span></p>
@@ -95,7 +95,7 @@
         </div>
 
     </div>
- 
+
     {% include 'project/projects_delete.html' %}
     {% include 'project/projects_edit_form.html' %}
 
@@ -111,6 +111,8 @@
 {% endblock content%}
 
     {% block js %}
+    <script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script>
+
         <script>
 $( document ).ready(function() {
 
