@@ -163,7 +163,7 @@ class ClientDelete(DeleteView):
 class UsersAutocompletesView(autocomplete.Select2QuerySetView):
 
     def get_queryset(self):
-        qs = CustomUser.objects.all().order_by('-id')
+        qs = CustomUser.objects.filter(client=True)
         if self.q:
             qs = qs.filter(username__istartswith=self.q)
         print(qs)
@@ -173,7 +173,7 @@ class UsersAutocompletesView(autocomplete.Select2QuerySetView):
 class ClientAutocompletesView(autocomplete.Select2QuerySetView):
 
     def get_queryset(self):
-        qs = Clients.objects.all().order_by('-company_name')
+        qs = CustomUser.objects.all().order_by('-id')
         if self.q:
             qs = qs.filter(company_name__istartswith=self.q)
         return qs

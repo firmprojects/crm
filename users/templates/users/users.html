@@ -10,8 +10,8 @@
                 <h4 class="page-title">Users</h4>
             </div>
             <div class="col-sm-8 col-8 text-right m-b-30">
-                <a href="#" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#add_user" data-whatever="@mdo"><i class="fa fa-plus"></i> Add User</a>
-              
+                <button class="btn btn-primary btn-rounded"  data-izimodal-open="#modal_user_form"><i
+                    class="fa fa-plus"></i> Add User</button>              
             </div>
         </div>
         <div class="row">
@@ -68,163 +68,11 @@
     </div>
 </div>
 
-
-<div class="mt-20">
-    <!-- Modal Start -->
-    <div class="izimodal" id="modal_user_form" data-iziModal-width="700px" data-iziModal-fullscreen="true"
-        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
-        <!-- Close Button Start -->
-        <div class="close-modal">
-            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
-        </div>
-        <!-- Close Button Start -->
-        <!-- Modal Body Start -->
-        <div class="modal-inside inner-30">
-            <div class="modal-heading">
-                <h4 class="modal-title center-holder">Add Users</h4>
-            </div>
-            <form  method="post">
-                {% csrf_token %}
-
-                {% for field in form %}
-                <div class="form-group">
-                  {{field.label_tag}}
-                  <div class="form-control">
-                  {{field}}
-                </div>
-                  <small>{{field.help_text}}</small>
-                  {% for i in field.errors %}
-                    <p class="text-danger">{{ i }}</p>
-                  {% endfor %}
-                </div>
-
-                {% endfor %}
-                <input type="submit" name="" value="Create user">
-              </form>
-        </div>
-        <!-- Modal Body End -->
-    </div>
-    <!-- Modal End -->
-</div>
+ {% include 'users/createuserform.html' %} 
+ {% include 'users/user_edit_form.html' %} 
+ {% include 'users/user_delete_form.html' %} 
 
 
-<div id="add_user" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h4 class="modal-title">Add User</h4>
-            </div>
-            <div class="modal-body">
-               
-
-                <form  method="post">
-                  {% csrf_token %}
-
-                  {% for field in form %}
-                  <div class="form-group">
-                    {{field.label_tag}}
-                    {{field}}
-                    <small>{{field.help_text}}</small>
-                    {% for i in field.errors %}
-                      <p class="text-danger">{{ i }}</p>
-                    {% endfor %}
-                  </div>
-
-                  {% endfor %}
-                  <input type="submit" name="" value="Create user">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="edit_user" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h4 class="modal-title">Edit User</h4>
-            </div>
-            <div class="modal-body">
-                <form class="m-b-30">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>First Name <span class="text-danger">*</span></label>
-                                <input class="form-control" value="John" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input class="form-control" value="Doe" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Username <span class="text-danger">*</span></label>
-                                <input class="form-control" value="johndoe" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Email <span class="text-danger">*</span></label>
-                                <input class="form-control" value="johndoe@example.com" type="email">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input class="form-control" type="password">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Confirm Password</label>
-                                <input class="form-control" type="password">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Role</label>
-                                <select class="select">
-                                    <option>Admin</option>
-                                    <option>Client</option>
-                                    <option selected>Employee</option>
-                                </select>
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary btn-lg">Edit User</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="delete_user" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content modal-md">
-            <div class="modal-header">
-                <h4 class="modal-title">Delete Employee</h4>
-            </div>
-            <form>
-                <div class="modal-body card-box">
-                    <p>Are you sure want to delete this?</p>
-
-                    <div class="m-t-20">
-                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <a role="button" id="delete_user_link" type="submit" class="btn">Delete</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 <script type="text/javascript">
   $(document).ready(()=>{
     $("#delete_user").on('show.bs.modal',function(event){
