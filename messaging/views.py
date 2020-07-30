@@ -8,6 +8,7 @@ from .models import MailBody,Mail,Files,Trash
 from users.models import CustomUser
 from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
+import json
 
 class EmailAutocompletesView(autocomplete.Select2QuerySetView):
 
@@ -156,6 +157,22 @@ def move_to_trash(request,pk):
         trash = Trash.objects.create(user=request.user)
         trash.body.add(mail_b)
     return HttpResponseRedirect(reverse('messaging:inbox'))
+
+@login_required
+def move_to_trash_multiple(request):
+    if request.method == 'POST':
+        for pk in json.loads(request.POST['data'])['data']:
+            mail_b = MailBody.objects.get(pk=int(pk))
+            mail_b.trash = True
+            mail_b.save()
+            try:
+                trash = Trash.objects.get(user=request.user)
+                trash.body.add(mail_b)
+
+            except Trash.DoesNotExist:
+                trash = Trash.objects.create(user=request.user)
+                trash.body.add(mail_b)
+    return JsonResponse({})
 
 @login_required
 def empty_trash(request):

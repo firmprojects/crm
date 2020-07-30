@@ -28,11 +28,12 @@
                                 <div class="col-sm-3">
                                     <div class="mail-view-action">
                                         <div class="btn-group">
-                                            <button id='btn_delete' type="button" class="btn btn-white btn-sm" data-toggle="tooltip" title="Delete" data-id='{{object.pk}}'> <i class="fa fa-trash-o"></i></button>
-                                            <a href="#" role="button" class="btn btn-white btn-sm" data-toggle="tooltip" title="Reply"> <i class="fa fa-reply"></i></a>
-                                            <button type="button" class="btn btn-white btn-sm" data-toggle="tooltip" title="Forward"> <i class="fa fa-share"></i></button>
+                                            <button class="btn btn-white btn-sm" data-toggle="modal" data-target="#delete_modal" data-id='{{object.pk}}'> <i class="fa fa-trash-o"></i></button>
+                                            <!-- <a href="#" role="button" class="btn btn-white btn-sm" data-toggle="tooltip" title="Reply">  -->
+                                            <button data-target='#reply_modal' data-toggle='modal' class="btn btn-white"><i class="fa fa-reply"></i></button>
+                                            <button data-target='#forwad_modal' data-toggle='modal' class="btn btn-white"><i class="fa fa-share"></i></button>
                                         </div>
-                                        <button type="button" class="btn btn-white btn-sm" data-toggle="tooltip" title="Print"> <i class="fa fa-print"></i></button>
+                                        <button type="button" class="btn btn-white btn-sm" data-toggle="tooltip" title="Print" onclick="divPrint()"> <i class="fa fa-print"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -70,27 +71,6 @@
                                 </div>
                             </li>
                           {% endfor %}
-                            <!-- <li>
-                                <div class="attach-file"><i class="fa fa-file-word-o"></i></div>
-                                <div class="attach-info">
-                                    <a href="#" class="attach-filename">documentation.docx</a>
-                                    <div class="attach-fileize"> 2,305 KB</div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="attach-file"><img src="{% static 'img/placeholder.jpg'  %}" alt="Attachment"></div>
-                                <div class="attach-info">
-                                    <a href="#" class="attach-filename">webdesign.png</a>
-                                    <div class="attach-fileize"> 1.42 MB</div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="attach-file"><img src="{% static 'img/placeholder.jpg'  %}" alt="Attachment"></div>
-                                <div class="attach-info">
-                                    <a href="#" class="attach-filename">webdevelopment.png</a>
-                                    <div class="attach-fileize"> 1.1 MB</div>
-                                </div>
-                            </li> -->
                         </ul>
                     </div>
                     <div class="mailview-footer">
@@ -103,8 +83,8 @@
 
                             </div>
                             <div class="col-sm-6 right-action">
-                                <button type="button" class="btn btn-white"><i class="fa fa-print"></i> Print</button>
-                                <button type="button" class="btn btn-white"><i class="fa fa-trash-o"></i> Delete</button>
+                                <button type="button" class="btn btn-white" onclick="divPrint()"><i class="fa fa-print"></i> Print</button>
+                                <button id='' type="button" class="btn btn-white" data-toggle="modal" data-target="#delete_modal" data-id='{{object.pk}}'> <i class="fa fa-trash-o"></i> Delete</button>
                             </div>
                         </div>
                     </div>
@@ -142,8 +122,7 @@
             <input type="checkbox" name="draft" hidden id='draft'>
             <div class="form-group m-b-0">
                 <div class="text-center">
-                    <button class="btn btn-primary"><span>Send</span> <i class="fa fa-send m-l-5"></i></button>
-                    <button class="btn btn-success m-l-5" type="reset"><span>Delete</span> <i class="fa fa-trash-o m-l-5"></i></button>
+                    <button class="btn btn-primary" type="submit"><span>Send</span> <i class="fa fa-send m-l-5"></i></button>
                 </div>
             </div>
         </form>
@@ -178,11 +157,67 @@
     </div>
   </div>
 </div>
+<div class="modal" tabindex="-1" role="dialog" id='delete_modal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure you want to move this to trash?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <a role="button" class="btn btn-primary del_link" href="#">Yes</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% block js %}
 <script type="text/javascript">
   function reply(){
     window.open("{% url 'messaging:reply_view' object.pk %}", '_blank', 'height=600,width=600,location=no');
   }
+  function divPrint() {
+      var nw = window.open();
+      nw.document.write(
+      `
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+      <div class="mailview-content ml-5">
+          <div class="mailview-header">
+              <div class="row">
+                  <div class="col-sm-9">
+                      <div class="text-ellipsis m-b-10">
+                          Subject: <span class="mail-view-title">{{object.subject}}</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="sender-info">
+                  <div class="receiver-details pull-left">
+                      <span class="sender-name">{{object.from_email|get_user}}</span>
+                      <span class="receiver-name">
+                          to <span>me</span>, <span>{{request.user.username}}</span>
+                      </span>
+                  </div>
+                  <div class="mail-sent-time">
+                      <span class="mail-time">{{object.date|date:'jS F, h:i A e'}}</span>
+                  </div>
+              </div>
+          </div>
+          <div class="mailview-inner">
+            <p>Body:</p>
+              <p>
+                {{object.body}}
+              </p>
+          </div>
+      </div>
+      `);
+      nw.print();
+      return false;
+  }
+
   $(function () {
     $.ajax({url:`/messaging/mark_as_read/{{object.pk}}`,type:'GET'})
     $('#id_forward').select2({
@@ -195,10 +230,14 @@
        },
    });
 
-   $("#btn_delete").click(function () {
-     console.log('OK');
-     window.location = `/messaging/move_to_trash/${$(this).data('id')}`
-   })
+
+
+   $("#delete_modal").on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var recipient = button.data('id')
+      var modal = $(this)
+      modal.find('.del_link').attr('href',`/messaging/move_to_trash/${recipient}`)
+    })
   })
 </script>
 {% endblock %}
