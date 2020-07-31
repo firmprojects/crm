@@ -12,29 +12,44 @@
           <div class="col-12">
               <div class="form-group">
                   {{ form.username|as_crispy_field }}
+                  {% for i in form.username.errors %}
+                    <p class="text-danger">{{ i }}</p>
+                  {% endfor %}
               </div>
           </div>
       </div>
       <div class="row">
           <div class="col-12">
               <div class="form-group">
-                <label>Email:</label>
-                <div >CLick <a href="{% url 'account_email'%}">here</a> to change your email</div>
+                  {{ form.email|as_crispy_field }}
+                  {% for i in form.email.errors %}
+                    <p class="text-danger">{{ i }}</p>
+                  {% endfor %}
               </div>
+              <div>Click <a href="{% url 'account_email'%}">here</a> to change your email</div>
+
           </div>
       </div>
-      <div class="row">
+
+      <div class="row mt-2">
           <div class="col-sm-6">
               <div class="form-group">
                   {{ form.first_name|as_crispy_field }}
+                  {% for i in form.first_name.errors %}
+                    <p class="text-danger">{{ i }}</p>
+                  {% endfor %}
               </div>
           </div>
           <div class="col-sm-6">
               <div class="form-group">
                   {{ form.last_name|as_crispy_field }}
+                  {% for i in form.last_name.errors %}
+                    <p class="text-danger">{{ i }}</p>
+                  {% endfor %}
               </div>
           </div>
       </div>
+
       <input type="submit" value="Save" class="btn btn-primary">
       <div class="row">
         <div class="col-12">
