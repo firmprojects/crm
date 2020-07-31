@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from allauth.account.forms import SignupForm
 
 from django.contrib.auth import get_user_model
+from employees.models import Staff
+from project.models import Clients
 
 class UserCreate(SignupForm):
     first_name = forms.CharField(required=True)
@@ -35,35 +37,36 @@ class UserCreate(SignupForm):
         user.save()
         return user
 
-# class UserChange(UserChangeForm):
-#     class Meta:
-#         model = get_user_model()
-#         fields = ('username','first_name','last_name','email','password1','password2','is_client','is_employee','is_admin')
-#
-#     def __init__(self,*args,**kwargs):
-#         super(UserCreate,self).__init__(*args,**kwargs)
-#         self.fields['first_name'].required = True
-#         self.fields['email'].required = True
-#         self.fields['username'].required = True
-#
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         print(cleaned_data)
-#         if not cleaned_data['is_client'] and not cleaned_data['is_admin'] and not cleaned_data['is_employee']:
-#             raise forms.ValidationError({'is_admin':'Select atleast one of is_client or is_admin or is_employee'})
-#
-#         return cleaned_data
-#
-#     def save(self, commit=True):
-#         user = super(UserCreate, self).save(commit=False)
-#         data = self.clean()
-#         if data['is_admin']:
-#             user.is_superuser = True
-#
-#         # Create client or staff here if you want to
-#         user.save()
-#         print(user)
-#         return user
+class UserChange(UserChangeForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('username','first_name','last_name','email')
+
+    def __init__(self,*args,**kwargs):
+        super(UserChange,self).__init__(*args,**kwargs)
+        self.fields['first_name'].required = True
+        self.fields['email'].required = True
+        self.fields['username'].required = True
+        # self.fields['email'].required = True
+
+class StaffForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        super(StaffForm,self).__init__(*args,**kwargs)
+        self.fields['staff_id'].disabled = True
+        self.fields['staff_id'].required = False
+
+
+    class Meta:
+        model = Staff
+        fields = ('staff_id','phone_number','designation',)
+
+class ClientForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        super(ClientForm,self).__init__(*args,**kwargs)
+        self.fields['clients_id'].disabled = True
+    class Meta:
+        model = Clients
+        fields = ('clients_id','phone_number','company_name')
 
 # class ClientForm(UserCreationForm):
 #     first_name = forms.CharField(required=True)

@@ -15,5 +15,10 @@ urlpatterns = [
     path('clock_out/',clock_out,name='clock_out'),
     path('get_date_on_refresh/',get_date_on_refresh,name='get_date_on_refresh'),
     path('get_weekly_report/',get_weekly_report,name='get_weekly_report'),
-    path('delete_user/<pk>/',delete_user,name='delete_user')
+    path('delete_user/<pk>/',delete_user,name='delete_user'),
+    path('profile/',staff_client,name='profile'),
+    path('user/',profile,name='user'),
+    path('change/staff/',staff_view,name='staff_view'),
+    path('change/client/',client_view,name='client_view'),
+    path('change/select/',select,name='select_role')
 ]

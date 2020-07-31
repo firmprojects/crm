@@ -79,8 +79,74 @@ WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Satur
 
 
 
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UserChange(request.POST,instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('users:user')
+        return render(request,'users/user_profile.html',{'form':form})
 
+    return render(request,'users/user_profile.html',{'form':UserChange(instance=request.user)})
 
+# def staff_client(request):
+#     if request.method == 'POST':
+#         if request.user.is_client:
+#             form = ClientForm(request.POST,instance=request.user.clients)
+#         elif request.user.is_employee:
+#             form = StaffForm(request.POST,instance=request.user.staff)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('users:profile')
+#         return render(request,'users/client_staff.html',{'form':form})
+#
+#     if request.user.is_client:
+#         form = ClientForm(instance=request.user.clients)
+#     elif request.user.is_employee:
+#         form = StaffForm(instance=request.user.staff)
+#     else:
+#         return redirect('users:user')
+#     return render(request,'users/client_staff.html',{'form':form})
+@login_required
+def staff_client(request):
+    if request.user.is_employee and request.user.is_client:
+        return redirect('users:select_role')
+    elif request.user.is_client:
+        return redirect('users:client_view')
+    elif request.user.is_employee:
+        return redirect('users:staff_view')
+    else:
+        return redirect('users:user')
+@login_required
+def select(request):
+    if request.user.is_employee and request.user.is_client:
+        return render(request,'users/select.html')
+@login_required
+def staff_view(request):
+    if request.user.is_employee:
+        if request.method == 'POST':
+            form = StaffForm(request.POST,instance=request.user.staff)
+            if form.is_valid():
+                form.save()
+                return redirect('users:staff_view')
+            return render(request,'users/client_staff.html',{'form':form})
+        form = StaffForm(instance=request.user.staff)
+        return render(request,'users/client_staff.html',{'form':form})
+    return HttpResponseRedirect('/dashboard/')
+
+@login_required
+def client_view(request):
+    if request.user.is_client:
+        if request.method == 'POST':
+            form = ClientForm(request.POST,instance=request.user.clients)
+            if form.is_valid():
+                form.save()
+                return redirect('users:client_view')
+            return render(request,'users/client_staff.html',{'form':form})
+        form = ClientForm(instance=request.user.clients)
+        return render(request,'users/client_staff.html',{'form':form})
+    return HttpResponseRedirect('/dashboard/')
 
 @method_decorator(superuser_only, name='dispatch')
 class Users(SignupView):
@@ -237,11 +303,3 @@ def delete_user(request,pk):
             return HttpResponseRedirect('/all')
 
     return HttpResponse("NOT ALLOWED")
-# def home(request):
-#     if request.user.is_authenticated:
-#         if request.user.is_employee:
-#             return redirect('users/staff_dashboard.html')
-#         else:
-#            return redirect('dashboard/index.html')
-
-#     return render(request, 'account/login.html')
