@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 import json
 
 class EmailAutocompletesView(autocomplete.Select2QuerySetView):
-
     def get_queryset(self):
         qs = CustomUser.objects.all().order_by('-id')
         if self.q:

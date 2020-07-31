@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-sm-8 col-8 text-right m-b-30">
                     <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
-                        data-target="#create_project"><i class="fa fa-plus"></i> Create Project</a>
+                        data-target="#exampleModal"><i class="fa fa-plus"></i> Create Project</a>
                                           <div class="view-icons">
                         <a href="{% url 'project:projects' %}" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
                         <a href="{% url 'project:project-list' %}" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
@@ -77,9 +77,6 @@
                                             src="{% static 'img/user.jpg' %}" alt="{{ i.username }}"></a>
                                 </li>
                                 {% endfor %}
-
-
-
                             </ul>
                         </div>
                         <p class="m-b-5">Progress <span class="text-success pull-right">40%</span></p>
@@ -98,26 +95,18 @@
 
     {% include 'project/projects_delete.html' %}
     {% include 'project/projects_edit_form.html' %}
-
-
-
 </div>
-
-
 {% include 'project/projects_form.html' %}
-
-
-
 {% endblock content%}
 
     {% block js %}
-    <script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script> -->
 
-        <script>
-$( document ).ready(function() {
+<script type="text/javascript">
+$(document).ready(function() {
 
         // select client area
-         $('.project_clients').select2({
+         $('#id_clients').select2({
             minimumInputLength: 1,
             placeholder: "Project Clients*",
             multiple: false,
