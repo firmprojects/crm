@@ -47,6 +47,9 @@ class UserChange(UserChangeForm):
         self.fields['first_name'].required = True
         self.fields['email'].required = True
         self.fields['username'].required = True
+        self.fields['username'].disabled = True
+        self.fields['email'].disabled = True
+
         # self.fields['email'].required = True
 
 class StaffForm(forms.ModelForm):
