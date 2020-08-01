@@ -40,7 +40,7 @@ class UserCreate(SignupForm):
 class UserChange(UserChangeForm):
     class Meta:
         model = get_user_model()
-        fields = ('username','first_name','last_name','email')
+        fields = ('username','first_name','last_name','email','photo')
 
     def __init__(self,*args,**kwargs):
         super(UserChange,self).__init__(*args,**kwargs)

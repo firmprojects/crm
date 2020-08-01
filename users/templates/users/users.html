@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-8 col-8 text-right m-b-30">
                 <button class="btn btn-primary btn-rounded"  data-izimodal-open="#modal_user_form"><i
-                    class="fa fa-plus"></i> Add User</button>              
+                    class="fa fa-plus"></i> Add User</button>
             </div>
         </div>
         <div class="row">
@@ -30,6 +30,7 @@
                         </thead>
                         <tbody>
                           {% for i in users %}
+
                             <tr>
                                 <td>
                                     <a href="{% url 'users:user_profile_view' %}" class="avatar"></a>
@@ -43,6 +44,14 @@
                                     {% endif %}
                                     {% if i.is_employee %}
                                       <span class="badge badge-success-border">Employee</span>
+                                      {% if i.staff.on_leave %}
+                                        <span class="badge badge-info-border">On leave</span>
+                                      {% endif %}
+                                      {% if not i.is_active %}
+                                        <span class="badge badge-danger-border">Suspended</span>
+                                      {% else %}
+                                        <span class="badge badge-success-border">Active</span>
+                                      {% endif %}
                                     {% endif %}
                                     {% if i.is_client %}
                                       <span class="badge badge-info-border">Client</span>
@@ -54,12 +63,26 @@
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a> -->
                                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_user" user_id="{{i.pk}}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                            {% if i.is_employee %}
+                                            <!-- {{i.is_active}} -->
+                                              {% if i.is_active %}
+                                                <a class="dropdown-item"data-toggle="modal" data-target="#change_status" user_id="{{i.pk}}" data-status='suspended'>Suspend user</a>
+                                              {% else %}
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#change_status" user_id="{{i.pk}}" data-status='allowed'>Unuspend user</a>
+                                              {% endif %}
+
+                                              {% if i.staff.on_leave %}
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#change_status" user_id="{{i.pk}}" data-status='joined'>Joined </a>
+                                              {% else %}
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#change_status" user_id="{{i.pk}}" data-status='leave'>On leave </a>
+                                              {% endif %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                           {% endfor %}
-                           
+
                         </tbody>
                     </table>
                 </div>
@@ -68,21 +91,34 @@
     </div>
 </div>
 
- {% include 'users/createuserform.html' %} 
- {% include 'users/user_edit_form.html' %} 
- {% include 'users/user_delete_form.html' %} 
+ {% include 'users/createuserform.html' %}
+ {% include 'users/user_edit_form.html' %}
+ {% include 'users/user_delete_form.html' %}
 
-
-<script type="text/javascript">
-  $(document).ready(()=>{
-    $("#delete_user").on('show.bs.modal',function(event){
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      var recipient = button.attr('user_id')
-      console.log(recipient);
-      $("#delete_user_link").attr({'href':`/delete_user/${recipient}`})
-      console.log($("#delete_user_link"));
-    })
-  })
-
-</script>
+{% block js %}
+ <script type="text/javascript">
+   $(document).ready(()=>{
+     $("#delete_user").on('show.bs.modal',function(event){
+       var button = $(event.relatedTarget) // Button that triggered the modal
+       var recipient = button.attr('user_id')
+       console.log(recipient);
+       $("#delete_user_link").attr({'href':`/delete_user/${recipient}`})
+       console.log($("#delete_user_link"));
+     })
+     $("#change_status").on('show.bs.modal',function(event){
+       var button = $(event.relatedTarget) // Button that triggered the modal
+       var status = button.data('status')
+       var recipient = button.attr('user_id')
+       $("#change_user_link").click(function () {
+         console.log('OK');
+         $.ajax({
+           url:`/change_staff_status/${recipient}/`,
+           data:{'csrfmiddlewaretoken':'{{csrf_token}}','status':status},
+           method:'POST',success:()=>{location.reload()},error:(err)=>{alert(err)}
+         })
+       })
+     })
+   })
+ </script>
+{% endblock %}
 {% endblock content %}

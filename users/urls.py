@@ -21,5 +21,6 @@ urlpatterns = [
     path('change/staff/',staff_view,name='staff_view'),
     path('change/client/',client_view,name='client_view'),
     path('users/profile', user_profile, name='user_profile_view'),
-    path('change/select/',select,name='select_role')
+    path('change/select/',select,name='select_role'),
+    path('change_staff_status/<pk>/',change_staff_status,name='change_staff_status')
 ]
