@@ -78,6 +78,10 @@ WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Satur
 #         return render(request,self.template_name,context=context)
 
 
+@login_required
+def user_profile(request):
+    return render(request, 'users/profile.html')
+
 
 @login_required
 def profile(request):

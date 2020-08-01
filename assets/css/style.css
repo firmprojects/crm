@@ -1764,3 +1764,8 @@ blockquote p {font-style: italic;font-weight: 400;}
     border-radius: 2px 20px 20px 2px;
     max-width: 60%;
 }
+
+.iziModal .iziModal-wrap {
+    padding: 20px;
+    background-color: white;
+}
