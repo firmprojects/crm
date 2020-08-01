@@ -80,6 +80,7 @@ WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Satur
 
 @login_required
 def user_profile(request):
+    data = None
     if request.user.is_client:
         data = request.user.clients
     elif request.user.is_employee:
