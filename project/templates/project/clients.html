@@ -4,11 +4,6 @@
 
 {% block content %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/sidebar.html' %}
-    </div>
-
     <div class="page-wrapper">
         <div class="content container-fluid">
             <div class="row">
@@ -16,39 +11,12 @@
                     <h4 class="page-title">Clients</h4>
                 </div>
                 <div class="col-sm-8 col-9 text-right m-b-20">
-                    <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
-                        data-target="#add_client"><i class="fa fa-plus"></i> Add Client</a>
+                    <!-- <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
+                        data-target="#add_client"><i class="fa fa-plus"></i> Add Client</a> -->
                     <div class="view-icons">
                         <a href="clients.html" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
                         <a href="clients-list.html" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
                     </div>
-                </div>
-            </div>
-            <div class="row filter-row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group form-focus">
-                        <label class="focus-label">Client ID</label>
-                        <input type="text" class="form-control floating">
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group form-focus">
-                        <label class="focus-label">Client Name</label>
-                        <input type="text" class="form-control floating">
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group form-focus select-focus">
-                        <label class="focus-label">Company</label>
-                        <select class="select floating">
-                            <option>Select Company</option>
-                            <option>Global Technologies</option>
-                            <option>Delta Infotech</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <a href="#" class="btn btn-success btn-block"> Search </a>
                 </div>
             </div>
             <div class="row staff-grid-row">
@@ -84,12 +52,6 @@
             </div>
         </div>
     </div>
-    {% include 'project/add_clients.html' %}
-    {% include 'project/edit_clients.html' %}
-    {% include 'project/delete_client.html' %}
 
-
-
-    <div class="sidebar-overlay" data-reff=""></div>
 </div>
 {% endblock content%}

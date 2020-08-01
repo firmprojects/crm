@@ -13,6 +13,7 @@ class CustomUser(AbstractUser):
     is_client = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now=True)
+    photo = models.ImageField(default='default.jpg', upload_to='users')
 
     def team_leader(self):
         return self.leader_set.all()

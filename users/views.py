@@ -6,19 +6,18 @@ from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime,parse_date
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
-
-
 from .models import *
 from .forms import *
 import json
 import datetime
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
+from users.decorators import employee_check, client_check
+
 
 
 def superuser_only(function):
@@ -79,14 +78,22 @@ WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Satur
 #         return render(request,self.template_name,context=context)
 
 
+@login_required
+def user_profile(request):
+    if request.user.is_client:
+        data = request.user.clients
+    elif request.user.is_employee:
+        data = request.user.staff
+    return render(request, 'users/profile.html',{'data':data})
+
 
 @login_required
 def profile(request):
     if request.method == 'POST':
-        form = UserChange(request.POST,instance=request.user)
+        form = UserChange(request.POST,request.FILES,instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('users:user')
+            return redirect('users:user_edit')
         return render(request,'users/user_profile.html',{'form':form})
 
     return render(request,'users/user_profile.html',{'form':UserChange(instance=request.user)})
@@ -107,7 +114,7 @@ def profile(request):
 #     elif request.user.is_employee:
 #         form = StaffForm(instance=request.user.staff)
 #     else:
-#         return redirect('users:user')
+#         return redirect('users:user_edit')
 #     return render(request,'users/client_staff.html',{'form':form})
 @login_required
 def staff_client(request):
@@ -118,7 +125,8 @@ def staff_client(request):
     elif request.user.is_employee:
         return redirect('users:staff_view')
     else:
-        return redirect('users:user')
+        return redirect('users:user_edit')
+
 @login_required
 def select(request):
     if request.user.is_employee and request.user.is_client:
@@ -186,20 +194,25 @@ class Contacts(TemplateView):
 class AddContacts(TemplateView):
     template_name = 'users/add_contacts.html'
 
+@method_decorator([employee_check, login_required], name='dispatch')
 class StaffDashboard(TemplateView):
     template_name = 'users/staff_dashboard.html'
+
+@method_decorator([client_check, login_required], name='dispatch')
+class ClientDashboard(TemplateView):
+    template_name = 'users/client_dashboard.html'
 
 
 class LoginPage(LoginView):
     template_name = 'account/login.html'
 
-def red(request):
-    if request.user.is_employee:
-        return redirect('employees:staff')
-    elif request.user.is_superuser:
-        return redirect('users:users')
-    else:
-        return redirect('dashboard:home')
+# def red(request):
+#     if request.user.is_employee:
+#         return redirect('employees:staff')
+#     elif request.user.is_superuser:
+#         return redirect('users:users')
+#     else:
+#         return redirect('dashboard:home')
 
 
 @csrf_exempt
@@ -299,3 +312,27 @@ def delete_user(request,pk):
             return HttpResponseRedirect('/all')
 
     return HttpResponse("NOT ALLOWED")
+
+def change_staff_status(request,pk):
+    if request.user.is_authenticated:
+        if request.user.is_admin or request.user.is_superuser:
+            if request.method == 'POST':
+                data = request.POST
+                print(request.POST)
+                user = CustomUser.objects.get(pk=pk)
+                if data['status'] == 'suspended':
+                    user.is_active = False
+                elif data['status'] == 'leave':
+                    staff = user.staff
+                    staff.on_leave = True
+                    staff.save()
+                elif data['status'] == 'allowed':
+                    user.is_active = True
+                elif data['status'] == 'joined':
+                    staff = user.staff
+                    staff.on_leave = False
+                    staff.save()
+                user.save()
+            return JsonResponse({})
+
+    return JsonResponse({},status=404)

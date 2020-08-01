@@ -15,6 +15,7 @@ class Staff(models.Model):
     address = models.CharField(max_length=200, blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
     branch = models.CharField(max_length=100, blank=True, null=True)
+    on_leave = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

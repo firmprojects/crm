@@ -43,7 +43,7 @@ class Projects(models.Model):
     PRIORITY = ( ('high', 'High'), ('medium', 'Medium'), ('low', 'Low'), )
     STATUS = ( ('working', 'Working'), ('pending', 'Pending'), ('suspended', 'Suspended'), ('cancelled', 'cancelled'),)
 
-    clients = models.ForeignKey(Clients,  on_delete=models.CASCADE)
+    clients = models.ForeignKey(Clients,  on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)

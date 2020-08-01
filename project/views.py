@@ -22,8 +22,6 @@ class CreateProject(CreateView):
         context['projects'] = Projects.objects.all()
         return context
 
-
-
 class CreateProjectList(View):
     def get(self, request):
         form = ProjectForm()
@@ -161,9 +159,8 @@ class ClientDelete(DeleteView):
 
 
 class UsersAutocompletesView(autocomplete.Select2QuerySetView):
-
     def get_queryset(self):
-        qs = CustomUser.objects.all().order_by('-id')
+        qs = CustomUser.objects.all()
         if self.q:
             qs = qs.filter(username__istartswith=self.q)
         print(qs)
@@ -171,15 +168,13 @@ class UsersAutocompletesView(autocomplete.Select2QuerySetView):
 
 
 class ClientAutocompletesView(autocomplete.Select2QuerySetView):
-
     def get_queryset(self):
-        qs = Clients.objects.all().order_by('-company_name')
+        qs = CustomUser.objects.filter(is_client=True)
         if self.q:
-            qs = qs.filter(company_name__istartswith=self.q)
+            qs = qs.filter(username__istartswith=self.q)
         return qs
 
 class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
-
     def get_queryset(self):
         qs = Projects.objects.all().order_by('name')
         if self.q:
@@ -206,9 +201,7 @@ def milestone_list(request,pk):
         comment_ = request.POST['comment']
         obj = Comment(text=comment_,commented_by=request.user,project=pr)
         obj.save()
-
         return HttpResponseRedirect(reverse('project:milestones',args=(pk,)))
-
     return render(request,'project/milestones.html',{"pk":pk,"project":pr,"milestones":milestones,"comments":pr.comment_set.all().order_by('commented_on')})
 
 def add_milestone(request):

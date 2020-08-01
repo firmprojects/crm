@@ -32,6 +32,13 @@
 <div class="main-wrapper">
 {% include 'backend/header.html' %}
 {% include 'backend/sidebar.html' %}
+
+
+{% block content %}{% endblock %}
+
+
+
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>
@@ -48,29 +55,12 @@
 <script type="text/javascript" src="{% static 'plugins/raphael/raphael-min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'js/app000.js' %}"></script>
-{% block js %}{% endblock %}
-
-{% block content %}{% endblock %}
-
-
 
 </div>
 <div class="sidebar-overlay" data-reff=""></div>
 
 
-<!--
-<script>
-    $( document ).ready(function() {
-      $('.cta-open').on('click', function() {
-        $('.toggle-form, .formwrap, .toggle-bg').addClass('active');
-        $('.icon-close').addClass('open');
-    });
-	 $('.icon-close').on('click', function() {
-        $('.toggle-form, .formwrap, .toggle-bg').removeClass('active');
-        $('.icon-close').removeClass('open');
-    });
-});
-</script> -->
+{% block js %}{% endblock %}
 </body>
 
 </html>
