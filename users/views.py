@@ -136,12 +136,13 @@ def select(request):
 def staff_view(request):
     if request.user.is_employee:
         if request.method == 'POST':
-            form = StaffForm(request.POST,instance=request.user.staff)
+            form = StaffForm(request.POST,request.FILES,instance=request.user.staff)
             if form.is_valid():
                 form.save()
+                print(form.cleaned_data)
                 return redirect('users:staff_view')
             return render(request,'users/client_staff.html',{'form':form})
-        form = StaffForm(instance=request.user.staff)
+        form = StaffForm(instance=request.user.staff,request=request)
         return render(request,'users/client_staff.html',{'form':form})
     return HttpResponseRedirect('/dashboard/')
 
@@ -149,12 +150,12 @@ def staff_view(request):
 def client_view(request):
     if request.user.is_client:
         if request.method == 'POST':
-            form = ClientForm(request.POST,instance=request.user.clients)
+            form = ClientForm(request.POST,request.FILES,instance=request.user.clients,kwargs={'request':request})
             if form.is_valid():
                 form.save()
                 return redirect('users:client_view')
             return render(request,'users/client_staff.html',{'form':form})
-        form = ClientForm(instance=request.user.clients)
+        form = ClientForm(instance=request.user.clients,initial={'first_name':request.user.first_name,'last_name':request.user.last_name,'username':request.user.username},request=request)
         return render(request,'users/client_staff.html',{'form':form})
     return HttpResponseRedirect('/dashboard/')
 
@@ -319,21 +320,25 @@ def change_staff_status(request,pk):
         if request.user.is_admin or request.user.is_superuser:
             if request.method == 'POST':
                 data = request.POST
-                print(request.POST)
+                print(data)
                 user = CustomUser.objects.get(pk=pk)
                 if data['status'] == 'suspended':
                     user.is_active = False
-                elif data['status'] == 'leave':
+                    user.save()
+                    return JsonResponse({'status':'suspended'})
+
+                elif data['status'] == 'on_leave':
                     staff = user.staff
                     staff.on_leave = True
                     staff.save()
-                elif data['status'] == 'allowed':
-                    user.is_active = True
-                elif data['status'] == 'joined':
+                    user.save()
+                    return JsonResponse({'status':'leave'})
+                else:
                     staff = user.staff
                     staff.on_leave = False
                     staff.save()
+                    user.is_active = True
                 user.save()
-            return JsonResponse({})
+            return JsonResponse({'status':'active'})
 
     return JsonResponse({},status=404)

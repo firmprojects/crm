@@ -25,6 +25,7 @@
 
                                 <th>Last login</th>
                                 <th>Role</th>
+                                <th>Status</th>
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
@@ -44,18 +45,31 @@
                                     {% endif %}
                                     {% if i.is_employee %}
                                       <span class="badge badge-success-border">Employee</span>
-                                      {% if i.staff.on_leave %}
-                                        <span class="badge badge-info-border">On leave</span>
-                                      {% endif %}
-                                      {% if not i.is_active %}
-                                        <span class="badge badge-danger-border">Suspended</span>
-                                      {% else %}
-                                        <span class="badge badge-success-border">Active</span>
-                                      {% endif %}
+                                      
                                     {% endif %}
                                     {% if i.is_client %}
                                       <span class="badge badge-info-border">Client</span>
                                     {% endif %}
+                                </td>
+                                <td>
+                                  <div class="dropdown action-label">
+                                    {% if i.is_employee %}
+                                      <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current" data-toggle="dropdown" aria-expanded="false">
+                                        {% if i.staff.on_leave and i.is_active %}
+                                          <i class="fa fa-dot-circle-o text-warning"></i> On leave
+                                        {% elif i.is_active %}
+                                          <i class="fa fa-dot-circle-o text-success"></i> Active
+                                        {% else %}
+                                          <i class="fa fa-dot-circle-o text-danger"></i> Suspended
+                                        {% endif %}
+                                      </a>
+                                      <div class="dropdown-menu" project_id="{{item.pk}}">
+                                          <a class="dropdown-item change_status" user_id="{{i.pk}}" status='active' href="#"><i class="fa fa-dot-circle-o text-success"></i> Active</a>
+                                          <a class="dropdown-item change_status" user_id="{{i.pk}}" status='on_leave' href="#"><i class="fa fa-dot-circle-o text-warning"></i> On leave</a>
+                                          <a class="dropdown-item change_status" user_id="{{i.pk}}" status='suspended' href="#"><i class="fa fa-dot-circle-o text-danger"></i> Suspended</a>
+                                      </div>
+                                    {% endif %}
+                                  </div>
                                 </td>
                                 <td class="text-right">
                                     <div class="dropdown dropdown-action">
@@ -63,8 +77,7 @@
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a> -->
                                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_user" user_id="{{i.pk}}"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                            {% if i.is_employee %}
-                                            <!-- {{i.is_active}} -->
+                                            <!-- {% if i.is_employee %}
                                               {% if i.is_active %}
                                                 <a class="dropdown-item"data-toggle="modal" data-target="#change_status" user_id="{{i.pk}}" data-status='suspended'>Suspend user</a>
                                               {% else %}
@@ -76,7 +89,7 @@
                                               {% else %}
                                                 <a class="dropdown-item" data-toggle="modal" data-target="#change_status" user_id="{{i.pk}}" data-status='leave'>On leave </a>
                                               {% endif %}
-                                            {% endif %}
+                                            {% endif %} -->
                                         </div>
                                     </div>
                                 </td>
@@ -105,17 +118,23 @@
        $("#delete_user_link").attr({'href':`/delete_user/${recipient}`})
        console.log($("#delete_user_link"));
      })
-     $("#change_status").on('show.bs.modal',function(event){
-       var button = $(event.relatedTarget) // Button that triggered the modal
-       var status = button.data('status')
-       var recipient = button.attr('user_id')
-       $("#change_user_link").click(function () {
-         console.log('OK');
-         $.ajax({
-           url:`/change_staff_status/${recipient}/`,
-           data:{'csrfmiddlewaretoken':'{{csrf_token}}','status':status},
-           method:'POST',success:()=>{location.reload()},error:(err)=>{alert(err)}
-         })
+     $(".change_status").click(function () {
+
+       $.ajax({
+         type:"POST",url:`/change_staff_status/${$(this).attr('user_id')}/`,
+         data:{"status":$(this).attr('status'),"csrfmiddlewaretoken":"{{csrf_token}}"},
+         success:function(res){
+           console.log(res);
+           if(res['status'] === 'suspended'){
+             $(".current").html(`<i class="fa fa-dot-circle-o text-danger"></i> Suspended`)
+           }
+           else if(res['status'] === 'leave'){
+             $(".current").html(`<i class="fa fa-dot-circle-o text-warning"></i> On leave`)
+           }
+           else{
+             $(".current").html(`<i class="fa fa-dot-circle-o text-success"></i> Active`)
+           }
+         }
        })
      })
    })

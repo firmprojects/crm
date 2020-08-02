@@ -53,23 +53,74 @@ class UserChange(UserChangeForm):
         # self.fields['email'].required = True
 
 class StaffForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    username = forms.CharField(max_length=150,required=False)
+    photo = forms.FileField()
+
     def __init__(self,*args,**kwargs):
+        request = kwargs.get('request')
+        if request:
+            del kwargs['request']
         super(StaffForm,self).__init__(*args,**kwargs)
         self.fields['staff_id'].disabled = True
         self.fields['staff_id'].required = False
+        self.fields['photo'].required = False
 
+        if request:
+            self.fields['username'].widget.attrs.update({'value': request.user.username,'disabled':'disabled'})
+            self.fields['first_name'].widget.attrs.update({'value': request.user.first_name,})
+            self.fields['last_name'].widget.attrs.update({'value': request.user.last_name,})
+            self.fields['photo'].widget.attrs.update({'value': request.user.photo,})
+        # self.fields['username'].disabled = True
 
     class Meta:
         model = Staff
-        fields = ('staff_id','phone_number','designation',)
+        fields = ('staff_id','phone_number','designation','address','gender')
+
+    def save(self,commit=True):
+        staff = super().save(commit)
+        user = staff.user
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.photo = self.cleaned_data.get('photo')
+        user.save()
+
+
+        return staff
 
 class ClientForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30)
+    last_name = forms.CharField(max_length=30)
+    username = forms.CharField(max_length=150,required=False)
+    photo = forms.FileField()
+
     def __init__(self,*args,**kwargs):
+        request = kwargs.get('request')
+        if request:
+            del kwargs['request']
         super(ClientForm,self).__init__(*args,**kwargs)
         self.fields['clients_id'].disabled = True
+        self.fields['photo'].required = False
+        if request:
+            self.fields['username'].widget.attrs.update({'value': request.user.username,'disabled':'disabled'})
+            self.fields['first_name'].widget.attrs.update({'value': request.user.first_name,})
+            self.fields['last_name'].widget.attrs.update({'value': request.user.last_name,})
+            self.fields['photo'].widget.attrs.update({'value': request.user.photo,})
+
     class Meta:
         model = Clients
-        fields = ('clients_id','phone_number','company_name')
+        fields = ('clients_id','phone_number','company_name','address','gender')
+
+    def save(self,commit=True):
+        client = super().save(commit)
+        user = client.user
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.photo = self.cleaned_data.get('photo')
+        user.save()
+
+        return client
 
 # class ClientForm(UserCreationForm):
 #     first_name = forms.CharField(required=True)
