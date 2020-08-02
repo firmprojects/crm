@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,DetailView
 from allauth.account.views import LoginView,SignupView
 from allauth.account import signals
 from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
@@ -76,7 +76,10 @@ WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Satur
 #         context['users'] = CustomUser.objects.all()
 #         context['form'] = form
 #         return render(request,self.template_name,context=context)
-
+@method_decorator(superuser_only, name='dispatch')
+class UserProfile(DetailView):
+    template_name = 'users/profile_admin.html'
+    model = CustomUser
 
 @login_required
 def user_profile(request):
