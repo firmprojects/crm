@@ -9,9 +9,68 @@
       Your info:
     </div></br>
     <div class="col-12">
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form|crispy}}
+        <!-- {{form|crispy}} -->
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form.username|as_crispy_field }}
+                    {% for i in form.username.errors %}
+                      <p class="text-danger">{{ i }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    {{ form.first_name|as_crispy_field }}
+                    {% for i in form.first_name.errors %}
+                      <p class="text-danger">{{ i }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    {{ form.last_name|as_crispy_field }}
+                    {% for i in form.last_name.errors %}
+                      <p class="text-danger">{{ i }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form.photo|as_crispy_field }}
+                    {% for i in form.photo.errors %}
+                      <p class="text-danger">{{ i }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            CLick <a href="{% url 'account_change_password'%}">here</a> to change your password
+          </div>
+          <div class="col-12">
+            CLick <a href="{% url 'account_email'%}">here</a> to change your email
+          </div>
+
+        </div>
+        <hr>
+        {% for field in form %}
+          {% if field.auto_id == 'id_first_name' or field.auto_id == 'id_last_name' or field.auto_id == 'id_username' or field.auto_id == 'id_photo' %}
+          {% else %}
+            <div class="form-group">
+                {{ field|as_crispy_field }}
+                {% for i in form.last_name.errors %}
+                  <p class="text-danger">{{ i }}</p>
+                {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
         <div class="form-group">
           <label for="">Joined on</label>
           <input type="text" name="" value="{{request.user.joined|date:'jS F Y, h:i A e'}}" disabled class="form-control">
@@ -19,9 +78,9 @@
         <input type="submit" class="btn btn-primary" value="Save">
       </form>
     </div>
-    <div class="col-12">
+    <!-- <div class="col-12">
       Click <a href="{% url 'users:user_edit' %}">here</a> to change your email or password
-    </div>
+    </div> -->
   </div>
 </div>
 

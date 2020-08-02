@@ -5,7 +5,7 @@ from .views import *
 app_name = 'users'
 urlpatterns = [
     path('all', Users.as_view(), name='users'),
-    # path('redirect/',red,name='red'),
+    path('user/<pk>/',UserProfile.as_view()),
     path('contacts', Contacts.as_view(), name='contacts'),
     path('add_contacts', AddContacts.as_view(), name='add_contacts'),
     path('staff/dashboard', StaffDashboard.as_view(), name='staff_dashboard'),

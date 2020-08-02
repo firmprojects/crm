@@ -1,4 +1,4 @@
-{% extends 'backend/base.html '%}
+{% extends 'backend/base.html' %}
 {% load static %}
 
 
@@ -46,8 +46,7 @@
                         </h5>
                         <div class="small text-muted">{{ item.contact_person_designation}}</div>
                         <a href="chat.html" class="btn btn-white btn-sm m-t-10">Message</a>
-                        <a href="#" class="btn btn-white btn-sm m-t-10">View
-                            Profile</a>
+                        <a href="/user/{{item.user.pk}}/" class="btn btn-white btn-sm m-t-10">View Profile</a>
                     </div>
                 </div>
                 {% endfor %}

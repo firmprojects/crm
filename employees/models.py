@@ -9,13 +9,14 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class Staff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    phone_number = models.CharField(max_length=20, blank=False, null=False)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     photo = models.ImageField(default='default.jpg', upload_to='users')
     staff_id = models.CharField(max_length=20, blank=False, null=False)
     address = models.CharField(max_length=200, blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
     branch = models.CharField(max_length=100, blank=True, null=True)
     on_leave = models.BooleanField(default=False)
+    gender = models.CharField(max_length=10,choices=(('male','Male'),('female','Female'),('other','Other')),blank=True, null=True)
 
     def __str__(self):
         return self.user.username
