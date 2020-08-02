@@ -550,7 +550,7 @@ textarea.form-control {height: auto;}
 .chat-left .chat-content {background-color: #fff;border: 1px solid #eaeaea;color: #888;float: left;position:relative;padding:8px 15px;border-radius:2px 20px 20px 2px;max-width: 60%;}
 .avatar {background-color: #aaa;border-radius: 50%;color: #fff;display: inline-block;font-weight: 500;height: 38px;line-height: 38px;margin: 0 10px 0 0;overflow: hidden;text-align: center;text-decoration: none;text-transform: uppercase;vertical-align: middle;width: 38px;position:relative;white-space:nowrap;}
 .avatar:hover {color:#fff;}
-.avatar > img {width: 100%;display:block;}
+.avatar > img {display:block; display: block; height: 100%; object-fit: cover;}
 .chat.chat-left .chat-bubble:first-child .chat-content {border-top-left-radius: 20px;margin-top: 0;}
 .chat.chat-left .chat-bubble:last-child .chat-content {border-bottom-left-radius: 20px;}
 .chat-left .chat-time{color:#a3afb7}

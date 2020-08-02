@@ -16,13 +16,12 @@ from users.models import CustomUser
 from dal import autocomplete
 
 class StaffCreateView(SignupView):
-    model = Staff
-    form_class = StaffSignupForm
+    model = CustomUser
     template_name = 'employees/employees.html'
 
     def get_context_data(self, **kwargs):
         context = super(StaffCreateView, self).get_context_data(**kwargs)
-        context['staff'] = Staff.objects.all()
+        context['staff'] = CustomUser.objects.filter(is_employee=True)
         return context
 
 

@@ -113,8 +113,7 @@ def upload_doc(request,pk):
         return redirect(reverse('project:project_detail',args=(pk,)))
 
 class ClientsCreateView(SignupView):
-    model = Clients
-    form_class = ClientSignupForm
+    model = CustomUser
     template_name = 'project/clients.html'
     redirect_field_name = 'next'
     view_name = 'client_sign_up'
@@ -122,7 +121,7 @@ class ClientsCreateView(SignupView):
 
     def get_context_data(self, **kwargs):
         context = super(ClientsCreateView, self).get_context_data(**kwargs)
-        context['clients'] = Clients.objects.all()
+        context['clients'] = CustomUser.objects.filter(is_client=True)
         return context
 
     # def form_valid(self, form):

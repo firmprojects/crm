@@ -24,7 +24,9 @@
                 <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
                     <div class="profile-widget">
                         <div class="profile-img">
-                            <a href="{% url 'project:client_detail' item.pk %}" class="avatar">G</a>
+                            <a href="{% url 'project:client_detail' item.pk %}" class="avatar">
+                                <img src="{{ item.photo.url}}" />
+                            </a>
                         </div>
                         <div class="dropdown profile-action">
                             <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
@@ -38,7 +40,7 @@
                             </div>
                         </div>
                         <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a
-                                href="{% url 'project:client_detail' item.pk %}">{{ item.company_name}}</a></h4>
+                                href="{% url 'project:client_detail' item.pk %}">{{ item.first_name}}</a></h4>
                         <h5 class="user-name m-t-10 m-b-0 text-ellipsis"><a
                                 href="#">{{ item.contact_person}}</a>
                         </h5>
