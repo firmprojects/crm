@@ -6,6 +6,7 @@ app_name = 'users'
 urlpatterns = [
     path('all', Users.as_view(), name='users'),
     path('user/<pk>/',UserProfile.as_view()),
+    path('user/<pk>/edit/',edit_profile_admin,name='edit_profile_admin'),
     path('contacts', Contacts.as_view(), name='contacts'),
     path('add_contacts', AddContacts.as_view(), name='add_contacts'),
     path('staff/dashboard', StaffDashboard.as_view(), name='staff_dashboard'),
@@ -22,5 +23,5 @@ urlpatterns = [
     path('change/client/',client_view,name='client_view'),
     path('users/profile', user_profile, name='user_profile_view'),
     path('change/select/',select,name='select_role'),
-    path('change_staff_status/<pk>/',change_staff_status,name='change_staff_status')
+    path('change_staff_status/<pk>/',change_staff_status,name='change_staff_status'),
 ]
