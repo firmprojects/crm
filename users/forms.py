@@ -57,22 +57,22 @@ class StaffForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     username = forms.CharField(max_length=150,required=False)
-    photo = forms.FileField()
+    photo = forms.ImageField()
 
     def __init__(self,*args,**kwargs):
-        request = kwargs.get('request')
-        if request:
-            del kwargs['request']
+        user = kwargs.get('user')
+        if user:
+            del kwargs['user']
         super(StaffForm,self).__init__(*args,**kwargs)
         self.fields['staff_id'].disabled = True
         self.fields['staff_id'].required = False
         self.fields['photo'].required = False
 
-        if request:
-            self.fields['username'].widget.attrs.update({'value': request.user.username,'disabled':'disabled'})
-            self.fields['first_name'].widget.attrs.update({'value': request.user.first_name,})
-            self.fields['last_name'].widget.attrs.update({'value': request.user.last_name,})
-            self.fields['photo'].widget.attrs.update({'value': request.user.photo,})
+        if user:
+            self.fields['username'].widget.attrs.update({'value': user.username,'disabled':'disabled'})
+            self.fields['first_name'].widget.attrs.update({'value': user.first_name,})
+            self.fields['last_name'].widget.attrs.update({'value': user.last_name,})
+            self.fields['photo'].widget.attrs.update({'value': user.photo,})
         # self.fields['username'].disabled = True
 
     class Meta:
@@ -94,20 +94,20 @@ class ClientForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     username = forms.CharField(max_length=150,required=False)
-    photo = forms.FileField()
+    photo = forms.ImageField()
 
     def __init__(self,*args,**kwargs):
-        request = kwargs.get('request')
-        if request:
-            del kwargs['request']
+        user = kwargs.get('user')
+        if user:
+            del kwargs['user']
         super(ClientForm,self).__init__(*args,**kwargs)
         self.fields['clients_id'].disabled = True
         self.fields['photo'].required = False
-        if request:
-            self.fields['username'].widget.attrs.update({'value': request.user.username,'disabled':'disabled'})
-            self.fields['first_name'].widget.attrs.update({'value': request.user.first_name,})
-            self.fields['last_name'].widget.attrs.update({'value': request.user.last_name,})
-            self.fields['photo'].widget.attrs.update({'value': request.user.photo,})
+        if user:
+            self.fields['username'].widget.attrs.update({'value': user.username,'disabled':'disabled'})
+            self.fields['first_name'].widget.attrs.update({'value': user.first_name,})
+            self.fields['last_name'].widget.attrs.update({'value': user.last_name,})
+            self.fields['photo'].widget.attrs.update({'value': user.photo,})
 
     class Meta:
         model = Clients
