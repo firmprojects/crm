@@ -5,6 +5,7 @@ from allauth.account.forms import SignupForm
 from django.contrib.auth import get_user_model
 from employees.models import Staff
 from project.models import Clients
+from .models import Assets
 
 class UserCreate(SignupForm):
     first_name = forms.CharField(required=True)
@@ -121,6 +122,18 @@ class ClientForm(forms.ModelForm):
         user.save()
 
         return client
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class AssetForm(forms.ModelForm):
+    class Meta:
+        model = Assets
+        fields = ['assigned_to', 'asset_name', 'asset_id', 'purchase_date', 'warranty_time', 'warranty_end', 'asset_amount']
+        widgets = {
+            'warranty_end': DateInput(format='%m-%d-%Y'),
+            'purchase_date': DateInput(format='%m-%d-%Y'),
+        }
 
 # class ClientForm(UserCreationForm):
 #     first_name = forms.CharField(required=True)

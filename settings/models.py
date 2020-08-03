@@ -1,5 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.conf import settings
+
 
 
 
@@ -18,5 +20,8 @@ class CompanyInfo(models.Model):
 
     def __str__(self):
         return self.company_name
+
+
+
     
 

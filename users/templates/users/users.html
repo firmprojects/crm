@@ -35,7 +35,7 @@
                             <tr>
                                 <td>
                                     <a href="{% url 'users:user_profile_view' %}" class="avatar"></a>
-                                    <h2><a href="/user/{{i.pk}}/">{{i.first_name}} {{i.last_name}} <span>Admin</span></a></h2>
+                                    <h2><a href="/user/{{i.pk}}/">{{i.first_name}} {{i.last_name}} <span>{{i.designation}}</span></a></h2>
                                 </td>
                                 <td>{{i.email}}</td>
                                 <td>{{i.last_login}}</td>

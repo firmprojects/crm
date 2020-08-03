@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView,DetailView
+from django.views.generic import TemplateView,DetailView, View
 from allauth.account.views import LoginView,SignupView
 from allauth.account import signals
 from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
@@ -18,6 +18,21 @@ from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 from users.decorators import employee_check, client_check
 
+
+class AssetView(View):
+    def get(self, request):
+        assets = Assets.objects.all()
+        form = AssetForm()
+        return render(request, 'users/assets.html', {'assets':assets, 'form':form})
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = AssetForm(request.POST)
+            print("Form errors", form.errors)
+            if form.is_valid():
+                form.save()
+                
+            return HttpResponseRedirect(reverse('users:assets'))
 
 
 def superuser_only(function):
