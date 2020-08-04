@@ -3,6 +3,66 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
+{% block js %}
+<script type="text/javascript">
+  $(document).ready(function() {
+     $('#id_client').select2({
+        minimumInputLength: 1,
+        placeholder: "Project Clients*",
+        multiple: false,
+        ajax: {
+            url: '/project/company_autocomplete/',
+            dataType: 'json'
+        },
+    });
+
+    $('#id_projects').select2({
+      minimumInputLength: 1,
+      placeholder: "Projects*",
+      multiple: false,
+      ajax: {
+          url: '/project/project_autocomplete/',
+          dataType: 'json'
+      },
+
+   });
+  })
+  function add_item() {
+    let item=
+    `
+    <tr class="items">
+        <td>${$('.items').length+1}</td>
+        <td>
+            <input class="form-control" type="text" style="min-width:150px">
+        </td>
+        <td>
+            <input class="form-control" type="text" style="min-width:150px">
+        </td>
+        <td>
+            <input class="form-control" style="width:100px" type="text">
+        </td>
+        <td>
+            <input class="form-control" style="width:80px" type="text">
+        </td>
+        <td>
+            <input class="form-control" readonly="" style="width:120px"
+                type="text">
+        </td>
+        <td><button type="button" onclick="remove_item(this)" class="btn text-danger font-18"
+                title="Remove"><i class="fa fa-trash-o"
+                    aria-hidden="true"></i></button></td>
+    </tr>
+    `
+    // items_add
+    $(".items_body").append(item)
+  }
+
+  function remove_item(ele) {
+
+    $(ele).parent().parent().remove()
+  }
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="main-wrapper">
@@ -76,28 +136,29 @@
                                                 <th> </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
+                                        <tbody class="items_body">
+                                            <tr class="items">
                                                 <td>1</td>
                                                 <td>
-                                                    {{ form.item_name|as_crispy_field }}
+                                                    <input class="form-control" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    {{ form.item_description|as_crispy_field }}
+                                                    <input class="form-control" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    {{ form.unit_cost|as_crispy_field }}
+                                                    <input class="form-control" style="width:100px" type="text">
                                                 </td>
                                                 <td>
-                                                    {{ form.quantity|as_crispy_field }}
+                                                    <input class="form-control" style="width:80px" type="text">
                                                 </td>
                                                 <td>
-                                                    {{ form.amount|as_crispy_field }}
+                                                  <input class="form-control" readonly="" style="width:120px"
+                                                      type="text">
                                                 </td>
-                                                <td><a href="javascript:void(0)" class="text-success font-18"
-                                                        title="Add"><i class="fa fa-plus"></i></a></td>
+                                                <td><button onclick="add_item()" type="button" class="btn text-success font-18"
+                                                        title="Add"><i class="fa fa-plus"></i></button></td>
                                             </tr>
-                                            <tr>
+                                            <tr class="items">
                                                 <td>2</td>
                                                 <td>
                                                     <input class="form-control" type="text" style="min-width:150px">
@@ -115,9 +176,9 @@
                                                     <input class="form-control" readonly="" style="width:120px"
                                                         type="text">
                                                 </td>
-                                                <td><a href="javascript:void(0)" class="text-danger font-18"
+                                                <td><button type="button" onclick="remove_item(this)" class="btn text-danger font-18"
                                                         title="Remove"><i class="fa fa-trash-o"
-                                                            aria-hidden="true"></i></a></td>
+                                                            aria-hidden="true"></i></button></td>
                                             </tr>
                                         </tbody>
                                     </table>

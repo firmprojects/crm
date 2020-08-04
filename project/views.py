@@ -173,6 +173,13 @@ class ClientAutocompletesView(autocomplete.Select2QuerySetView):
             qs = qs.filter(username__istartswith=self.q)
         return qs
 
+class CompanyAutocompletesView(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = CustomUser.objects.filter(is_client=True)
+        if self.q:
+            qs = qs.filter(clients__company_name__icontains=self.q)
+        return qs
+
 class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Projects.objects.all().order_by('name')
