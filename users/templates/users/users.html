@@ -10,8 +10,8 @@
                 <h4 class="page-title">Users</h4>
             </div>
             <div class="col-sm-8 col-8 text-right m-b-30">
-                <button class="btn btn-primary btn-rounded"  data-izimodal-open="#modal_user_form"><i
-                    class="fa fa-plus"></i> Add User</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userForm" data-whatever="@mdo"><i
+                class="fa fa-plus"></i>Add User</button>
             </div>
         </div>
         <div class="row">
@@ -20,9 +20,9 @@
                     <table class="table table-striped custom-table datatable">
                         <thead>
                             <tr>
-                                <th style="width:30%;">Name</th>
+                                <th style="width:20%;">Name</th>
+                                <th>username</th>
                                 <th>Email</th>
-
                                 <th>Last login</th>
                                 <th>Role</th>
                                 <th>Status</th>
@@ -37,6 +37,7 @@
                                     <a href="{% url 'users:user_profile_view' %}" class="avatar"></a>
                                     <h2><a href="/user/{{i.pk}}/">{{i.first_name}} {{i.last_name}} <span>{{i.designation}}</span></a></h2>
                                 </td>
+                                <td>{{i.username}}</td>
                                 <td>{{i.email}}</td>
                                 <td>{{i.last_login}}</td>
                                 <td>
@@ -121,7 +122,8 @@
      $(".change_status").click(function () {
 
        $.ajax({
-         type:"POST",url:`/change_staff_status/${$(this).attr('user_id')}/`,
+         type:"POST",
+         url:`/change_staff_status/${$(this).attr('user_id')}/`,
          data:{"status":$(this).attr('status'),"csrfmiddlewaretoken":"{{csrf_token}}"},
          success:function(res){
            console.log(res);

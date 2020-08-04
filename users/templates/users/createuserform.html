@@ -1,21 +1,16 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-<div class="mt-20">
-    <!-- Modal Start -->
-    <div class="izimodal" id="modal_user_form" data-iziModal-width="700px" data-iziModal-fullscreen="true"
-        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
-        <!-- Close Button Start -->
-        <div class="close-modal">
-            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
+<div class="modal fade" id="userForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title text-center" id="exampleModalLabel">Add User</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <!-- Close Button Start -->
-        <!-- Modal Body Start -->
-        <div class="modal-inside inner-30">
-            <div class="modal-heading">
-                <h4 class="modal-title center-holder">Add User</h4>
-            </div>
-
+        <div class="modal-body">
             <form method="post"  enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
@@ -65,9 +60,11 @@
                     <button class="btn btn-primary btn-lg">Add User</button>
                 </div>
             </form>
-          
         </div>
-        <!-- Modal Body End -->
+      </div>
     </div>
-    <!-- Modal End -->
-</div>
+  </div>
+
+
+
+

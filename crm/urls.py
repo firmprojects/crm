@@ -8,6 +8,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('accounts/', include('allauth.urls')),
     path('employees/', include('employees.urls')),
+    path('blog/', include('blog.urls')),
     path('crm_accounts/', include('crm_accounts.urls')),
     path('chat/', include('chat.urls')),
     path('project/', include('project.urls', namespace='project')),

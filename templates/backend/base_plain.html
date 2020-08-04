@@ -15,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/select2.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'plugins/morris/morris.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <!--[if lt IE 9]>
 		<script src="assets/js/html5shiv.min.js"></script>
@@ -25,7 +24,8 @@
 
 <body>
 <div class="main-wrapper">
- {% block content %}{% endblock %}
+ {% block content %}
+ {% endblock %}
 
 
 </div>
@@ -33,16 +33,21 @@
 
     <div class="sidebar-overlay" data-reff=""></div>
     <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery.slimscroll.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/morris/morris.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/raphael/raphael-min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/custom.js' %}"></script>
+    
+    <script type="text/javascript" src="{% static 'js/app000.js' %}"></script>
+    
+    <!-- <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script> -->
+    <!-- <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script> -->
+    <script type="text/javascript" src="{% static 'js/timer.js' %}"></script>
     {% block js %}{% endblock %}
 </body>
 

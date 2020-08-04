@@ -44,29 +44,44 @@
                                 </div>
                                 <div class="col-md-7">
                                     <ul class="personal-info">
-                                        <li>
-                                            <span class="title">Phone:</span>
-                                            {% if request.user.is_employee %}
-                                            <div class="staff-id">Employee ID : {{request.user.staff.staff_id}}</div>
-                                            <div class="staff-id">Designation : {{request.user.staff.designation}}</div>
-                                          {% endif %}
-                                        </li>
-                                        <li>
-                                            <span class="title">Email:</span>
-                                            <span class="text"><a href="">{{request.user.email}}</a></span>
-                                        </li>
-                                        <li>
-                                            <span class="title">Birthday:</span>
-                                            <span class="text">24th July</span>
-                                        </li>
-                                        <li>
-                                            <span class="title">Address:</span>
-                                            <span class="text">{{data.address}}</span>
-                                        </li>
-                                        <li>
-                                            <span class="title">Gender:</span>
-                                            <span class="text">{{data.gender}}</span>
-                                        </li>
+                                        {% if request.user.is_employee %}
+                                          <li>
+                                              <span class="title">Phone:</span>
+                                              <span class="text"><a href="">{{request.user.staff.phone_number}}</a></span>
+                                          </li>
+                                          <li>
+                                              <span class="title">Email:</span>
+                                              <span class="text"><a href="">{{request.user.email}}</a></span>
+                                          </li>
+                                         <li>
+                                              <span class="title">Address:</span>
+                                              <span class="text">{{request.user.staff.address}}</span>
+                                          </li>
+                                          <li>
+
+                                              <span class="title">Gender:</span>
+                                              <span class="text">{{request.user.staff.gender}}</span>
+                                          </li>
+                                        {% elif request.user.is_client %}
+                                          <li>
+                                              <span class="title">Phone:</span>
+                                              <span class="text"><a href="">{{request.user.clients.phone_number}}</a></span>
+                                          </li>
+                                          <li>
+                                              <span class="title">Email:</span>
+                                              <span class="text"><a href="">{{request.user.email}}</a></span>
+                                          </li>
+                                          <li>
+                                              <span class="title">Address:</span>
+                                              <span class="text">{{request.user.clients.address}}</span>
+                                          </li>
+                                          <li>
+
+                                              <span class="title">Gender:</span>
+                                              <span class="text">{{request.user.clients.gender}}</span>
+                                          </li>
+
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>

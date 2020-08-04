@@ -997,43 +997,43 @@ if ($(".full-height").length > 0) {
 /*------------------------------------
     19. Ripple Effect
 --------------------------------------*/  
-  try {
-    $('.erreor-box-404').ripples({
-      resolution: 512,
-      dropRadius: 20, //px
-      perturbance: 0.04,
-    });
-    $('main').ripples({
-      resolution: 512,
-      dropRadius: 20, //px
-      perturbance: 0.04,
-      interactive: false
-    });
-  }
-  catch (e) {
-    $('.error').show().text(e);
-  }
+  // try {
+  //   $('.erreor-box-404').ripples({
+  //     resolution: 512,
+  //     dropRadius: 20, //px
+  //     perturbance: 0.04,
+  //   });
+  //   $('main').ripples({
+  //     resolution: 512,
+  //     dropRadius: 20, //px
+  //     perturbance: 0.04,
+  //     interactive: false
+  //   });
+  // }
+  // catch (e) {
+  //   $('.error').show().text(e);
+  // }
 
-  $('.js-ripples-disable').on('click', function() {
-    $('body, main').ripples('destroy');
-    $(this).hide();
-  });
+  // $('.js-ripples-disable').on('click', function() {
+  //   $('body, main').ripples('destroy');
+  //   $(this).hide();
+  // });
 
-  $('.js-ripples-play').on('click', function() {
-    $('body, main').ripples('play');
-  });
+  // $('.js-ripples-play').on('click', function() {
+  //   $('body, main').ripples('play');
+  // });
 
-  $('.js-ripples-pause').on('click', function() {
-    $('body, main').ripples('pause');
-  });
+  // $('.js-ripples-pause').on('click', function() {
+  //   $('body, main').ripples('pause');
+  // });
 
-  // Automatic drops
-  setInterval(function() {
-    var $el = $('main');
-    var x = Math.random() * $el.outerWidth();
-    var y = Math.random() * $el.outerHeight();
-    var dropRadius = 20;
-    var strength = 0.04 + Math.random() * 0.04;
+  // // Automatic drops
+  // setInterval(function() {
+  //   var $el = $('main');
+  //   var x = Math.random() * $el.outerWidth();
+  //   var y = Math.random() * $el.outerHeight();
+  //   var dropRadius = 20;
+  //   var strength = 0.04 + Math.random() * 0.04;
 
-    $el.ripples('drop', x, y, dropRadius, strength);
-  }, 400);
+  //   $el.ripples('drop', x, y, dropRadius, strength);
+  // }, 400);

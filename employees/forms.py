@@ -1,7 +1,5 @@
 from django import forms
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django import forms
 from django.db import transaction
 from allauth.account.forms import SignupForm
 from .models import( Department, Designation, Holidays, LeaveRequest, LeaveType, Staff )

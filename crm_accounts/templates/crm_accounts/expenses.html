@@ -5,11 +5,6 @@
 
 {% block content %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/sidebar.html' %}
-    </div>
-
     <div class="page-wrapper">
         <div class="content container-fluid">
             <div class="row">
@@ -17,8 +12,11 @@
                     <h4 class="page-title">Expenses</h4>
                 </div>
                 <div class="col-sm-4 col-7 text-right m-b-30">
-                    <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
-                        data-target="#add_expense"><i class="fa fa-plus"></i> Add Expense</a>
+                    <!-- <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
+                        data-target="#add_expense"><i class="fa fa-plus"></i> Add Expense</a> -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#expensesForm" data-whatever="@mdo"><i
+                            class="fa fa-plus"></i>Add Expenses</button>
+                        
                 </div>
             </div>
             <div class="row">
@@ -38,16 +36,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
+                                {% for item in expenses  %}
                                 <tr>
                                     <td>
-                                        <strong>Dell Laptop</strong>
+                                        <strong>{{ item.item_name}}</strong>
                                     </td>
-                                    <td>Amazon</td>
-                                    <td>5 May 2017</td>
-                                    <td>Loren Gatlin</td>
-                                    <td>$1215</td>
-                                    <td>Cash</td>
-                                    <td class="text-center">
+                                    <td>{{ item.purchase_from }}</td>
+                                    <td>{{ item.purchase_date }}</td>
+                                    <td>{{ item.purchase_by }}</td>
+                                    <td>{{ item.amount }}</td>
+                                    <td>{{ item.paid_by }}</td>
+                                     <td class="text-center">
                                         <div class="dropdown action-label">
                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#"
                                                 data-toggle="dropdown" aria-expanded="false">
@@ -76,147 +76,17 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <strong>Mac System</strong>
-                                    </td>
-                                    <td>Amazon</td>
-                                    <td>5 May 2017</td>
-                                    <td>Tarah Shropshire</td>
-                                    <td>$1215</td>
-                                    <td>Cheque</td>
-                                    <td class="text-center">
-                                        <div class="dropdown action-label">
-                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#"
-                                                data-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa fa-dot-circle-o text-success"></i> Approved
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#"><i
-                                                        class="fa fa-dot-circle-o text-danger"></i> Pending</a>
-                                                <a class="dropdown-item" href="#"><i
-                                                        class="fa fa-dot-circle-o text-success"></i> Approved</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="dropdown dropdown-action">
-                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-                                                aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#" title="Edit" data-toggle="modal"
-                                                    data-target="#edit_expense"><i class="fa fa-pencil m-r-5"></i>
-                                                    Edit</a>
-                                                <a class="dropdown-item" href="#" title="Delete" data-toggle="modal"
-                                                    data-target="#delete_expense"><i class="fa fa-trash-o m-r-5"></i>
-                                                    Delete</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {% endfor %}
+                                    
+                            
+               
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        {% include 'backend/notifications.html' %}
-    </div>
-    <div id="add_expense" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content modal-lg">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Expense</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Item Name</label>
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Purchase From</label>
-                                    <input class="form-control" type="text">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Purchase Date</label>
-                                    <div class="cal-icon">
-                                        <input class="form-control datetimepicker" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Purchased By </label>
-                                    <select class="select">
-                                        <option>Daniel Porter</option>
-                                        <option>Roger Dixon</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input placeholder="$50" class="form-control" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Paid By</label>
-                                    <select class="select">
-                                        <option>Cash</option>
-                                        <option>Cheque</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <select class="select">
-                                        <option>Pending</option>
-                                        <option>Approved</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Attachments</label>
-                                    <input class="form-control" type="file">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="attach-files">
-                            <ul>
-                                <li>
-                                    <img src="assets/img/user.jpg" alt="">
-                                    <a href="#" class="fa fa-close file-remove"></a>
-                                </li>
-                                <li>
-                                    <img src="assets/img/user.jpg" alt="">
-                                    <a href="#" class="fa fa-close file-remove"></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="m-t-20 text-center">
-                            <button class="btn btn-primary btn-lg">Create Expense</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        {% include 'crm_accounts/modalForms/addExpensesForm.html' %}
     </div>
     <div id="edit_expense" class="modal custom-modal fade" role="dialog">
         <div class="modal-dialog">
@@ -336,7 +206,7 @@
 {% endblock content%}
 
 {% block js %}
-<script>
+<!-- <script>
     $(document).ready(function () {
         table = $('#exp').DataTable({
             paging: false
@@ -351,7 +221,7 @@
                 'pdfHtml5'
             ]
         })
-    })
+    });
 
-</script>
+</script> -->
 {% endblock %}

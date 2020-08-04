@@ -112,18 +112,6 @@ class MailViewSent(DetailView):
         cont['reply_form'] = ReplyForm
         return render(request,self.template_name,cont)
 
-class Blog(TemplateView):
-    template_name='messaging/blog.html'
-
-class BlogView(TemplateView):
-    template_name='messaging/blog_view.html'
-
-class AddBlog(TemplateView):
-    template_name='messaging/add_blog.html'
-
-class EditBlog(TemplateView):
-    template_name='messaging/edit_blog.html'
-
 
 @login_required
 def forward_view(request,pk):

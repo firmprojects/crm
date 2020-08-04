@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'ajax_select',
     'settings',
     'tasks',
+    'blog',
 
 
 

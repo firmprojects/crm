@@ -5,6 +5,7 @@ import uuid
 import random
 import string
 from django.conf import settings
+from django.utils.crypto import get_random_string
 
 
 
@@ -40,9 +41,9 @@ class Taxes(models.Model):
         return self.tax_name
 
 
-def ran_gen(size, chars=string.ascii_letters + string.digits):
-    est_id = ''.join(random.choice(chars) for x in range(size))
-    return est_id
+def generate_id():
+    id = get_random_string(6)
+    return id
 
 
 class Estimate(models.Model):
@@ -60,7 +61,7 @@ class Estimate(models.Model):
     quantity = models.IntegerField("")
     amount = models.IntegerField("")
     estimate_id = models.CharField(
-        max_length=10, default=ran_gen(5), unique=True)
+        max_length=10, default=generate_id(), unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
     discount = models.CharField("", max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
@@ -87,7 +88,7 @@ class Invoice(models.Model):
     quantity = models.IntegerField("")
     amount = models.IntegerField("")
     invoice_id = models.CharField(
-        max_length=10, default=ran_gen(5), unique=True)
+        max_length=10, default=generate_id(), unique=True)
     status = models.CharField(max_length=100, choices=INVOICE_STATUS)
     discount = models.CharField("", max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
@@ -145,11 +146,11 @@ class Expenses(models.Model):
     item_name = models.CharField(max_length=200)
     purchase_from = models.CharField(max_length=200)
     purchase_date = models.DateTimeField()
-    purchase_by = models.CharField(max_length=200)
+    purchase_by = models.CharField(max_length=200, blank=True, null=True)
     amount = models.FloatField()
-    paid_by = models.CharField(max_length=2, choices=PAYMENT_METHOD)
-    status = models.CharField(max_length=2, choices=EXPENSES_STATUS)
-    attachement = models.FileField()
+    paid_by = models.CharField(max_length=100, choices=PAYMENT_METHOD, blank=True, null=True)
+    status = models.CharField(max_length=100, choices=EXPENSES_STATUS, blank=True, null=True)
+    attachement = models.FileField( blank=True, null=True)
 
     def __str__(self):
         return self.item_name

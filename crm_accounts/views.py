@@ -1,10 +1,12 @@
 from dal import autocomplete
 from django.shortcuts import render, get_object_or_404
 from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, View, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from project.models import Clients, Projects
+from .forms import ExpensesForm
 
 
 # Estimate views
@@ -20,7 +22,6 @@ class EstimatesView(ListView):
 
 class CreateEstimate(CreateView):
     model = Estimate
-
     fields = [
         'client', 'projects', 'email', 'taxes', 'extimate_date', 'expiry_date', 'client_address',
         'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
@@ -99,13 +100,33 @@ class ProvidentFundView(ListView):
               'employee_share', 'company_share', 'created', 'description']
 
 
-class ExpensesView(ListView):
-    model = Expenses
-    template_name = 'crm_accounts/expenses.html'
-    fields = ['item_name', 'purchase_from', 'purchase_date', 'purchase_by',
-              'amount', 'paid_by', 'status', 'attachement']
+class CreateExpenses(View):
+    def get(self, request):
+        expenses = Expenses.objects.all()
+        form = ExpensesForm()
+        return render(request, 'crm_accounts/expenses.html', {'expenses':expenses, 'form':form})
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = ExpensesForm(request.POST)
+            if form.is_valid():
+                form.save()
+            return HttpResponseRedirect(reverse('crm_accounts:expenses'))
+        
 
 
+# class CreateExpenses(CreateView):
+#     model = Expenses
+#     template_name = 'crm_accounts/expenses.html'
+#     fields = ['item_name', 'purchase_from', 'purchase_date', 'purchase_by',
+#               'amount', 'paid_by', 'status', 'attachement']
+
+#     def get_context_data(self, **kwargs):
+#         context = super(CreateExpenses, self).get_context_data(**kwargs)
+#         context['expenses'] = Expenses.objects.all()
+#         return context
+
+ 
 
 class CreateTaxes(CreateView):
     model = Taxes
