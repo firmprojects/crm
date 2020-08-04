@@ -6,16 +6,22 @@ from django.contrib.postgres import fields
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.crypto import get_random_string
+
+def generate_emp_id():
+    id = get_random_string(length=4)
+    return "EM-"+str(id)
 
 class Staff(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
-    phone_number = models.CharField(max_length=20, blank=False, null=False)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     photo = models.ImageField(default='default.jpg', upload_to='users')
-    staff_id = models.CharField(max_length=20, blank=False, null=False)
+    staff_id = models.CharField(max_length=20, unique=True,default=generate_emp_id)
     address = models.CharField(max_length=200, blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
     branch = models.CharField(max_length=100, blank=True, null=True)
     on_leave = models.BooleanField(default=False)
+    gender = models.CharField(max_length=10,choices=(('male','Male'),('female','Female'),('other','Other')),blank=True, null=True)
 
     def __str__(self):
         return self.user.username

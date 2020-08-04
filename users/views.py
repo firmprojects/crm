@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,DetailView
 from allauth.account.views import LoginView,SignupView
 from allauth.account import signals
 from django.http import HttpResponseRedirect,JsonResponse, HttpResponse
@@ -30,53 +30,11 @@ def superuser_only(function):
 
 
 WEEKDAY = {0:'Monday',1:'Tuesday',2:'Wednesday',3:'Thursday',4:'Friday',5:'Saturday',6:'Sunday'}
-# class Users(TemplateView):
-#     template_name = 'users/users.html'
-#     form_class = UserCreate
-#     success_url = '/all'
-#     def get(self,request):
-#         super().get(request)
-#         context = super().get_context_data()
-#         context['users'] = CustomUser.objects.all()
-#         context['form'] = UserCreate
-#         context['change_form'] = UserChangeForm
-#         return render(request,self.template_name,context=context)
-#
-#     def post(self,request):
-#
-#         context = super().get_context_data()
-#         form = UserCreate(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(request.build_absolute_uri())
-#         context['users'] = CustomUser.objects.all()
-#         context['form'] = form
-#         return render(request,self.template_name,context=context)
-#
 
-# class Users(TemplateView):
-#     template_name = 'users/users.html'
-#     form_class = UserCreate
-#     success_url = '/all'
-#     def get(self,request):
-#         super().get(request)
-#         context = super().get_context_data()
-#         context['users'] = CustomUser.objects.all()
-#         context['form'] = UserCreate
-#         context['change_form'] = UserChangeForm
-#         return render(request,self.template_name,context=context)
-#
-#     def post(self,request):
-#
-#         context = super().get_context_data()
-#         form = UserCreate(request.POST)
-#         if form.is_valid():
-#             form.save(request)
-#             return HttpResponseRedirect(request.build_absolute_uri())
-#         context['users'] = CustomUser.objects.all()
-#         context['form'] = form
-#         return render(request,self.template_name,context=context)
-
+@method_decorator(superuser_only, name='dispatch')
+class UserProfile(DetailView):
+    template_name = 'users/profile_admin.html'
+    model = CustomUser
 
 @login_required
 def user_profile(request):
@@ -99,24 +57,28 @@ def profile(request):
 
     return render(request,'users/user_profile.html',{'form':UserChange(instance=request.user)})
 
-# def staff_client(request):
-#     if request.method == 'POST':
-#         if request.user.is_client:
-#             form = ClientForm(request.POST,instance=request.user.clients)
-#         elif request.user.is_employee:
-#             form = StaffForm(request.POST,instance=request.user.staff)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('users:profile')
-#         return render(request,'users/client_staff.html',{'form':form})
-#
-#     if request.user.is_client:
-#         form = ClientForm(instance=request.user.clients)
-#     elif request.user.is_employee:
-#         form = StaffForm(instance=request.user.staff)
-#     else:
-#         return redirect('users:user_edit')
-#     return render(request,'users/client_staff.html',{'form':form})
+def edit_profile_admin(request,pk):
+    user = CustomUser.objects.get(pk=pk)
+    if user == request.user:
+        return redirect('users:user_edit')
+    if request.method == 'POST':
+        if user.is_client:
+            form = ClientForm(request.POST,request.FILES,instance=user.clients)
+        elif user.is_employee:
+            form = StaffForm(request.POST,request.FILES,instance=user.staff)
+        if form.is_valid():
+            form.save()
+            return redirect('users:edit_profile_admin',pk=pk)
+        return render(request,'users/client_staff.html',{'form':form})
+
+    if user.is_client:
+        form = ClientForm(instance=user.clients,user=user)
+    elif user.is_employee:
+        form = StaffForm(instance=user.staff,user=user)
+    else:
+        return redirect('users:user_edit')
+    return render(request,'users/client_staff_admin.html',{'form':form})
+
 @login_required
 def staff_client(request):
     if request.user.is_employee and request.user.is_client:
@@ -132,16 +94,18 @@ def staff_client(request):
 def select(request):
     if request.user.is_employee and request.user.is_client:
         return render(request,'users/select.html')
+
 @login_required
 def staff_view(request):
     if request.user.is_employee:
         if request.method == 'POST':
-            form = StaffForm(request.POST,instance=request.user.staff)
+            form = StaffForm(request.POST,request.FILES,instance=request.user.staff)
             if form.is_valid():
                 form.save()
+                print(form.cleaned_data)
                 return redirect('users:staff_view')
             return render(request,'users/client_staff.html',{'form':form})
-        form = StaffForm(instance=request.user.staff)
+        form = StaffForm(instance=request.user.staff,user=request.user)
         return render(request,'users/client_staff.html',{'form':form})
     return HttpResponseRedirect('/dashboard/')
 
@@ -149,12 +113,12 @@ def staff_view(request):
 def client_view(request):
     if request.user.is_client:
         if request.method == 'POST':
-            form = ClientForm(request.POST,instance=request.user.clients)
+            form = ClientForm(request.POST,request.FILES,instance=request.user.clients)
             if form.is_valid():
                 form.save()
                 return redirect('users:client_view')
             return render(request,'users/client_staff.html',{'form':form})
-        form = ClientForm(instance=request.user.clients)
+        form = ClientForm(instance=request.user.clients,user=request.user)
         return render(request,'users/client_staff.html',{'form':form})
     return HttpResponseRedirect('/dashboard/')
 
@@ -319,21 +283,25 @@ def change_staff_status(request,pk):
         if request.user.is_admin or request.user.is_superuser:
             if request.method == 'POST':
                 data = request.POST
-                print(request.POST)
+                print(data)
                 user = CustomUser.objects.get(pk=pk)
                 if data['status'] == 'suspended':
                     user.is_active = False
-                elif data['status'] == 'leave':
+                    user.save()
+                    return JsonResponse({'status':'suspended'})
+
+                elif data['status'] == 'on_leave':
                     staff = user.staff
                     staff.on_leave = True
                     staff.save()
-                elif data['status'] == 'allowed':
-                    user.is_active = True
-                elif data['status'] == 'joined':
+                    user.save()
+                    return JsonResponse({'status':'leave'})
+                else:
                     staff = user.staff
                     staff.on_leave = False
                     staff.save()
+                    user.is_active = True
                 user.save()
-            return JsonResponse({})
+            return JsonResponse({'status':'active'})
 
     return JsonResponse({},status=404)

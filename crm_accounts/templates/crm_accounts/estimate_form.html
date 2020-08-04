@@ -3,6 +3,32 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
+{% block js %}
+<script type="text/javascript">
+  $(document).ready(function() {
+     $('#id_client').select2({
+        minimumInputLength: 1,
+        placeholder: "Project Clients*",
+        multiple: false,
+        ajax: {
+            url: '/project/company_autocomplete/',
+            dataType: 'json'
+        },
+    });
+
+    $('#id_projects').select2({
+      minimumInputLength: 1,
+      placeholder: "Projects*",
+      multiple: false,
+      ajax: {
+          url: '/project/project_autocomplete/',
+          dataType: 'json'
+      },
+
+   });
+  })
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="main-wrapper">

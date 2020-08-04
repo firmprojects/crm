@@ -17,6 +17,7 @@ urlpatterns = [
     path('client/delete/<int:pk>/', ClientDelete.as_view(), name='delete_client'),
     path('user_autocomplete/', UsersAutocompletesView.as_view(), name="user_autocomplete"),
     path('clients_autocomplete/', ClientAutocompletesView.as_view(), name="client_autocomplete"),
+    path('company_autocomplete/',CompanyAutocompletesView.as_view(),name='company_autocomplete'),
     path('project_autocomplete/',ProjectAutocompletesView.as_view(),name='project_autocompletes'),
     path('<pk>/milestones/', milestone_list, name='milestones'),
     path('milestones/add/',add_milestone,name="add_milestone"),

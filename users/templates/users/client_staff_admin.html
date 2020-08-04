@@ -6,7 +6,7 @@
 <div class="page-wrapper">
   <div class="row m-5">
     <div class="col-12" style="font-size:2em;font-weight:300">
-      Your info:
+      User's info:
     </div></br>
     <div class="col-12">
       <form method="post" enctype="multipart/form-data">
@@ -50,15 +50,14 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-12">
             CLick <a href="{% url 'account_change_password'%}">here</a> to change your password
           </div>
           <div class="col-12">
             CLick <a href="{% url 'account_email'%}">here</a> to change your email
           </div>
-
-        </div>
+        </div> -->
         <hr>
         {% for field in form %}
           {% if field.auto_id == 'id_first_name' or field.auto_id == 'id_last_name' or field.auto_id == 'id_username' or field.auto_id == 'id_photo' %}

@@ -23,11 +23,12 @@
             <div class="row staff-grid-row">
                 {% for user in staff %}
                 <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
-    
+
                     <div class="profile-widget">
                         <div class="profile-img">
-                            <a href="{{ user.get_absolute_url }}"><img class="avatar" src="{{ user.profile.photo.url }}"
-                                    alt=""></a>
+                          {% if user.user.photo %}
+                            <a href="/user/{{user.user.pk}}/"><img class="avatar" src="{{ user.user.photo.url }}"alt=""></a>
+                          {% endif %}
                         </div>
                         <div class="dropdown profile-action">
                             <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
@@ -40,17 +41,19 @@
                             </div>
                         </div>
                         <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a
-                                href="{{ user.get_absolute_url }}">{{ user.first_name }}
-                                {{ user.last_name }}</a></h4>
+                                href="{{ user.get_absolute_url }}">{{ user.user.first_name }}
+                                {{ user.user.last_name }}</a></h4>
                         <div class="small text-muted">{{ user.profile.department }}</div>
+                        <a href="/user/{{user.user.pk}}/" class="btn btn-white btn-sm m-t-10">View Profile</a>
+
                     </div>
-    
+
                 </div>
                 {% endfor %}
-    
+
             </div>
         </div>
-    
+
     </div>
 
 <!-- ----------------------------------------------------

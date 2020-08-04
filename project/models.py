@@ -23,6 +23,7 @@ class Clients(models.Model):
     address = models.CharField(max_length=200, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
+    gender = models.CharField(max_length=10,choices=(('male','Male'),('female','Female'),('other','Other')),blank=True, null=True)
 
     def __str__(self):
         return self.company_name
