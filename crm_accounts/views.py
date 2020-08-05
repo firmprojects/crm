@@ -3,10 +3,14 @@ from django.shortcuts import render, get_object_or_404
 from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses
 from django.views.generic import ListView, View, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
 from project.models import Clients, Projects
 from .forms import ExpensesForm
+from django.forms.models import model_to_dict
+
+
+
 
 
 # Estimate views
@@ -110,10 +114,28 @@ class CreateExpenses(View):
         if request.method == 'POST':
             form = ExpensesForm(request.POST)
             if form.is_valid():
+                form = form.save(commit=False)
+                form.status = 'inspect'
                 form.save()
             return HttpResponseRedirect(reverse('crm_accounts:expenses'))
+
+
+
+
+def change_status(request):
+    if request.method == 'POST':
+        expenses = Expenses.objects.get(pk = request.POST['pk'])
+        expenses.status = request.POST['status']
+        expenses.save()
+        return JsonResponse({"status":expenses.status})
         
 
+def delete_expenses(request, id):
+    expense = Expenses.objects.get(id=id)
+    exp = expense.delete()
+    exp.save()
+
+    JsonResponse({'del_exp':model_to_dict(exp)}, status=200)
 
 # class CreateExpenses(CreateView):
 #     model = Expenses

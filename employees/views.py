@@ -1,7 +1,7 @@
 from django.http import JsonResponse,HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404,reverse
-
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.views.generic import ListView, View, DetailView, CreateView, UpdateView, DeleteView
 from django.forms import modelformset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm)
@@ -12,6 +12,7 @@ from django.utils import timezone
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from users.models import CustomUser
+from django.forms.models import model_to_dict
 
 from dal import autocomplete
 
@@ -25,15 +26,35 @@ class StaffCreateView(SignupView):
         return context
 
 
-class HolidayCreate(CreateView):
-    model = Holidays
-    template_name = "employees/holiday.html"
-    form_class = HolidaysForm
 
-    def get_context_data(self, **kwargs):
-        context = super(HolidayCreate, self).get_context_data(**kwargs)
-        context['holidays'] = Holidays.objects.all()
-        return context
+class HolidayList(View):
+    def get(self, request):
+        form = HolidaysForm()
+        holidays = Holidays.objects.all()
+        return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
+
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = HolidaysForm(request.POST)
+            if form.is_valid():
+                new_holiday = form.save()
+                return JsonResponse({'hols':model_to_dict(new_holiday)})
+
+
+
+
+
+
+# class HolidayCreate(CreateView):
+#     model = Holidays
+#     template_name = "employees/holiday.html"
+#     form_class = HolidaysForm
+
+#     def get_context_data(self, **kwargs):
+#         context = super(HolidayCreate, self).get_context_data(**kwargs)
+#         context['holidays'] = Holidays.objects.all()
+#         return context
 
 
 class HolidayUpdate(UpdateView):

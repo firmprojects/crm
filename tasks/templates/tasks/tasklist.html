@@ -352,7 +352,11 @@
     <script type="text/javascript">
       function change_priority(pr,ele) {
         $.ajax({
-          url:'/task/change_priority/',data:{"pk":$(ele).parent().siblings("a").attr("task_id"),"pr":pr,"csrfmiddlewaretoken":"{{csrf_token}}"},
+          url:'/task/change_priority/',
+          data:{"pk":$(ele).parent().siblings("a").attr("task_id"),
+          "pr":pr,
+          "csrfmiddlewaretoken":"{{csrf_token}}"
+          },
           type:"POST",
           success:(res)=>{
             if(res.priority == 'high'){
@@ -370,7 +374,10 @@
       }
       function change_status(pr,ele) {
         $.ajax({
-          url:'/task/change_status/',data:{"pk":$(ele).parent().siblings("a").attr("task_id"),"status":pr,"csrfmiddlewaretoken":"{{csrf_token}}"},
+          url:'/task/change_status/',
+          data:{"pk":$(ele).parent().siblings("a").attr("task_id"),
+          "status":pr,
+          "csrfmiddlewaretoken":"{{csrf_token}}"},
           type:"POST",
           success:(res)=>{
             console.log(res);

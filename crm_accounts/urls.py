@@ -18,7 +18,9 @@ from .views import (
     TaxUpdate,
     TaxDelete,
     ClientAutocompletesView,
-    ProjectAutocompletesView
+    ProjectAutocompletesView,
+    change_status,
+    delete_expenses
 
 )
 
@@ -46,6 +48,8 @@ urlpatterns = [
     path('taxes/<int:pk>/update', TaxUpdate.as_view(), name='edit_tax'),
     path('taxes/<int:pk>/delete', TaxDelete.as_view(), name='delete_tax'),
     path('client_autocomplete/', ClientAutocompletesView.as_view(), name="client-autocomplete"),
-    path('project_autocomplete/', ProjectAutocompletesView.as_view(), name="project-autocomplete")
+    path('project_autocomplete/', ProjectAutocompletesView.as_view(), name="project-autocomplete"),
+    path('change_status/',change_status, name='change_status'),
+    path('expenses/<int:id>/delete/', delete_expenses, name="delete_expense")
 
 ]

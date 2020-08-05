@@ -38,7 +38,7 @@
                             <tbody>
                                 
                                 {% for item in expenses  %}
-                                <tr>
+                                <tr class="record" data-id={{ item.id}}>
                                     <td>
                                         <strong>{{ item.item_name}}</strong>
                                     </td>
@@ -49,15 +49,19 @@
                                     <td>{{ item.paid_by }}</td>
                                      <td class="text-center">
                                         <div class="dropdown action-label">
-                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#"
-                                                data-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa fa-dot-circle-o text-danger"></i> Pending
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle status_change" status_id="{{item.pk}}" data-toggle="dropdown" aria-expanded="false">
+                                              {% if item.status == 'inspect' %}
+                                                <i class="fa fa-dot-circle-o text-danger"></i> Inspect
+                                              {% elif item.status == 'approved' %}
+                                                <i class="fa fa-dot-circle-o text-warning"></i> Approved
+                                              {% else %}
+                                                <i class="fa fa-dot-circle-o text-success"></i> Rejected
+                                              {% endif %}
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#"><i
-                                                        class="fa fa-dot-circle-o text-danger"></i> Pending</a>
-                                                <a class="dropdown-item" href="#"><i
-                                                        class="fa fa-dot-circle-o text-success"></i> Approved</a>
+                                                <a class="dropdown-item" href="#" onclick="change_status('inspect',this)"><i class="fa fa-dot-circle-o text-danger"></i> Inspect</a>
+                                                <a class="dropdown-item" href="#" onclick="change_status('approved',this)"><i class="fa fa-dot-circle-o text-warning"></i> Approved</a>
+                                                <a class="dropdown-item" href="#" onclick="change_status('rejected',this)"><i class="fa fa-dot-circle-o text-success"></i> Rejected</a>
                                             </div>
                                         </div>
                                     </td>
@@ -194,7 +198,7 @@
                     <p>Are you sure want to delete this expense?</p>
                     <div class="m-t-20 text-left">
                         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-danger exp_del">Delete</button>
                     </div>
                 </div>
             </div>
@@ -204,9 +208,49 @@
     <div class="sidebar-overlay" data-reff=""></div>
 </div>
 {% endblock content%}
-
 {% block js %}
+<script>
+ var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+ function change_status(pr,ele) {
+        $.ajax({
+          url:'/crm_accounts/change_status/',
+          data:{"pk":$(ele).parent().siblings("a").attr("status_id"),
+          "status":pr,
+          "csrfmiddlewaretoken":"{{csrf_token}}"},
+          type:"POST",
+          success:(res)=>{
+            console.log(res);
+            if(res.status == 'inspect'){
+              $(ele).parent().siblings(".status_change").html('<i class="fa fa-dot-circle-o text-danger"></i> Inspect')
+            }
+            else if(res.status == 'approved'){
+              $(ele).parent().siblings(".status_change").html('<i class="fa fa-dot-circle-o text-warning"></i> Approved')
+            }
+            else{
+              $(ele).parent().siblings(".status_change").html('<i class="fa fa-dot-circle-o text-success"></i> Reject')
+            }
+
+          }
+        })
+
+      }
+
+$('.exp_del').click(function(){
+    var dataID = $('.record').data('id')
+    console.log(dataID)
+   $.ajax({
+       url: 'crm_accounts/expenses/' + dataID + '/delete/',
+       data:{
+           id: dataID,
+           
+       }
+
+   })
+});
+</script>
+
 <!-- <script>
+
     $(document).ready(function () {
         table = $('#exp').DataTable({
             paging: false
