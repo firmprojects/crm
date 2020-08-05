@@ -25,7 +25,57 @@
           dataType: 'json'
       },
 
-   });
+    });
+
+    $("#estimate_form").submit(function () {
+      console.log('ok');
+      // return false;
+      try {
+        var form_data = new FormData();
+        form_data.append('client',parseInt($('#id_client').val()))
+        form_data.append('projects',parseInt($('#id_projects').val()))
+        form_data.append('email',$('#id_email').val())
+        form_data.append('taxes',$('#id_taxes').val())
+        form_data.append('client_address',$('#id_client_address').val())
+        form_data.append('billing_address',$('#id_billing_address').val())
+        form_data.append('extimate_date',$('#id_extimate_date').val())
+        form_data.append('expiry_date',$('#id_expiry_date').val())
+        form_data.append('discount',$('#id_discount').val())
+        form_data.append('other_information',$('#id_other_information').val())
+
+        let items = []
+        $(".items").map(function () {
+          items.push(JSON.stringify({
+            "item_name":$(this).find('.item_name').val(),
+            "item_description":$(this).find('.item_description').val(),
+            "unit_cost":$(this).find('.item_unit_cost').val(),
+            "quantity":$(this).find('.item_quantity').val(),
+          }))
+        })
+        form_data.append('items',items)
+        form_data.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+        $.ajax({
+          url:'/crm_accounts/create_estimates_ajax/',
+          method:'POST',
+          data:form_data,
+          processData: false,
+          contentType: false,
+          success:(data)=>{
+            return false;
+          },
+          error:()=>{
+            return false;
+          }
+        })
+      }
+      catch(err){
+        console.log(err);
+      }
+
+
+      return false;
+    })
   })
   function add_item() {
     let item=
@@ -33,16 +83,16 @@
     <tr class="items">
         <td>${$('.items').length+1}</td>
         <td>
-            <input class="form-control" type="text" style="min-width:150px">
+            <input class="form-control item_name" type="text" style="min-width:150px">
         </td>
         <td>
-            <input class="form-control" type="text" style="min-width:150px">
+            <input class="form-control item_description" type="text" style="min-width:150px">
         </td>
         <td>
-            <input class="form-control" style="width:100px" type="text">
+            <input class="form-control item_unit_cost" style="width:100px" type="text">
         </td>
         <td>
-            <input class="form-control" style="width:80px" type="text">
+            <input class="form-control item_quantity" style="width:80px" type="text">
         </td>
         <td>
             <input class="form-control" readonly="" style="width:120px"
@@ -75,7 +125,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" id='estimate_form'>
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-sm-6 col-md-3">
@@ -140,16 +190,16 @@
                                             <tr class="items">
                                                 <td>1</td>
                                                 <td>
-                                                    <input class="form-control" type="text" style="min-width:150px">
+                                                    <input class="form-control item_name" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" type="text" style="min-width:150px">
+                                                    <input class="form-control item_description" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" style="width:100px" type="text">
+                                                    <input class="form-control item_unit_cost" style="width:100px" type="text">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" style="width:80px" type="text">
+                                                    <input class="form-control item_quantity" style="width:80px" type="text">
                                                 </td>
                                                 <td>
                                                   <input class="form-control" readonly="" style="width:120px"
@@ -161,16 +211,16 @@
                                             <tr class="items">
                                                 <td>2</td>
                                                 <td>
-                                                    <input class="form-control" type="text" style="min-width:150px">
+                                                    <input class="form-control item_name" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" type="text" style="min-width:150px">
+                                                    <input class="form-control item_description" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" style="width:100px" type="text">
+                                                    <input class="form-control item_unit_cost" style="width:100px" type="text">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" style="width:80px" type="text">
+                                                    <input class="form-control item_quantity" style="width:80px" type="text">
                                                 </td>
                                                 <td>
                                                     <input class="form-control" readonly="" style="width:120px"

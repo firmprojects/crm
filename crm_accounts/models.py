@@ -5,7 +5,6 @@ import uuid
 import random
 import string
 from django.conf import settings
-from django.utils.crypto import get_random_string
 
 
 
@@ -41,9 +40,9 @@ class Taxes(models.Model):
         return self.tax_name
 
 
-def generate_id():
-    id = get_random_string(6)
-    return id
+def ran_gen(size=5, chars=string.ascii_letters + string.digits):
+    est_id = ''.join(random.choice(chars) for x in range(size))
+    return est_id
 
 
 class Estimate(models.Model):
@@ -55,13 +54,10 @@ class Estimate(models.Model):
     billing_address = models.TextField()
     extimate_date = models.DateField()
     expiry_date = models.DateField()
-    item_name = models.CharField("", max_length=200)
-    item_description = models.CharField("", max_length=200)
-    unit_cost = models.IntegerField("")
-    quantity = models.IntegerField("")
-    amount = models.IntegerField("")
+
+    amount = models.IntegerField(blank=True, null=True)
     estimate_id = models.CharField(
-        max_length=10, default=generate_id(), unique=True)
+        max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
     discount = models.CharField("", max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
@@ -72,6 +68,12 @@ class Estimate(models.Model):
     def get_absolute_url(self):
         return reverse('crm_accounts:estimates')
 
+class Items(models.Model):
+    estimate = models.ForeignKey(to=Estimate,on_delete=models.CASCADE)
+    item_name = models.CharField("", max_length=200)
+    item_description = models.CharField("", max_length=200)
+    unit_cost = models.IntegerField("")
+    quantity = models.IntegerField("")
 
 class Invoice(models.Model):
     client = models.ForeignKey(Clients, on_delete=models.CASCADE)
@@ -88,7 +90,7 @@ class Invoice(models.Model):
     quantity = models.IntegerField("")
     amount = models.IntegerField("")
     invoice_id = models.CharField(
-        max_length=10, default=generate_id(), unique=True)
+        max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=INVOICE_STATUS)
     discount = models.CharField("", max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
@@ -132,26 +134,25 @@ class ProvidentFund(models.Model):
 
 class Expenses(models.Model):
     PAYMENT_METHOD = (
-        ('Cash', 'cash'),
-        ('Tranfer', 'transfer'),
-        ('Bank Deposit', 'bank_deposit'),
-        ('Cheque', 'cheque'),
-        ('Others', 'Others'),
+        ('ca', 'Cash'),
+        ('tf', 'Tranfer'),
+        ('bd', 'Bank Deposit'),
+        ('ch', 'Cheque'),
+        ('ot', 'Ot'),
     )
 
     EXPENSES_STATUS = (
-        ('inspect', 'Inspect'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        ('pd', 'Pending'),
+        ('ap', 'Approved'),
     )
     item_name = models.CharField(max_length=200)
     purchase_from = models.CharField(max_length=200)
     purchase_date = models.DateTimeField()
-    purchase_by = models.CharField(max_length=200, blank=True, null=True)
+    purchase_by = models.CharField(max_length=200)
     amount = models.FloatField()
-    paid_by = models.CharField(max_length=100, choices=PAYMENT_METHOD, blank=True, null=True)
-    status = models.CharField(max_length=100, choices=EXPENSES_STATUS)
-    attachement = models.FileField( blank=True, null=True)
+    paid_by = models.CharField(max_length=2, choices=PAYMENT_METHOD)
+    status = models.CharField(max_length=2, choices=EXPENSES_STATUS)
+    attachement = models.FileField()
 
     def __str__(self):
         return self.item_name

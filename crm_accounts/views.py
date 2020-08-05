@@ -1,17 +1,25 @@
 from dal import autocomplete
 from django.shortcuts import render, get_object_or_404
-from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses
-from django.views.generic import ListView, View, DetailView, CreateView, UpdateView, DeleteView
+from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses,Items
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from project.models import Clients, Projects
-from .forms import ExpensesForm
-from django.forms.models import model_to_dict
+import django.forms as forms
+import json
 
 
+class EstimateForm(forms.ModelForm):
+    class Meta:
+        model = Estimate
+        fields = [
+            'client', 'projects', 'email', 'taxes', 'extimate_date', 'expiry_date', 'client_address',
+            # 'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
+            # 'other_information'
+            'billing_address',  'discount',
+            'other_information'
 
-
+        ]
 
 # Estimate views
 class EstimatesView(ListView):
@@ -24,14 +32,38 @@ class EstimatesView(ListView):
         return context
 
 
-class CreateEstimate(CreateView):
-    model = Estimate
-    fields = [
-        'client', 'projects', 'email', 'taxes', 'extimate_date', 'expiry_date', 'client_address',
-        'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
-        'other_information'
-    ]
+class CreateEstimate(TemplateView):
 
+    template_name = 'crm_accounts/estimate_form.html'
+    def get(self,request,*args,**kwargs):
+        super().get(request,*args,**kwargs)
+        conte = super().get_context_data()
+        conte['form'] = EstimateForm
+        return render(request,self.template_name,conte)
+
+
+
+def create_estimate(request):
+    if request.method == 'POST':
+        data = request.POST
+        print(data)
+        es = Estimate.objects.create(
+            client=Clients.objects.get(pk=int(data['client'])),projects=Projects.objects.get(pk=int(data['projects'])),email=data['email'],
+            taxes=Taxes.objects.get(pk=int(data['taxes'])),extimate_date=data.get('extimate_date'),expiry_date=data.get('expiry_date'),
+            client_address=data.get('client_address'),billing_address=data['billing_address'],
+            discount=data['discount'],other_information=data['other_information']
+        )
+
+        for i in data.getlist('items'):
+            print(i)
+            js = json.loads(i)
+            Items.objects.create(
+                item_name=js['item_name'],item_description=js['item_description'],
+                unit_cost=js['unit_cost'],quantity=js['quantity'],estimate=es
+            )
+
+        # After creating estimate and it's associated Items, user your logic to calculate subtotal and save it.
+        
 
 class EstimateDetail(DetailView):
     model = Estimate
@@ -104,51 +136,13 @@ class ProvidentFundView(ListView):
               'employee_share', 'company_share', 'created', 'description']
 
 
-class CreateExpenses(View):
-    def get(self, request):
-        expenses = Expenses.objects.all()
-        form = ExpensesForm()
-        return render(request, 'crm_accounts/expenses.html', {'expenses':expenses, 'form':form})
-
-    def post(self, request):
-        if request.method == 'POST':
-            form = ExpensesForm(request.POST)
-            if form.is_valid():
-                form = form.save(commit=False)
-                form.status = 'inspect'
-                form.save()
-            return HttpResponseRedirect(reverse('crm_accounts:expenses'))
+class ExpensesView(ListView):
+    model = Expenses
+    template_name = 'crm_accounts/expenses.html'
+    fields = ['item_name', 'purchase_from', 'purchase_date', 'purchase_by',
+              'amount', 'paid_by', 'status', 'attachement']
 
 
-
-
-def change_status(request):
-    if request.method == 'POST':
-        expenses = Expenses.objects.get(pk = request.POST['pk'])
-        expenses.status = request.POST['status']
-        expenses.save()
-        return JsonResponse({"status":expenses.status})
-        
-
-def delete_expenses(request, id):
-    expense = Expenses.objects.get(id=id)
-    exp = expense.delete()
-    exp.save()
-
-    JsonResponse({'del_exp':model_to_dict(exp)}, status=200)
-
-# class CreateExpenses(CreateView):
-#     model = Expenses
-#     template_name = 'crm_accounts/expenses.html'
-#     fields = ['item_name', 'purchase_from', 'purchase_date', 'purchase_by',
-#               'amount', 'paid_by', 'status', 'attachement']
-
-#     def get_context_data(self, **kwargs):
-#         context = super(CreateExpenses, self).get_context_data(**kwargs)
-#         context['expenses'] = Expenses.objects.all()
-#         return context
-
- 
 
 class CreateTaxes(CreateView):
     model = Taxes
@@ -186,5 +180,3 @@ class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
-
-

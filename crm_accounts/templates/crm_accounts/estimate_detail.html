@@ -69,14 +69,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                  <!-- {{object.items_set.all}} -->
+                                  {% for item in object.items_set.all %}
                                     <tr>
-                                        <td>{{ object.id}}</td>
-                                        <td>{{ object.item_name}}</td>
-                                        <td class="d-none d-sm-block">{{ object.item_description}}</td>
-                                        <td>N{{object.unit_cost|intcomma }}</td>
-                                        <td>{{object.quantity}}</td>
+                                        <td>{{ item.item_name}}</td>
+                                        <td class="d-none d-sm-block">{{ item.item_description}}</td>
+                                        <td>{{item.unit_cost|intcomma }}</td>
+                                        <td>{{item.quantity}}</td>
                                         <td>N2000</td>
                                     </tr>
+                                  {% endfor %}
                                 </tbody>
                             </table>
                             <div>

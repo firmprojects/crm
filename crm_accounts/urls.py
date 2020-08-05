@@ -13,15 +13,13 @@ from .views import (
     InvoiceDelete,
     PaymentsView,
     ProvidentFundView,
-    CreateExpenses,
+    ExpensesView,
     CreateTaxes,
     TaxUpdate,
     TaxDelete,
     ClientAutocompletesView,
     ProjectAutocompletesView,
-    change_status,
-    delete_expenses
-
+    create_estimate
 )
 
 
@@ -43,13 +41,12 @@ urlpatterns = [
     path('create_invoices/', CreateInvoice.as_view(), name='invoice_create'),
     path('payments/', PaymentsView.as_view(), name='payments'),
     path('providentfund/', ProvidentFundView.as_view(), name='providentfund'),
-    path('expenses/', CreateExpenses.as_view(), name='expenses'),
+    path('expenses/', ExpensesView.as_view(), name='expenses'),
     path('taxes/', CreateTaxes.as_view(), name='taxes'),
     path('taxes/<int:pk>/update', TaxUpdate.as_view(), name='edit_tax'),
     path('taxes/<int:pk>/delete', TaxDelete.as_view(), name='delete_tax'),
     path('client_autocomplete/', ClientAutocompletesView.as_view(), name="client-autocomplete"),
     path('project_autocomplete/', ProjectAutocompletesView.as_view(), name="project-autocomplete"),
-    path('change_status/',change_status, name='change_status'),
-    path('expenses/<int:id>/delete/', delete_expenses, name="delete_expense")
+    path('create_estimates_ajax/',create_estimate)
 
 ]
