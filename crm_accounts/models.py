@@ -40,7 +40,7 @@ class Taxes(models.Model):
         return self.tax_name
 
 
-def ran_gen(size, chars=string.ascii_letters + string.digits):
+def ran_gen(size=5, chars=string.ascii_letters + string.digits):
     est_id = ''.join(random.choice(chars) for x in range(size))
     return est_id
 
@@ -54,13 +54,10 @@ class Estimate(models.Model):
     billing_address = models.TextField()
     extimate_date = models.DateField()
     expiry_date = models.DateField()
-    item_name = models.CharField("", max_length=200)
-    item_description = models.CharField("", max_length=200)
-    unit_cost = models.IntegerField("")
-    quantity = models.IntegerField("")
-    amount = models.IntegerField("")
+
+    amount = models.IntegerField(blank=True, null=True)
     estimate_id = models.CharField(
-        max_length=10, default=ran_gen(5), unique=True)
+        max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
     discount = models.CharField("", max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
@@ -71,6 +68,12 @@ class Estimate(models.Model):
     def get_absolute_url(self):
         return reverse('crm_accounts:estimates')
 
+class Items(models.Model):
+    estimate = models.ForeignKey(to=Estimate,on_delete=models.CASCADE)
+    item_name = models.CharField("", max_length=200)
+    item_description = models.CharField("", max_length=200)
+    unit_cost = models.IntegerField("")
+    quantity = models.IntegerField("")
 
 class Invoice(models.Model):
     client = models.ForeignKey(Clients, on_delete=models.CASCADE)
@@ -87,7 +90,7 @@ class Invoice(models.Model):
     quantity = models.IntegerField("")
     amount = models.IntegerField("")
     invoice_id = models.CharField(
-        max_length=10, default=ran_gen(5), unique=True)
+        max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=INVOICE_STATUS)
     discount = models.CharField("", max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)

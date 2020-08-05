@@ -1,11 +1,25 @@
 from dal import autocomplete
 from django.shortcuts import render, get_object_or_404
-from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses,Items
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from project.models import Clients, Projects
+import django.forms as forms
+import json
 
+
+class EstimateForm(forms.ModelForm):
+    class Meta:
+        model = Estimate
+        fields = [
+            'client', 'projects', 'email', 'taxes', 'extimate_date', 'expiry_date', 'client_address',
+            # 'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
+            # 'other_information'
+            'billing_address',  'discount',
+            'other_information'
+
+        ]
 
 # Estimate views
 class EstimatesView(ListView):
@@ -18,15 +32,38 @@ class EstimatesView(ListView):
         return context
 
 
-class CreateEstimate(CreateView):
-    model = Estimate
+class CreateEstimate(TemplateView):
 
-    fields = [
-        'client', 'projects', 'email', 'taxes', 'extimate_date', 'expiry_date', 'client_address',
-        'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
-        'other_information'
-    ]
+    template_name = 'crm_accounts/estimate_form.html'
+    def get(self,request,*args,**kwargs):
+        super().get(request,*args,**kwargs)
+        conte = super().get_context_data()
+        conte['form'] = EstimateForm
+        return render(request,self.template_name,conte)
 
+
+
+def create_estimate(request):
+    if request.method == 'POST':
+        data = request.POST
+        print(data)
+        es = Estimate.objects.create(
+            client=Clients.objects.get(pk=int(data['client'])),projects=Projects.objects.get(pk=int(data['projects'])),email=data['email'],
+            taxes=Taxes.objects.get(pk=int(data['taxes'])),extimate_date=data.get('extimate_date'),expiry_date=data.get('expiry_date'),
+            client_address=data.get('client_address'),billing_address=data['billing_address'],
+            discount=data['discount'],other_information=data['other_information']
+        )
+
+        for i in data.getlist('items'):
+            print(i)
+            js = json.loads(i)
+            Items.objects.create(
+                item_name=js['item_name'],item_description=js['item_description'],
+                unit_cost=js['unit_cost'],quantity=js['quantity'],estimate=es
+            )
+
+        # After creating estimate and it's associated Items, user your logic to calculate subtotal and save it.
+        
 
 class EstimateDetail(DetailView):
     model = Estimate
@@ -143,5 +180,3 @@ class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
-
-
