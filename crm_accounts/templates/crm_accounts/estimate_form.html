@@ -4,8 +4,16 @@
 {% load widget_tweaks %}
 
 {% block js %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
+    $("#id_expiry_date").prop('readonly','readonly')
+    $('#id_expiry_date').datepicker({format:'yyyy-mm-dd'});
+
+    $("#id_extimate_date").prop('readonly','readonly')
+    $('#id_extimate_date').datepicker({format:'yyyy-mm-dd'});
+
      $('#id_client').select2({
         minimumInputLength: 1,
         placeholder: "Project Clients*",
@@ -45,14 +53,16 @@
 
         let items = []
         $(".items").map(function () {
-          items.push(JSON.stringify({
+          items.push({
             "item_name":$(this).find('.item_name').val(),
             "item_description":$(this).find('.item_description').val(),
             "unit_cost":$(this).find('.item_unit_cost').val(),
             "quantity":$(this).find('.item_quantity').val(),
-          }))
+          })
         })
-        form_data.append('items',items)
+        // console.log();
+        // return false;
+        form_data.append('items',JSON.stringify(items))
         form_data.append('csrfmiddlewaretoken','{{csrf_token}}')
 
         $.ajax({
@@ -62,6 +72,7 @@
           processData: false,
           contentType: false,
           success:(data)=>{
+            location.href = '/crm_accounts/estimates/'+data.pk
             return false;
           },
           error:()=>{
@@ -89,14 +100,14 @@
             <input class="form-control item_description" type="text" style="min-width:150px">
         </td>
         <td>
-            <input class="form-control item_unit_cost" style="width:100px" type="text">
+            <input class="form-control item_unit_cost" style="width:100px" type="number">
         </td>
         <td>
-            <input class="form-control item_quantity" style="width:80px" type="text">
+            <input class="form-control item_quantity" style="width:80px" type="number">
         </td>
         <td>
             <input class="form-control" readonly="" style="width:120px"
-                type="text">
+                type="number">
         </td>
         <td><button type="button" onclick="remove_item(this)" class="btn text-danger font-18"
                 title="Remove"><i class="fa fa-trash-o"
@@ -196,14 +207,14 @@
                                                     <input class="form-control item_description" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_unit_cost" style="width:100px" type="text">
+                                                    <input class="form-control item_unit_cost" style="width:100px" type="number">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_quantity" style="width:80px" type="text">
+                                                    <input class="form-control item_quantity" style="width:80px" type="number">
                                                 </td>
                                                 <td>
                                                   <input class="form-control" readonly="" style="width:120px"
-                                                      type="text">
+                                                      type="number">
                                                 </td>
                                                 <td><button onclick="add_item()" type="button" class="btn text-success font-18"
                                                         title="Add"><i class="fa fa-plus"></i></button></td>
@@ -217,14 +228,14 @@
                                                     <input class="form-control item_description" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_unit_cost" style="width:100px" type="text">
+                                                    <input class="form-control item_unit_cost" style="width:100px" type="number">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_quantity" style="width:80px" type="text">
+                                                    <input class="form-control item_quantity" style="width:80px" type="number">
                                                 </td>
                                                 <td>
                                                     <input class="form-control" readonly="" style="width:120px"
-                                                        type="text">
+                                                        type="number">
                                                 </td>
                                                 <td><button type="button" onclick="remove_item(this)" class="btn text-danger font-18"
                                                         title="Remove"><i class="fa fa-trash-o"

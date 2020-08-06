@@ -1,5 +1,6 @@
 from django.db import models
 from project.models import Projects, Clients
+from django.db.models.signals import pre_save,post_save
 from django.urls import reverse
 import uuid
 import random
@@ -59,7 +60,7 @@ class Estimate(models.Model):
     estimate_id = models.CharField(
         max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
-    discount = models.CharField("", max_length=100, blank=True, null=True)
+    discount = models.FloatField(default=0, max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -68,12 +69,42 @@ class Estimate(models.Model):
     def get_absolute_url(self):
         return reverse('crm_accounts:estimates')
 
+    def get_total(self):
+        am = 0
+        for i in self.items_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            am+=amo
+        return am
+
+    def get_taxes(self):
+        am = 0
+        for i in self.items_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            am+=amo
+        return am*(self.taxes.tax_percentage/100)
+
+    def get_dis(self):
+        am = 0
+        for i in self.items_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            am+=amo
+        return am*float(self.discount)/100
+
+
+
 class Items(models.Model):
     estimate = models.ForeignKey(to=Estimate,on_delete=models.CASCADE)
     item_name = models.CharField("", max_length=200)
     item_description = models.CharField("", max_length=200)
     unit_cost = models.IntegerField("")
     quantity = models.IntegerField("")
+    total = models.IntegerField(default=0)
+
+# def cal_info(sender,instance,created,**extra):
+#     if created:
+#
+#
+# post_save.connect(cal_info,sender=Estimate)
 
 class Invoice(models.Model):
     client = models.ForeignKey(Clients, on_delete=models.CASCADE)

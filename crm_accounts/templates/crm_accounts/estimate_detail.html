@@ -72,11 +72,12 @@
                                   <!-- {{object.items_set.all}} -->
                                   {% for item in object.items_set.all %}
                                     <tr>
+                                        <td>{{forloop.counter}}</td>
                                         <td>{{ item.item_name}}</td>
                                         <td class="d-none d-sm-block">{{ item.item_description}}</td>
                                         <td>{{item.unit_cost|intcomma }}</td>
                                         <td>{{item.quantity}}</td>
-                                        <td>N2000</td>
+                                        <td>{{item.total}}</td>
                                     </tr>
                                   {% endfor %}
                                 </tbody>
@@ -93,16 +94,20 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>Subtotal:</th>
-                                                            <td class="text-right">$7,000</td>
+                                                            <td class="text-right">${{object.get_total}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Tax: <span class="text-regular">(25%)</span></th>
-                                                            <td class="text-right">$1,750</td>
+                                                            <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
+                                                            <td class="text-right">${{object.get_taxes}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
+                                                            <td class="text-right">${{object.get_dis}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Total:</th>
                                                             <td class="text-right text-primary">
-                                                                <h5>$8,750</h5>
+                                                                <h5>${{object.amount}}</h5>
                                                             </td>
                                                         </tr>
                                                     </tbody>
