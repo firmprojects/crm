@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'settings',
     'tasks',
     'blog',
+    'books',
 
 
 

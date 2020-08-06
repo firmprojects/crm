@@ -16,6 +16,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('settings/', include('settings.urls')),
     path('task/', include('tasks.urls')),
+    path('books/', include('books.urls')),
 ]
 
 
