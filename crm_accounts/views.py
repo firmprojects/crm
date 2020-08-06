@@ -4,6 +4,7 @@ from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, Provide
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from project.models import Clients, Projects
 import django.forms as forms
 import json
@@ -20,6 +21,9 @@ class EstimateForm(forms.ModelForm):
             'other_information'
 
         ]
+    def __init__(self,*args,**kwargs):
+        super(EstimateForm,self).__init__(*args,**kwargs)
+        self.fields['discount'].widget = forms.NumberInput(attrs={'min':0,'max':100})
 
 # Estimate views
 class EstimatesView(ListView):
@@ -47,23 +51,39 @@ def create_estimate(request):
     if request.method == 'POST':
         data = request.POST
         print(data)
+        print(data.getlist('items'))
+
         es = Estimate.objects.create(
             client=Clients.objects.get(pk=int(data['client'])),projects=Projects.objects.get(pk=int(data['projects'])),email=data['email'],
             taxes=Taxes.objects.get(pk=int(data['taxes'])),extimate_date=data.get('extimate_date'),expiry_date=data.get('expiry_date'),
             client_address=data.get('client_address'),billing_address=data['billing_address'],
-            discount=data['discount'],other_information=data['other_information']
+            discount=0 if data.get('discount') or data.get('discount')=='' else data.get('discount'),other_information=data['other_information']
         )
+        items = json.loads(data['items'])
+        for js in items:
 
-        for i in data.getlist('items'):
-            print(i)
-            js = json.loads(i)
             Items.objects.create(
                 item_name=js['item_name'],item_description=js['item_description'],
                 unit_cost=js['unit_cost'],quantity=js['quantity'],estimate=es
             )
 
+        am = 0
+        for i in es.items_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            print(amo,i.quantity,i.unit_cost)
+            i.total = amo
+            i.save()
+            am+=amo
+        amo = am
+        am = am*(1+(es.taxes.tax_percentage/100))
+        am = am-amo*(float(es.discount)/100)
+        es.amount = am
+
+        es.save()
+        return JsonResponse({'success':'success','pk':es.pk})
+
         # After creating estimate and it's associated Items, user your logic to calculate subtotal and save it.
-        
+
 
 class EstimateDetail(DetailView):
     model = Estimate
@@ -71,7 +91,7 @@ class EstimateDetail(DetailView):
 
 class EstimateDelete(DeleteView):
     model = Estimate
-    success_url = "/acct/estimates"
+    success_url = "/crm_accounts/estimates"
 
 
 class EstimateUpdate(UpdateView):

@@ -35,7 +35,7 @@
                             <tbody>
                                 {% for item in estimate %}
                                 <tr>
-                                    <td><a href="{% url 'crm_accounts:estimate_detail' item.id %}">EST-0001</a></td>
+                                    <td><a href="{% url 'crm_accounts:estimate_detail' item.id %}">{{item.estimate_id}}</a></td>
                                     <td>{{ item.client }}</td>
                                     <td>{{ item.extimate_date }}</td>
                                     <td>{{ item.expiry_date }}</td>
