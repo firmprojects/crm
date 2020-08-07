@@ -12,14 +12,14 @@
                     <h4 class="page-title">Holidays</h4>
                 </div>
                 <div class="col-sm-7 col-7 text-right m-b-30">
-                    <button type="button" class="btn btn-primary hol" data-toggle="modal" data-target="#HolidayForm" data-whatever="@mdo"><i
+                    <button type="button" class="btn btn-primary js-create" data-toggle="modal" data-url="{% url 'employees:holiday_create' %}"><i
                         class="fa fa-plus"></i>Add Holiday</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table class="table datatable table-striped custom-table m-b-0">
+                        <table class="table datatable table-striped custom-table m-b-0" id="holiday-table">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -29,19 +29,23 @@
                                 </tr>
                             </thead>
                             <tbody >
-                                {% for item in holidays %}
+                                {% for item in holiday %}
                                 <tr class="holiday-upcoming">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.date|date:"d M, Y" }}</td>
-                                      <td class="text-right">
-                                        <a type="button" class="btn btn-sm btn-primary" href="{% url 'employees:holiday_update' item.id %}">
-                                          <span class="fa fa-pencil"></span>
-                                        </a>
-                                        <a type="button" class="btn btn-sm btn-danger" href="{% url 'employees:delete_holiday' item.id %}">
-                                          <span class="fa fa-trash"></span>
-                                        </a>
-                                     </td>
+                                    <td style="width: 150px">
+                                        <button type="button"
+                                                class="btn btn-warning btn-sm js-update"
+                                                data-url="{% url 'employees:holiday_update' item.id %}">
+                                          <span class="glyphicon glyphicon-pencil"></span> Edit
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm js-delete"
+                                                data-url="{% url 'employees:delete_holiday' item.id %}">
+                                          <span class="glyphicon glyphicon-trash"></span> Delete
+                                        </button>
+                                      </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -53,61 +57,77 @@
     
     
     </div>
-
-    <!-- 
----------------------------------------------
-Add Holiday Form
--------------------------------------------- -->
-
-
-   <div class="modal fade" id="HolidayForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title text-center" id="exampleModalLabel">Add Holidays</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" id="holiday_form" data-url="{% url 'employees:holiday' %}">
-                    {% csrf_token %}
-                    <div class="form-group mx-3">
-                        {{ form.name|as_crispy_field }}
-                    </div>
-                    <div class="form-group mx-3">
-                        {{ form.date|as_crispy_field }}
-                    </div>
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary btn-lg holiday" type="button">Create Holiday</button>
-                    </div>
-                </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
 </div>
+
+<div class="modal fade" id="modal-form">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+      </div>
+    </div>
+  </div>
 {% endblock content%}
 
 
 {% block js %}
 <script>
-$('.holiday').click(function(){
-    var ser_form = $("#holiday_form").serialize()
-    
-    $.ajax({
-        url: $("holiday_form").data('url') ,
-        data:ser_form,
-        type: 'post',
-        success: function(res){
-            console.log(res.hols)
-        }
-    })
-    $("#holiday_form")[0].reset()
+$(function () {
+
+/* Functions */
+
+var loadForm = function () {
+  var btn = $(this);
+  $.ajax({
+    url: btn.attr("data-url"),
+    type: 'get',
+    dataType: 'json',
+    beforeSend: function () {
+      $("#modal-form .modal-content").html("");
+      $("#modal-form").modal("show");
+    },
+    success: function (data) {
+      $("#modal-form .modal-content").html(data.html_form);
+    }
+  });
+};
+
+var saveForm = function () {
+  var form = $(this);
+  $.ajax({
+    url: form.attr("action"),
+    data: form.serialize(),
+    type: form.attr("method"),
+    dataType: 'json',
+    success: function (data) {
+      if (data.form_is_valid) {
+        $("#holiday-table tbody").html(data.html_list);
+        $("#modal-form").modal("hide");
+      }
+      else {
+        $("#modal-form .modal-content").html(data.html_form);
+      }
+    }
+  });
+  return false;
+};
 
 
-})
+/* Binding */
+
+// Create book
+$(".js-create").click(loadForm);
+$("#modal-form").on("submit", ".js-create-form", saveForm);
+
+// Update book
+$("#holiday-table").on("click", ".js-update", loadForm);
+$("#modal-form").on("submit", ".js-update-form", saveForm);
+
+// Delete book
+$("#holiday-table").on("click", ".js-delete", loadForm);
+$("#modal-form").on("submit", ".js-delete-form", saveForm);
+
+});
+
 </script>
     
 {% endblock js %}

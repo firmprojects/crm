@@ -6,10 +6,6 @@ app_name = 'employees'
 
 urlpatterns = [
     path('', StaffCreateView.as_view(), name='staff'),
-#     path('<id>/update', edit_employee, name='employees_update'),
-    path('holiday/', HolidayList.as_view(), name='holiday'),
-    path('holiday/<int:pk>/update', HolidayUpdate.as_view(), name='holiday_update'),
-    path('holiday/<int:pk>/delete', HolidayDelete.as_view(), name='delete_holiday'),
     path('department/', CreateDepartment.as_view(), name='departments'),
     path('department/<int:pk>/update',
          UpdateDepartment.as_view(), name='update_department'),
@@ -39,6 +35,12 @@ urlpatterns = [
 
     path('get_attendance/',getAttendance,name='getAttendance'),
 
-    path('staff_ac',StaffAC.as_view(),name='staff_ac')
+    path('staff_ac',StaffAC.as_view(),name='staff_ac'),
+
+    path('holiday/', holiday_list, name='holiday'),
+    path('create/', holiday_create, name='holiday_create'),
+    path('<pk>/update/', holiday_update, name='holiday_update'),
+    path('<pk>/delete/', holiday_delete, name='delete_holiday'),
+
 
 ]

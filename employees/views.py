@@ -13,6 +13,7 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from users.models import CustomUser
 from django.forms.models import model_to_dict
+from django.template.loader import render_to_string
 
 from dal import autocomplete
 
@@ -27,20 +28,74 @@ class StaffCreateView(SignupView):
 
 
 
-class HolidayList(View):
-    def get(self, request):
+# class HolidayList(View):
+#     def get(self, request):
+#         form = HolidaysForm()
+#         holidays = Holidays.objects.all()
+#         return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
+
+
+#     def post(self, request):
+#         if request.method == 'POST':
+#             form = HolidaysForm(request.POST)
+#             if form.is_valid():
+#                 new_holiday = form.save()
+#                 return JsonResponse({'hols':model_to_dict(new_holiday)})
+
+
+def holiday_list(request):
+    holiday = Holidays.objects.all()
+    return render(request, 'employees/holiday.html', {'holiday': holiday})
+
+
+def save_holiday_form(request, form, template_name):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            data['form_is_valid'] = True
+            holiday = Holidays.objects.all()
+            data['html_holiday_list'] = render_to_string('employees/modals/partial_list.html', {
+                'holiday': holiday
+            })
+        else:
+            data['form_is_valid'] = False
+    context = {'form': form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+
+def holiday_create(request):
+    if request.method == 'POST':
+        form = HolidaysForm(request.POST)
+    else:
         form = HolidaysForm()
-        holidays = Holidays.objects.all()
-        return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
+    return save_holiday_form(request, form, 'employees/modals/partial_create.html')
 
 
-    def post(self, request):
-        if request.method == 'POST':
-            form = HolidaysForm(request.POST)
-            if form.is_valid():
-                new_holiday = form.save()
-                return JsonResponse({'hols':model_to_dict(new_holiday)})
+def holiday_update(request, pk):
+    holiday = get_object_or_404(Holidays, pk=pk)
+    if request.method == 'POST':
+        form = HolidaysForm(request.POST, instance=holiday)
+    else:
+        form = HolidaysForm(instance=holiday)
+    return save_holiday_form(request, form, 'employees/modals/partial_update.html')
 
+
+def holiday_delete(request, pk):
+    holiday = get_object_or_404(Holidays, pk=pk)
+    data = dict()
+    if request.method == 'POST':
+        holiday.delete()
+        data['form_is_valid'] = True
+        holiday = Holidays.objects.all()
+        data['html_list'] = render_to_string('employees/modals/partial_list.html', {
+            'holiday': holiday
+        })
+    else:
+        context = {'holiday': holiday}
+        data['html_form'] = render_to_string('employees/modals/partial_delete.html', context, request=request)
+    return JsonResponse(data)
 
 
 
@@ -57,14 +112,14 @@ class HolidayList(View):
 #         return context
 
 
-class HolidayUpdate(UpdateView):
-    model = Holidays
-    fields = ['name', 'date']
+# class HolidayUpdate(UpdateView):
+#     model = Holidays
+#     fields = ['name', 'date']
 
 
-class HolidayDelete(DeleteView):
-    model = Holidays
-    success_url = '/employees/holiday'
+# class HolidayDelete(DeleteView):
+#     model = Holidays
+#     success_url = '/employees/holiday'
 
 
 class CreateDepartment(CreateView):
