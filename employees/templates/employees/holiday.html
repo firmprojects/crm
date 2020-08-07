@@ -31,18 +31,18 @@
                             <tbody >
                                 {% for item in holiday %}
                                 <tr class="holiday-upcoming">
-                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.pk }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.date|date:"d M, Y" }}</td>
                                     <td style="width: 150px">
                                         <button type="button"
                                                 class="btn btn-warning btn-sm js-update"
-                                                data-url="{% url 'employees:holiday_update' item.id %}">
+                                                data-url="{% url 'employees:holiday_update' item.pk %}">
                                           <span class="glyphicon glyphicon-pencil"></span> Edit
                                         </button>
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm js-delete"
-                                                data-url="{% url 'employees:delete_holiday' item.id %}">
+                                        <button type="button" onclick="delete_holiday(this)"
+                                                class="btn btn-danger btn-sm"
+                                                data-url="{% url 'employees:delete_holiday' item.pk %}">
                                           <span class="glyphicon glyphicon-trash"></span> Delete
                                         </button>
                                       </td>
@@ -54,8 +54,8 @@
                 </div>
             </div>
         </div>
-    
-    
+
+
     </div>
 </div>
 
@@ -71,64 +71,78 @@
 
 {% block js %}
 <script>
-$(function () {
-
-/* Functions */
-
-var loadForm = function () {
-  var btn = $(this);
-  $.ajax({
-    url: btn.attr("data-url"),
-    type: 'get',
-    dataType: 'json',
-    beforeSend: function () {
-      $("#modal-form .modal-content").html("");
-      $("#modal-form").modal("show");
-    },
-    success: function (data) {
-      $("#modal-form .modal-content").html(data.html_form);
-    }
-  });
-};
-
-var saveForm = function () {
-  var form = $(this);
-  $.ajax({
-    url: form.attr("action"),
-    data: form.serialize(),
-    type: form.attr("method"),
-    dataType: 'json',
-    success: function (data) {
-      if (data.form_is_valid) {
-        $("#holiday-table tbody").html(data.html_list);
-        $("#modal-form").modal("hide");
+  function delete_holiday(ele){
+    $.ajax({
+      url: $(ele).data("url"),
+      type: 'POST',
+      dataType: 'json',
+      data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+      // beforeSend: function () {
+      //   $("#modal-form .modal-content").html("");
+      //   $("#modal-form").modal("show");
+      // },
+      success: function (data) {
+        // $("#modal-form .modal-content").html(data.html_form);
+        location.reload()
       }
-      else {
-        $("#modal-form .modal-content").html(data.html_form);
-      }
-    }
+    });
+  }
+  $(function () {
+
+    var loadForm = function () {
+      var btn = $(this);
+      $.ajax({
+        url: btn.data("url"),
+        // type: 'POST',
+        dataType: 'json',
+        // data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+        beforeSend: function () {
+          $("#modal-form .modal-content").html("");
+          $("#modal-form").modal("show");
+        },
+        success: function (data) {
+          $("#modal-form .modal-content").html(data.html_form);
+        }
+      });
+    };
+
+    var saveForm = function () {
+      var form = $(this);
+      $.ajax({
+        url: form.attr("action"),
+        data: form.serialize(),
+        type: form.attr("method"),
+        dataType: 'json',
+        success: function (data) {
+          if (data.form_is_valid) {
+            $("#holiday-table tbody").html(data.html_list);
+            $("#modal-form").modal("hide");
+          }
+          else {
+            $("#modal-form .modal-content").html(data.html_form);
+          }
+        }
+      });
+      return false;
+    };
+
+
+    /* Binding */
+
+    // Create book
+    $(".js-create").click(loadForm);
+    $("#modal-form").on("submit", ".js-create-form", saveForm);
+
+    // Update book
+    $("#holiday-table").on("click", ".js-update", loadForm);
+    $("#modal-form").on("submit", ".js-update-form", saveForm);
+
+    // Delete book
+    $("#holiday-table").on("click", ".js-delete", loadForm);
+    $("#modal-form").on("submit", ".js-delete-form", saveForm);
+
   });
-  return false;
-};
-
-
-/* Binding */
-
-// Create book
-$(".js-create").click(loadForm);
-$("#modal-form").on("submit", ".js-create-form", saveForm);
-
-// Update book
-$("#holiday-table").on("click", ".js-update", loadForm);
-$("#modal-form").on("submit", ".js-update-form", saveForm);
-
-// Delete book
-$("#holiday-table").on("click", ".js-delete", loadForm);
-$("#modal-form").on("submit", ".js-delete-form", saveForm);
-
-});
 
 </script>
-    
+
 {% endblock js %}
-    
