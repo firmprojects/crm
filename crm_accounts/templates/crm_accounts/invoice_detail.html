@@ -1,6 +1,86 @@
 {% extends 'backend/base.html'%}
 {% load static %}
 {% load humanize %}
+{% block js %}
+<script type="text/javascript" src='/static/js/pdfMake.js'></script>
+<script type="text/javascript" src="{% static 'js/fonts.js' %}"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<script type="text/javascript">
+  function Export() {
+    let items = [['#','ITEM','DESCRIPTION','UNIT COST','QUANTITY','TOTAL']]
+    $.each($('.item_body').find('tr'),function () {
+      let qu = []
+      $(this).find('td').map((i,item)=>{
+        // console.log(item);
+        qu.push($(item).html())
+      })
+      items.push(qu)
+    })
+    console.log(items);
+
+    var docDefinition = {
+      content: [
+        {
+          stack:[
+            'Estimate to: {{ object.client_address }}',
+            'Create Date: {{ object.extimate_date }}',
+            'Expiry date: {{ object.expiry_date }}',
+
+          ],
+          style:'style'
+        },
+        {
+    			style: 'tableExample',
+    			table: {
+    				body: items
+    			},
+
+  		  },
+        {
+          ul: [
+  				'Subtotal: '+$("#subtotal_").html(),
+          'Tax ({{object.taxes.tax_percentage}}%): '+$("#taxes_").html(),
+          'Discount ({{object.discount}}%): '+$("#discount_").html(),
+          'Total: '+$("#amount_").html(),
+          ],
+          style:'items'
+
+        },
+        {
+          stack:[
+            'Other info: {{object.other_information}}',
+          ],
+          style:'items'
+        }
+      ],
+      styles: {
+        header: {
+          bold: true,
+          fontSize: 15,
+        },
+        items:{
+          marginTop:10,
+        },
+        style:{
+          marginBottom:10
+        }
+      },
+      defaultStyle: {
+        fontSize: 12
+      }
+    };
+    pdfMake.createPdf(docDefinition).download()
+    return false;
+  }
+
+  function divPrint() {
+      var nw = window.open();
+      nw.document.write($(".div_print").html());
+      nw.print();
+      return false;
+  }
+</script>
+{% endblock %}
 
 
 {% block content %}
@@ -68,7 +148,7 @@
                                         <th>TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="item_body">
                                     <tr>
                                         <td>{{ object.id}}</td>
                                         <td>{{ object.item_name}}</td>
@@ -119,7 +199,6 @@
                 </div>
             </div>
         </div>
-        {% include 'notifications.html' %}
     </div>
 
 
