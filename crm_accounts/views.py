@@ -26,7 +26,7 @@ class EstimateForm(forms.ModelForm):
         ]
     def __init__(self,*args,**kwargs):
         super(EstimateForm,self).__init__(*args,**kwargs)
-        self.fields['discount'].widget = forms.NumberInput(attrs={'min':0,'max':100})
+        self.fields['discount'].widget = forms.NumberInput(attrs={'min':0,'max':100,'step':0.01})
 
 # Estimate views
 class EstimatesView(ListView):

@@ -75,7 +75,12 @@
 
   function divPrint() {
       var nw = window.open();
-      nw.document.write($(".div_print").html());
+      nw.document.write(
+      `
+      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+      ${$(".div_print").html()}
+      `
+      );
       nw.print();
       return false;
   }

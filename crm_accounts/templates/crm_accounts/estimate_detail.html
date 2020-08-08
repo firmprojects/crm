@@ -78,7 +78,18 @@
 
   function divPrint() {
       var nw = window.open();
-      nw.document.write($(".div_print").html());
+      nw.document.write(
+      `
+      <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+        <div class="main-wrapper">
+          <div class="row">
+            ${$(".div_print").html()}
+          </div>
+        </div>
+      `
+      );
       nw.print();
       return false;
   }
