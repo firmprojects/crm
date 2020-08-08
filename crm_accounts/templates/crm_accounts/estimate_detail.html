@@ -4,6 +4,86 @@
 
 
 {% block content %}
+{% block js %}
+<script type="text/javascript" src='/static/js/pdfMake.js'></script>
+<script type="text/javascript" src="{% static 'js/fonts.js' %}"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<script type="text/javascript">
+  function Export() {
+    let items = [['#','ITEM','DESCRIPTION','UNIT COST','QUANTITY','TOTAL']]
+    $.each($('.item_body').find('tr'),function () {
+      let qu = []
+      $(this).find('td').map((i,item)=>{
+        // console.log(item);
+        qu.push($(item).html())
+      })
+      items.push(qu)
+    })
+    console.log(items);
+
+    var docDefinition = {
+      content: [
+        {
+          stack:[
+            'Estimate to: {{ object.client_address }}',
+            'Create Date: {{ object.extimate_date }}',
+            'Expiry date: {{ object.expiry_date }}',
+
+          ],
+          style:'style'
+        },
+        {
+    			style: 'tableExample',
+    			table: {
+    				body: items
+    			},
+
+  		  },
+        {
+          ul: [
+  				'Subtotal: '+$("#subtotal_").html(),
+          'Tax ({{object.taxes.tax_percentage}}%): '+$("#taxes_").html(),
+          'Discount ({{object.discount}}%): '+$("#discount_").html(),
+          'Total: '+$("#amount_").html(),
+          ],
+          style:'items'
+
+        },
+        {
+          stack:[
+            'Other info: {{object.other_information}}',
+          ],
+          style:'items'
+        }
+      ],
+      styles: {
+        header: {
+          bold: true,
+          fontSize: 15,
+        },
+        items:{
+          marginTop:10,
+        },
+        style:{
+          marginBottom:10
+        }
+      },
+      defaultStyle: {
+        fontSize: 12
+      }
+    };
+    pdfMake.createPdf(docDefinition).download()
+    return false;
+  }
+
+  function divPrint() {
+      var nw = window.open();
+      nw.document.write($(".div_print").html());
+      nw.print();
+      return false;
+  }
+</script>
+{% endblock %}
 <div class="main-wrapper">
     {% include 'backend/navbar.html' %}
     <div class="sidebar" id="sidebar">
@@ -18,13 +98,13 @@
                 </div>
                 <div class="col-sm-7 col-8 text-right m-b-30">
                     <div class="btn-group btn-group-sm">
-                        <button class="btn btn-white">CSV</button>
-                        <button class="btn btn-white">PDF</button>
-                        <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
+                        <!-- <button class="btn btn-white">CSV</button> -->
+                        <button class="btn btn-white" onclick="Export()">PDF</button>
+                        <button class="btn btn-white" onclick="divPrint()"><i class="fa fa-print fa-lg"></i> Print</button>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row div_print">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
@@ -68,7 +148,7 @@
                                         <th>TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="item_body">
                                   <!-- {{object.items_set.all}} -->
                                   {% for item in object.items_set.all %}
                                     <tr>
@@ -94,20 +174,20 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>Subtotal:</th>
-                                                            <td class="text-right">${{object.get_total}}</td>
+                                                            <td class="text-right" id='subtotal_'>${{object.get_total}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
-                                                            <td class="text-right">${{object.get_taxes}}</td>
+                                                            <td class="text-right" id='taxes_'>${{object.get_taxes}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
-                                                            <td class="text-right">${{object.get_dis}}</td>
+                                                            <td class="text-right" id='discount_'>${{object.get_dis}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Total:</th>
                                                             <td class="text-right text-primary">
-                                                                <h5>${{object.amount}}</h5>
+                                                                <h5 id='amount_'>${{object.amount}}</h5>
                                                             </td>
                                                         </tr>
                                                     </tbody>
