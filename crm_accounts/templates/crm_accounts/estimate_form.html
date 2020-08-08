@@ -87,7 +87,23 @@
 
       return false;
     })
+
+    $(".item_unit_cost").keyup(function () {
+      let item_unit = parseFloat($(this).val()).toFixed(2)
+      let item_quantity = parseFloat($(this).parent().parent().find(".item_quantity").val()).toFixed(2)
+      $(this).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
+      cal_amount()
+
+    })
+    $(".item_quantity").keyup(function () {
+      let item_unit = parseFloat($(this).val()).toFixed(2)
+      let item_quantity = parseFloat($(this).parent().parent().find(".item_unit_cost").val()).toFixed(2)
+      $(this).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
+      cal_amount()
+    })
+
   })
+
   function add_item() {
     let item=
     `
@@ -100,13 +116,13 @@
             <input class="form-control item_description" type="text" style="min-width:150px">
         </td>
         <td>
-            <input class="form-control item_unit_cost" style="width:100px" type="number">
+            <input class="form-control item_unit_cost" onkeyup="change_amm_item(this)" style="width:100px" type="number">
         </td>
         <td>
-            <input class="form-control item_quantity" style="width:80px" type="number">
+            <input class="form-control item_quantity" onkeyup="change_amm_qu(this)" style="width:80px" type="number">
         </td>
         <td>
-            <input class="form-control" readonly="" style="width:120px"
+            <input class="form-control amount" readonly="" style="width:120px"
                 type="number">
         </td>
         <td><button type="button" onclick="remove_item(this)" class="btn text-danger font-18"
@@ -119,8 +135,30 @@
   }
 
   function remove_item(ele) {
-
     $(ele).parent().parent().remove()
+  }
+  function change_amm_item(ele) {
+    let item_unit = parseFloat($(ele).val()).toFixed(2)
+    let item_quantity = parseFloat($(ele).parent().parent().find(".item_quantity").val()).toFixed(2)
+    $(ele).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
+    cal_amount()
+  }
+  function change_amm_qu(ele) {
+
+    let item_unit = parseFloat($(ele).val()).toFixed(2)
+    let item_quantity = parseFloat($(ele).parent().parent().find(".item_unit_cost").val()).toFixed(2)
+    $(ele).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
+    cal_amount()
+  }
+  function cal_amount() {
+    var am = parseFloat(0);
+    $(".amount").map((i,item)=>{
+      let val = $(item).val()
+      if(val !== null && val!== undefined && val!==''){
+        am+=parseFloat(val)
+      }
+    })
+    $(".total_amount").val(am)
   }
 </script>
 {% endblock %}
@@ -207,13 +245,13 @@
                                                     <input class="form-control item_description" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_unit_cost" style="width:100px" type="number">
+                                                    <input class="form-control item_unit_cost" onkeyup="change_amm_item(this)" style="width:100px" type="number">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_quantity" style="width:80px" type="number">
+                                                    <input class="form-control item_quantity" onkeyup="change_amm_qu(this)" style="width:80px" type="number">
                                                 </td>
                                                 <td>
-                                                  <input class="form-control" readonly="" style="width:120px"
+                                                  <input class="form-control amount" readonly="" style="width:120px"
                                                       type="number">
                                                 </td>
                                                 <td><button onclick="add_item()" type="button" class="btn text-success font-18"
@@ -228,13 +266,13 @@
                                                     <input class="form-control item_description" type="text" style="min-width:150px">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_unit_cost" style="width:100px" type="number">
+                                                    <input class="form-control item_unit_cost" onkeyup="change_amm_item(this)" style="width:100px" type="number">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control item_quantity" style="width:80px" type="number">
+                                                    <input class="form-control item_quantity" onkeyup="change_amm_qu(this)" style="width:80px" type="number">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" readonly="" style="width:120px"
+                                                    <input class="form-control amount" readonly="" style="width:120px"
                                                         type="number">
                                                 </td>
                                                 <td><button type="button" onclick="remove_item(this)" class="btn text-danger font-18"
@@ -252,8 +290,9 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td class="text-right">Total</td>
-                                                <td style="text-align: right; padding-right: 30px;width: 230px">0</td>
+                                                <td class="text-right">Total:</td>
+                                                <td><input type="number" class="form-control total_amount" readonly value="0"></td>
+
                                             </tr>
                                             <tr>
                                                 <td colspan="5" class="text-right">Tax</td>
@@ -276,7 +315,7 @@
                                                 </td>
                                                 <td
                                                     style="text-align: right; padding-right: 30px; font-weight: bold; font-size: 16px;width: 230px">
-                                                    $ 0.00
+                                                    --
                                                 </td>
                                             </tr>
                                         </tbody>

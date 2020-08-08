@@ -74,21 +74,21 @@ class Estimate(models.Model):
         for i in self.items_set.all():
             amo = int(i.unit_cost*i.quantity)
             am+=amo
-        return am
+        return round(am,2)
 
     def get_taxes(self):
         am = 0
         for i in self.items_set.all():
             amo = int(i.unit_cost*i.quantity)
             am+=amo
-        return am*(self.taxes.tax_percentage/100)
+        return round(am*(self.taxes.tax_percentage/100),2)
 
     def get_dis(self):
         am = 0
         for i in self.items_set.all():
             amo = int(i.unit_cost*i.quantity)
             am+=amo
-        return am*float(self.discount)/100
+        return round(am*float(self.discount)/100,2)
 
 
 
