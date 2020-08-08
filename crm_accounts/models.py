@@ -165,25 +165,26 @@ class ProvidentFund(models.Model):
 
 class Expenses(models.Model):
     PAYMENT_METHOD = (
-        ('ca', 'Cash'),
-        ('tf', 'Tranfer'),
-        ('bd', 'Bank Deposit'),
-        ('ch', 'Cheque'),
-        ('ot', 'Ot'),
+        ('cash', 'Cash'),
+        ('transfer', 'Tranfer'),
+        ('bank deposit', 'Bank Deposit'),
+        ('cheque', 'Cheque'),
+        ('others', 'Others'),
     )
 
     EXPENSES_STATUS = (
-        ('pd', 'Pending'),
-        ('ap', 'Approved'),
+        ('inspect', 'Inspect'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
     )
     item_name = models.CharField(max_length=200)
     purchase_from = models.CharField(max_length=200)
-    purchase_date = models.DateTimeField()
+    purchase_date = models.DateField(blank=True)
     purchase_by = models.CharField(max_length=200)
     amount = models.FloatField()
-    paid_by = models.CharField(max_length=2, choices=PAYMENT_METHOD)
-    status = models.CharField(max_length=2, choices=EXPENSES_STATUS)
-    attachement = models.FileField()
+    paid_by = models.CharField(max_length=20, choices=PAYMENT_METHOD)
+    status = models.CharField(max_length=20, choices=EXPENSES_STATUS)
+    attachement = models.FileField(blank=True)
 
     def __str__(self):
         return self.item_name

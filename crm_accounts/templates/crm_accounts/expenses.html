@@ -7,6 +7,11 @@
 <div class="main-wrapper">
     <div class="page-wrapper">
         <div class="content container-fluid">
+            {% if messages %}
+            {% for message in messages %}
+            <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+            {% endif %}
             <div class="row">
                 <div class="col-sm-8 col-5">
                     <h4 class="page-title">Expenses</h4>
@@ -22,7 +27,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table id="exp" class="table table-striped custom-table m-b-0 datatable">
+                        <table id="dtable" class="table table-striped custom-table m-b-0">
                             <thead>
                                 <tr>
                                     <th>Item</th>
@@ -49,7 +54,7 @@
                                     <td>{{ item.paid_by }}</td>
                                      <td class="text-center">
                                         <div class="dropdown action-label">
-                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle status_change" status_id="{{item.pk}}" data-toggle="dropdown" aria-expanded="false">
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle status_change" status_id="{{item.id}}" data-toggle="dropdown" aria-expanded="false">
                                               {% if item.status == 'inspect' %}
                                                 <i class="fa fa-dot-circle-o text-danger"></i> Inspect
                                               {% elif item.status == 'approved' %}
@@ -71,10 +76,9 @@
                                                 aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item" href="#" title="Edit" data-toggle="modal"
-                                                    data-target="#edit_expense"><i class="fa fa-pencil m-r-5"></i>
+                                                    data-target="#expensesUpdateForm"><i class="fa fa-pencil m-r-5"></i>
                                                     Edit</a>
-                                                <a class="dropdown-item" href="#" title="Delete" data-toggle="modal"
-                                                    data-target="#delete_expense"><i class="fa fa-trash-o m-r-5"></i>
+                                                <a class="dropdown-item" href="#" data-key="{{ item.id}}" title="Delete" id="delete_expense"><i class="fa fa-trash-o m-r-5"></i>
                                                     Delete</a>
                                             </div>
                                         </div>
@@ -91,126 +95,32 @@
             </div>
         </div>
         {% include 'crm_accounts/modalForms/addExpensesForm.html' %}
+        {% include 'crm_accounts/modalForms/updateExpensesForm.html' %}
     </div>
-    <div id="edit_expense" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content modal-lg">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Expense</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Item Name</label>
-                                    <input class="form-control" value="Dell Laptop" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Purchase From</label>
-                                    <input class="form-control" value="Amazon" type="text">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Purchase Date</label>
-                                    <div class="cal-icon">
-                                        <input class="form-control datetimepicker" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Purchased By </label>
-                                    <select class="select">
-                                        <option>Daniel Porter</option>
-                                        <option>Roger Dixon</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Amount</label>
-                                    <input placeholder="$50" class="form-control" value="$10000" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Paid By</label>
-                                    <select class="select">
-                                        <option>Cash</option>
-                                        <option>Cheque</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <select class="select">
-                                        <option>Pending</option>
-                                        <option>Approved</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Attachments</label>
-                                    <input class="form-control" type="file">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="attach-files">
-                            <ul>
-                                <li>
-                                    <img src="assets/img/user.jpg" alt="">
-                                    <a href="#" class="fa fa-close file-remove"></a>
-                                </li>
-                                <li>
-                                    <img src="assets/img/user.jpg" alt="">
-                                    <a href="#" class="fa fa-close file-remove"></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="m-t-20 text-center">
-                            <button class="btn btn-primary btn-lg">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
+    
+    <div class="modal fade del-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center" id="exampleModalLabel">Removed Expenses</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-        </div>
-    </div>
-    <div id="delete_expense" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content modal-md">
-                <div class="modal-header">
-                    <h4 class="modal-title">Delete Expense</h4>
-                </div>
-                <div class="modal-body card-box">
-                    <p>Are you sure want to delete this expense?</p>
+            <div class="modal-body">
+                <p>Are you sure want to delete this expense?</p>
                     <div class="m-t-20 text-left">
                         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
                         <button type="button" class="btn btn-danger exp_del">Delete</button>
-                    </div>
-                </div>
             </div>
+          </div>
         </div>
-    </div>
-
-    <div class="sidebar-overlay" data-reff=""></div>
+      </div>
 </div>
 {% endblock content%}
 {% block js %}
 <script>
- var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+//  var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
  function change_status(pr,ele) {
         $.ajax({
           url:'/crm_accounts/change_status/',
@@ -227,7 +137,7 @@
               $(ele).parent().siblings(".status_change").html('<i class="fa fa-dot-circle-o text-warning"></i> Approved')
             }
             else{
-              $(ele).parent().siblings(".status_change").html('<i class="fa fa-dot-circle-o text-success"></i> Reject')
+              $(ele).parent().siblings(".status_change").html('<i class="fa fa-dot-circle-o text-success"></i> Rejected')
             }
 
           }
@@ -235,28 +145,9 @@
 
       }
 
-$('.exp_del').click(function(){
-    var dataID = $('.record').data('id')
-    console.log(dataID)
-   $.ajax({
-       url: 'crm_accounts/expenses/' + dataID + '/delete/',
-       data:{
-           id: dataID,
-           
-       }
 
-   })
-});
-</script>
 
-<!-- <script>
-
-    $(document).ready(function () {
-        table = $('#exp').DataTable({
-            paging: false
-        });
-
-        $('#exp').DataTable({
+      $('#dtable').DataTable( {
             dom: 'Bfrtip',
             buttons: [
                 'copyHtml5',
@@ -264,8 +155,16 @@ $('.exp_del').click(function(){
                 'csvHtml5',
                 'pdfHtml5'
             ]
-        })
-    });
+        } );
 
-</script> -->
+
+        $("#delete_expense").on('click', function(){
+            let id = $(this).attr("data-key");
+            $('.del-modal').modal('show');
+            $(".exp_del").on('click', function(){
+               window.location.href = `/crm_accounts/expenses/${id}/delete`
+            });
+        });
+</script>
+
 {% endblock %}

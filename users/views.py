@@ -17,6 +17,7 @@ import datetime
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 from users.decorators import employee_check, client_check
+from django.contrib import messages
 
 
 class AssetView(View):
@@ -31,6 +32,11 @@ class AssetView(View):
             print("Form errors", form.errors)
             if form.is_valid():
                 form.save()
+                messages.success(request, "Asset was successfully created")
+
+            else:
+                form = AssetForm()
+                messages.error(request, "Asset was not created")
                 
             return HttpResponseRedirect(reverse('users:assets'))
 

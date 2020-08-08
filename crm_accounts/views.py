@@ -1,13 +1,16 @@
 from dal import autocomplete
 from django.shortcuts import render, get_object_or_404
 from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses,Items
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.urls import reverse_lazy, reverse
+from django.http import JsonResponse, HttpResponseRedirect
 from project.models import Clients, Projects
-import django.forms as forms
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 import json
+from .forms import ExpensesForm
+from django import forms
 
 
 class EstimateForm(forms.ModelForm):
@@ -156,11 +159,48 @@ class ProvidentFundView(ListView):
               'employee_share', 'company_share', 'created', 'description']
 
 
-class ExpensesView(ListView):
-    model = Expenses
-    template_name = 'crm_accounts/expenses.html'
-    fields = ['item_name', 'purchase_from', 'purchase_date', 'purchase_by',
-              'amount', 'paid_by', 'status', 'attachement']
+class ExpensesView(View):
+    def get(self, request):
+        expenses = Expenses.objects.all()
+        form = ExpensesForm()
+        return render(request, 'crm_accounts/expenses.html', {'form': form, 'expenses':expenses})
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = ExpensesForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Expense was successfully created")
+            return HttpResponseRedirect(reverse('crm_accounts:expenses'))
+
+
+
+class DeleteExpense(View):
+    def get(self, request, id):
+        expense = Expenses.objects.get(id=id)
+        expense.delete()
+        messages.success(request, "Expense was successfully removed")
+        return HttpResponseRedirect(reverse('crm_accounts:expenses'))
+
+
+def update_expense(request, pk):
+    expense = get_object_or_404(Expenses, pk=pk)
+    if request.method == 'POST':
+        form = ExpensesForm(request.POST, instance=expense)
+        if form.is_valid():
+            form.save()
+        else:
+            form = ExpensesForm(instance=expense)
+        return (request, 'crm_accounts/expenses.html', {'form':form})
+
+
+def change_status(request):
+    if request.method == 'POST':
+        expenses = Expenses.objects.get(pk = request.POST['pk'])
+        expenses.status = request.POST['status']
+        expenses.save()
+        return JsonResponse({"status":expenses.status})
+    
 
 
 

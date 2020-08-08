@@ -14,6 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from users.models import CustomUser
 from django.forms.models import model_to_dict
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 from dal import autocomplete
 
@@ -48,7 +49,7 @@ def holiday_list(request):
     return render(request, 'employees/holiday.html', {'holiday': holiday})
 
 
-def save_holiday_form(request, form, template_name):
+def save_form(request, form, template_name):
     data = dict()
     if request.method == 'POST':
         if form.is_valid():
@@ -70,7 +71,7 @@ def holiday_create(request):
         form = HolidaysForm(request.POST)
     else:
         form = HolidaysForm()
-    return save_holiday_form(request, form, 'employees/modals/partial_create.html')
+    return save_form(request, form, 'employees/modals/partial_create.html')
 
 
 def holiday_update(request, pk):
@@ -79,7 +80,7 @@ def holiday_update(request, pk):
         form = HolidaysForm(request.POST, instance=holiday)
     else:
         form = HolidaysForm(instance=holiday)
-    return save_holiday_form(request, form, 'employees/modals/partial_update.html')
+    return save_form(request, form, 'employees/modals/partial_update.html')
 
 
 def holiday_delete(request, pk):

@@ -11,5 +11,5 @@ class ExpensesForm(forms.ModelForm):
         fields = ['item_name', 'purchase_from', 'purchase_date',
                   'purchase_by', 'amount', 'paid_by', 'status', 'attachement' ]
         widgets = {
-            'purchase_date': DateInput(format='%Y-%m-%d'),
+            'purchase_date': DateInput(format='%m-%d-%Y'),
         }

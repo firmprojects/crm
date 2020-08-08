@@ -1769,3 +1769,10 @@ blockquote p {font-style: italic;font-weight: 400;}
     padding: 20px;
     background-color: white;
 }
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+	border-color: #f5c6cb;
+
+}
