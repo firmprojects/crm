@@ -75,10 +75,9 @@
                                             <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
                                                 aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#" title="Edit" data-toggle="modal"
-                                                    data-target="#expensesUpdateForm"><i class="fa fa-pencil m-r-5"></i>
+                                                <a class="dropdown-item" data-update="{{ item.id }}" id="expensesUpdateForm"><i class="fa fa-pencil m-r-5"></i>
                                                     Edit</a>
-                                                <a class="dropdown-item" href="#" data-key="{{ item.id}}" title="Delete" id="delete_expense"><i class="fa fa-trash-o m-r-5"></i>
+                                                <a class="dropdown-item" href="#" data-key="{{ item.id}}"  id="delete_expense"><i class="fa fa-trash-o m-r-5"></i>
                                                     Delete</a>
                                             </div>
                                         </div>
@@ -99,23 +98,23 @@
     </div>
     
     <div class="modal fade del-modal" tabindex="-1" role="dialog"  aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title text-center" id="exampleModalLabel">Removed Expenses</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure want to delete this expense?</p>
-                    <div class="m-t-20 text-left">
-                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="button" class="btn btn-danger exp_del">Delete</button>
-            </div>
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title text-center" id="exampleModalLabel">Removed Expenses</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <p>Are you sure want to delete this expense?</p>
+                  <div class="m-t-20 text-left">
+                      <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                      <button type="button" class="btn btn-danger exp_del">Delete</button>
           </div>
         </div>
       </div>
+    </div>
 </div>
 {% endblock content%}
 {% block js %}
@@ -165,6 +164,13 @@
                window.location.href = `/crm_accounts/expenses/${id}/delete`
             });
         });
+
+        $("#expensesUpdateForm").on('click', function(){
+            $('.editForm').modal('show');
+
+        });
+
+
 </script>
 
 {% endblock %}

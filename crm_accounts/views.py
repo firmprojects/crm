@@ -189,9 +189,9 @@ def update_expense(request, pk):
         form = ExpensesForm(request.POST, instance=expense)
         if form.is_valid():
             form.save()
-        else:
-            form = ExpensesForm(instance=expense)
-        return (request, 'crm_accounts/expenses.html', {'form':form})
+    else:
+        form = ExpensesForm(instance=expense)
+        return render(request, 'crm_accounts/updateExpensesForm.html', {'form':form})
 
 
 def change_status(request):

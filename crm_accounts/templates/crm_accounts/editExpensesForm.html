@@ -14,7 +14,7 @@ Leave Request Form
               </button>
             </div>
             <div class="modal-body">
-                <form method="POST" id="updateForm" action="{% url 'crm_accounts:expenses_update' form.instance.pk %}">
+                <form method="POST" action="{% url 'crm_accounts:expenses_update' form.instance.pk %}">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
