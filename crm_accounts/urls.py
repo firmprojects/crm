@@ -19,10 +19,7 @@ from .views import (
     TaxDelete,
     ClientAutocompletesView,
     ProjectAutocompletesView,
-    create_estimate,
-    change_status,
-    DeleteExpense,
-    update_expense
+    create_estimate,get_tax
 )
 
 
@@ -45,14 +42,12 @@ urlpatterns = [
     path('payments/', PaymentsView.as_view(), name='payments'),
     path('providentfund/', ProvidentFundView.as_view(), name='providentfund'),
     path('expenses/', ExpensesView.as_view(), name='expenses'),
-    path('expenses/<id>/delete', DeleteExpense.as_view(), name='expenses-delete'),
-     path('expenses/<pk>/update', update_expense, name='expenses_update'),
     path('taxes/', CreateTaxes.as_view(), name='taxes'),
     path('taxes/<int:pk>/update', TaxUpdate.as_view(), name='edit_tax'),
     path('taxes/<int:pk>/delete', TaxDelete.as_view(), name='delete_tax'),
     path('client_autocomplete/', ClientAutocompletesView.as_view(), name="client-autocomplete"),
     path('project_autocomplete/', ProjectAutocompletesView.as_view(), name="project-autocomplete"),
     path('create_estimates_ajax/',create_estimate),
-    path('change_status/',change_status, name='change_status'),
+    path('get_tax/<pk>/',get_tax,name='get_tax')
 
 ]

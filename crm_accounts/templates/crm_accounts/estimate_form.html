@@ -101,6 +101,43 @@
       $(this).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
       cal_amount()
     })
+    $(".item_unit_cost").change(function () {
+      let item_unit = parseFloat($(this).val()).toFixed(2)
+      let item_quantity = parseFloat($(this).parent().parent().find(".item_quantity").val()).toFixed(2)
+      $(this).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
+      cal_amount()
+
+    })
+    $(".item_quantity").change(function () {
+      let item_unit = parseFloat($(this).val()).toFixed(2)
+      let item_quantity = parseFloat($(this).parent().parent().find(".item_unit_cost").val()).toFixed(2)
+      $(this).parent().parent().find(".amount").val((item_unit*item_quantity).toFixed(2))
+      cal_amount()
+    })
+    $("#id_taxes").change(function () {
+      if($(this).val() == undefined || $(this).val() == null || $(this).val() == ''){
+        $("#tax_value").val(0)
+        cal_amount()
+      }
+      else{
+        $.ajax({
+          type:'GET',url:'/crm_accounts/get_tax/'+$(this).val(),
+          success:(data)=>{
+            $("#tax_value").val(data.tax)
+            cal_amount()
+          }
+
+        })
+      }
+
+    })
+
+    $("#id_discount").change(function () {
+      cal_amount()
+    })
+    $("#id_discount").keyup(function () {
+      cal_amount()
+    })
 
   })
 
@@ -159,6 +196,10 @@
       }
     })
     $(".total_amount").val(am)
+    let amo =  am
+    am += am*(parseFloat($("#tax_value").val())/100)
+    am -= amo*(parseFloat($("#id_discount").val())/100)
+    $(".total_amount_tax").val(am)
   }
 </script>
 {% endblock %}
@@ -297,8 +338,8 @@
                                             <tr>
                                                 <td colspan="5" class="text-right">Tax</td>
                                                 <td style="text-align: right; padding-right: 30px;width: 230px">
-                                                    <input class="form-control text-right" value="0" readonly=""
-                                                        type="text">
+                                                    <input class="form-control" id='tax_value' value="0" readonly=""
+                                                        type="number">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -315,8 +356,7 @@
                                                 </td>
                                                 <td
                                                     style="text-align: right; padding-right: 30px; font-weight: bold; font-size: 16px;width: 230px">
-                                                    --
-                                                </td>
+                                                    <input type="number" class="form-control total_amount_tax" readonly value="0"></td>
                                             </tr>
                                         </tbody>
                                     </table>

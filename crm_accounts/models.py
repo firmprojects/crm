@@ -56,7 +56,7 @@ class Estimate(models.Model):
     extimate_date = models.DateField()
     expiry_date = models.DateField()
 
-    amount = models.IntegerField(blank=True, null=True)
+    amount = models.FloatField(blank=True, null=True)
     estimate_id = models.CharField(
         max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
