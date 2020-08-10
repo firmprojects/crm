@@ -19,7 +19,7 @@ from .views import (
     TaxDelete,
     ClientAutocompletesView,
     ProjectAutocompletesView,
-    create_estimate
+    create_estimate,get_tax
 )
 
 
@@ -47,6 +47,7 @@ urlpatterns = [
     path('taxes/<int:pk>/delete', TaxDelete.as_view(), name='delete_tax'),
     path('client_autocomplete/', ClientAutocompletesView.as_view(), name="client-autocomplete"),
     path('project_autocomplete/', ProjectAutocompletesView.as_view(), name="project-autocomplete"),
-    path('create_estimates_ajax/',create_estimate)
+    path('create_estimates_ajax/',create_estimate),
+    path('get_tax/<pk>/',get_tax,name='get_tax')
 
 ]

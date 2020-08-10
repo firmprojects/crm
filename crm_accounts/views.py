@@ -46,6 +46,8 @@ class CreateEstimate(TemplateView):
         return render(request,self.template_name,conte)
 
 
+def get_tax(request,pk):
+    return JsonResponse({'tax':Taxes.objects.get(pk=pk).tax_percentage})
 
 def create_estimate(request):
     if request.method == 'POST':
@@ -57,7 +59,7 @@ def create_estimate(request):
             client=Clients.objects.get(pk=int(data['client'])),projects=Projects.objects.get(pk=int(data['projects'])),email=data['email'],
             taxes=Taxes.objects.get(pk=int(data['taxes'])),extimate_date=data.get('extimate_date'),expiry_date=data.get('expiry_date'),
             client_address=data.get('client_address'),billing_address=data['billing_address'],
-            discount=0 if data.get('discount') or data.get('discount')=='' else data.get('discount'),other_information=data['other_information']
+            discount=0 if data.get('discount') is None or data.get('discount')=='' else data.get('discount'),other_information=data['other_information']
         )
         items = json.loads(data['items'])
         for js in items:
