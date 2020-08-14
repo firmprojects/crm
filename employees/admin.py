@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Experience, Education, Skill, LeaveRequest, LeaveType, Holidays, Staff,Attendance
+from .models import *
 
 
 class EducationAdmin(admin.ModelAdmin):
@@ -52,8 +52,14 @@ admin.site.register(LeaveType, LeaveTypeAdmin)
 
 
 class LeaveRequestAdmin(admin.ModelAdmin):
-    list_display = ['leave_type', 'leave_start_date', 'leave_end_date',
-                    'number_of_days', 'remaining_days', 'leave_reason']
-
+    list_display = ['leave_type', 'leave_start_date', 'leave_end_date','leave_reason']
 
 admin.site.register(LeaveRequest, LeaveRequestAdmin)
+
+
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+admin.site.register(Department, DepartmentAdmin)
+
+

@@ -5,11 +5,6 @@
 
 {% block content %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/sidebar.html' %}
-    </div>
-
     <div class="page-wrapper">
         <div class="content container-fluid">
             <div class="row">
@@ -17,8 +12,8 @@
                     <h4 class="page-title">Provident Fund</h4>
                 </div>
                 <div class="col-sm-7 col-8 text-right m-b-30">
-                    <a href="#" class="btn btn-primary btn-rounded" data-toggle="modal" data-target="#add_pf"><i
-                            class="fa fa-plus"></i> Add Provident Fund</a>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#providentForm" data-whatever="@mdo"><i
+                        class="fa fa-plus"></i>Add Provident Fund</button>
                 </div>
             </div>
             <div class="row">
@@ -81,166 +76,9 @@
                 </div>
             </div>
         </div>
-        {% include 'backend/notifications.html' %}
+        {% include 'crm_accounts/modalForms/addProvidentForm.html' %}
     </div>
-    <div id="add_pf" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content modal-lg">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Provident Fund</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Employee Name</label>
-                                    <select class="form-control select">
-                                        <option value="3">John Doe (FT-0001)</option>
-                                        <option value="23">Richard Miles (FT-0002)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Provident Fund Type</label>
-                                    <select class="form-control select">
-                                        <option value="Fixed Amount" selected="">Fixed Amount</option>
-                                        <option value="Percentage of Basic Salary">Percentage of Basic Salary</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="show-fixed-amount">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Employee Share (Amount)</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Organization Share (Amount)</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="show-basic-salary">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Employee Share (%)</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Organization Share (%)</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" rows="4" cols="50"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-t-20 text-center">
-                            <button class="btn btn-primary btn-lg">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="edit_pf" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="modal-content modal-lg">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Provident Fund</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Employee Name</label>
-                                    <select class="form-control select">
-                                        <option value="3">John Doe (FT-0001)</option>
-                                        <option value="23">Richard Miles (FT-0002)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Provident Fund Type</label>
-                                    <select class="form-control select">
-                                        <option value="Fixed Amount" selected="">Fixed Amount</option>
-                                        <option value="Percentage of Basic Salary">Percentage of Basic Salary</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="show-fixed-amount">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Employee Share (Amount)</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Organization Share (Amount)</label>
-                                                <input class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="show-basic-salary">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Employee Share (%)</label>
-                                                <input class="form-control" type="text" value="2%">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Organization Share (%)</label>
-                                                <input class="form-control" type="text" value="2%">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-t-20 text-center">
-                            <button class="btn btn-primary btn-lg">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
     <div id="delete_pf" class="modal custom-modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content modal-md">
@@ -261,3 +99,23 @@
     <div class="sidebar-overlay" data-reff=""></div>
 </div>
 {% endblock content%}
+
+
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#id_user').select2({
+        minimumInputLength: 1,
+        placeholder: "Select Staff",
+        multiple: false,
+        ajax: {
+            url: '/crm_accounts/user_autocomplete/',
+            dataType: 'json'
+        },
+    });
+    });
+</script>
+    
+{% endblock js %}
+    

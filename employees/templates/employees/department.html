@@ -6,12 +6,17 @@
 <div class="main-wrapper">
     <div class="page-wrapper">
         <div class="content container-fluid">
+            {% if messages %}
+            {% for message in messages %}
+            <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+            {% endif %}
             <div class="row">
                 <div class="col-sm-5 col-5">
                     <h4 class="page-title">Department</h4>
                 </div>
                 <div class="col-sm-7 col-7 text-right m-b-30">
-                    <button class="btn btn-primary btn-rounded"  data-izimodal-open="#modal3"><i
+                    <button class="btn btn-primary btn-rounded"  data-toggle="modal" data-target="#DepartmentForm" data-whatever="@mdo"><i
                         class="fa fa-plus"></i>Add Department</button>
                 </div>
             </div>
@@ -27,7 +32,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in dept %}
+                                {% for item in departments %}
                                 <tr>
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ item.name}}</td>
@@ -36,8 +41,8 @@
                                         <a type="button" class="btn btn-sm btn-primary" href="{% url 'employees:update_department' item.id %}">
                                           <span class="fa fa-pencil"></span>
                                         </a>
-                                        <a type="button" class="btn btn-sm btn-danger" href="{% url 'employees:delete_department' item.id %}">
-                                          <span class="fa fa-trash"></span>
+                                        <a type="button" class="btn btn-sm btn-danger delete" data-key="{{ item.id }}">
+                                          <span class="fa fa-trash text-white"></span>
                                         </a>
                                      </td>
                                 </tr>
@@ -51,39 +56,81 @@
         </div>
     
     </div>
+
+
+    <div class="modal fade del_modal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-center">Delete Department</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure want to delete this Department?</p>
+                    <div class="m-t-20 text-left">
+                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                  <button type="button" class="btn btn-danger delete_button">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      
+
 <!-- 
 ---------------------------------------------
 Add Department Form
 -------------------------------------------- -->
 
- <div class="mt-20">
-        <!-- Modal Start -->
-        <div class="izimodal" id="modal3" data-iziModal-width="600px" data-iziModal-fullscreen="true"
-            data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
-            <!-- Close Button Start -->
-            <div class="close-modal">
-                <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
-            </div>
-            <!-- Close Button Start -->
-            <!-- Modal Body Start -->
-            <div class="modal-inside inner-30">
-                <div class="modal-heading">
-                    <h4 class="modal-title center-holder">Add Department</h4>
-                </div>
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.name|as_crispy_field }}
-
-                    </div>
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary btn-lg" type="submit">Create Department</button>
-                    </div>
-                </form>
-            </div>
-            <!-- Modal Body End -->
+<div class="modal fade" id="DepartmentForm">
+    <div class="modal-dialog modal-lg" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title text-center">Add Department</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <!-- Modal End -->
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        {{ form.name|as_crispy_field }}
+                        {% for i in form.name.errors %}
+                        <small class="text-danger">{{ i }}</small>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+                  <div class="m-t-20 text-center">
+                    <button class="btn btn-primary btn-lg">Create</button>
+                </div>
+            </form>
+        </div>
+      </div>
     </div>
+  </div>
+
 </div>
 {% endblock content%}
+
+
+
+{% block js %}
+<script>
+        $(".delete").on('click', function(){
+            let id = $(this).attr("data-key");
+            $('.del_modal').modal('show');
+            $(".delete_button").on('click', function(){
+               window.location.href = `/employees/department/${id}/delete`
+            });
+        });
+
+</script>
+
+{% endblock js %}

@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import ListView, View, DetailView, CreateView, UpdateView, DeleteView
 from django.forms import modelformset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm)
+from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm, LeaveTypeForm, DepartmentForm, DesignationForm)
 from .models import *
 from allauth.account.views import SignupView
 from users.models import Clocking
@@ -29,109 +29,50 @@ class StaffCreateView(SignupView):
 
 
 
-# class HolidayList(View):
-#     def get(self, request):
-#         form = HolidaysForm()
-#         holidays = Holidays.objects.all()
-#         return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
-
-
-#     def post(self, request):
-#         if request.method == 'POST':
-#             form = HolidaysForm(request.POST)
-#             if form.is_valid():
-#                 new_holiday = form.save()
-#                 return JsonResponse({'hols':model_to_dict(new_holiday)})
-
-
-def holiday_list(request):
-    holiday = Holidays.objects.all()
-    return render(request, 'employees/holiday.html', {'holiday': holiday})
-
-
-def save_form(request, form, template_name):
-    data = dict()
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            data['form_is_valid'] = True
-            holiday = Holidays.objects.all()
-            data['html_holiday_list'] = render_to_string('employees/modals/partial_list.html', {
-                'holiday': holiday
-            })
-        else:
-            data['form_is_valid'] = False
-    context = {'form': form}
-    data['html_form'] = render_to_string(template_name, context, request=request)
-    return JsonResponse(data)
-
-
-def holiday_create(request):
-    if request.method == 'POST':
-        form = HolidaysForm(request.POST)
-    else:
+class HolidayList(View):
+    def get(self, request):
         form = HolidaysForm()
-    return save_form(request, form, 'employees/modals/partial_create.html')
+        holidays = Holidays.objects.all()
+        return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = HolidaysForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Holiday was successfully created")
+            return HttpResponseRedirect(reverse('employees:holiday'))
 
 
-def holiday_update(request, pk):
-    holiday = get_object_or_404(Holidays, pk=pk)
-    if request.method == 'POST':
-        form = HolidaysForm(request.POST, instance=holiday)
-    else:
-        form = HolidaysForm(instance=holiday)
-    return save_form(request, form, 'employees/modals/partial_update.html')
-
-
-def holiday_delete(request, pk):
-    holiday = get_object_or_404(Holidays, pk=pk)
-    data = dict()
-    if request.method == 'POST':
+class DeleteHoliday(View):
+    def get(self, request, id):
+        holiday = Holidays.objects.get(id=id)
         holiday.delete()
-        data['form_is_valid'] = True
-        holiday = Holidays.objects.all()
-        data['html_list'] = render_to_string('employees/modals/partial_list.html', {
-            'holiday': holiday
-        })
-    else:
-        context = {'holiday': holiday}
-        data['html_form'] = render_to_string('employees/modals/partial_delete.html', context, request=request)
-    return JsonResponse(data)
+        messages.success(request, "Holiday was successfully removed")
+        return HttpResponseRedirect(reverse('employees:holiday'))
+
+
+class UpdateHoliday(UpdateView):
+    model = Holidays
+    fields = '__all__'
 
 
 
+class CreateDepartment(View):
+        def get(self, request):
+            form = DepartmentForm()
+            dept = Department.objects.all()
+            return render(request, 'employees/department.html', {'form':form, 'departments':dept})
 
+        def post(self, request):
+            if request.method == 'POST':
+                form = DepartmentForm(request.POST)
+                print(form)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, "Department was successfully created")
+                return HttpResponseRedirect(reverse('employees:departments'))
 
-# class HolidayCreate(CreateView):
-#     model = Holidays
-#     template_name = "employees/holiday.html"
-#     form_class = HolidaysForm
-
-#     def get_context_data(self, **kwargs):
-#         context = super(HolidayCreate, self).get_context_data(**kwargs)
-#         context['holidays'] = Holidays.objects.all()
-#         return context
-
-
-# class HolidayUpdate(UpdateView):
-#     model = Holidays
-#     fields = ['name', 'date']
-
-
-# class HolidayDelete(DeleteView):
-#     model = Holidays
-#     success_url = '/employees/holiday'
-
-
-class CreateDepartment(CreateView):
-    model = Department
-    template_name = "employees/department.html"
-    fields = ['name', ]
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateDepartment, self).get_context_data(**kwargs)
-        context['dept'] = Department.objects.all()
-        return context
 
 
 class UpdateDepartment(UpdateView):
@@ -139,20 +80,28 @@ class UpdateDepartment(UpdateView):
     fields = ['name']
 
 
-class DeleteDepartment(DeleteView):
-    model = Department
-    success_url = '/employees/department'
+class DeleteDepartment(View):
+    def get(self, request, id):
+        dept = Department.objects.get(id=id)
+        dept.delete()
+        messages.success(request, "Department was successfully removed")
+        return HttpResponseRedirect(reverse('employees:departments'))
 
 
-class CreateDesignation(CreateView):
-    model = Designation
-    template_name = "employees/designation.html"
-    fields = ['title', ]
+class CreateDesignation(View):
+        def get(self, request):
+            form = DesignationForm()
+            designation = Designation.objects.all()
+            return render(request, 'employees/designation.html', {'form':form, 'designations':designation})
 
-    def get_context_data(self, **kwargs):
-        context = super(CreateDesignation, self).get_context_data(**kwargs)
-        context['designation'] = Designation.objects.all()
-        return context
+        def post(self, request):
+            if request.method == 'POST':
+                form = DesignationForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, "Designation was successfully created")
+                return HttpResponseRedirect(reverse('employees:designation'))
+
 
 
 class UpdateDesignation(UpdateView):
@@ -160,53 +109,80 @@ class UpdateDesignation(UpdateView):
     fields = ['title']
 
 
-class DeleteDesignation(DeleteView):
-    model = Designation
-    success_url = '/employees/designation'
+class DeleteDesignation(View):
+   def get(self, request, id):
+        designation = Designation.objects.get(id=id)
+        designation.delete()
+        messages.success(request, "Designation was successfully removed")
+        return HttpResponseRedirect(reverse('employees:designation'))
 
 
-class CreateLeave(CreateView):
-    model = LeaveRequest
-    template_name = "employees/leave.html"
-    fields = ['employee','leave_type', 'leave_start_date', 'leave_end_date',
-              'number_of_days', 'remaining_days', 'leave_reason']
+class CreateLeave(View):
+    def get(self, request):
+        form = LeaveRequestForm()
+        leave = LeaveRequest.objects.all()
+        return render(request, 'employees/leave.html', {'form':form, 'leave':leave})
 
-    def get_context_data(self, **kwargs):
-        context = super(CreateLeave, self).get_context_data(**kwargs)
-        context['leave'] = LeaveRequest.objects.all()
-        return context
+    def post(self, request):
+        if request.method == 'POST':
+            form = LeaveRequestForm(request.POST)
+            print(form)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Your leave request was successfull")
+            return HttpResponseRedirect(reverse('employees:leave'))
+    
 
 class UpdateLeave(UpdateView):
     model = LeaveRequest
-    fields = ['employee', 'leave_type', 'leave_start_date', 'leave_end_date',
-              'number_of_days', 'remaining_days', 'leave_reason']
-
-
-class DeleteLeave(LoginRequiredMixin, DeleteView):
-    model = LeaveRequest
-    success_url = '/employees/leave.html'
-
-
-class CreateLeaveType(CreateView):
-    model = LeaveType
-    template_name = "employees/leave_type.html"
-    fields = ['title', ]
+    fields = '__all__'
     success_url = '/employees/leave'
 
-    def get_context_data(self, **kwargs):
-        context = super(CreateLeaveType, self).get_context_data(**kwargs)
-        context['leave_type'] = LeaveType.objects.all()
-        return context
+
+class DeleteLeave(View):
+    def get(self, request, id):
+        leave = LeaveRequest.objects.get(id=id)
+        leave.delete()
+        messages.success(request, "Leave Request was successfully removed")
+        return HttpResponseRedirect(reverse('employees:leave'))
+
+
+def change_status(request):
+    if request.method == 'POST':
+        leave = LeaveRequest.objects.get(pk = request.POST['pk'])
+        leave.status = request.POST['status']
+        leave.save()
+        return JsonResponse({"status":leave.status})
+
+
+class CreateLeaveType(View):
+        def get(self, request):
+            form = LeaveTypeForm()
+            leave_type = LeaveType.objects.all()
+            return render(request, 'employees/leave_type.html', {'form':form, 'leave_type':leave_type})
+
+        def post(self, request):
+            if request.method == 'POST':
+                form = LeaveTypeForm(request.POST)
+                print(form)
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, "Your leave type was successfully created")
+                return HttpResponseRedirect(reverse('employees:leave_type'))
 
 
 class UpdateLeaveType(UpdateView):
     model = LeaveType
     fields = ['title']
+    success_url = '/employees/leave_type'
 
 
-class DeleteLeaveType(DeleteView):
-    model = LeaveType
-    success_url = '/employees/leave'
+class DeleteLeaveType(View):
+    def get(self, request, id):
+        leave = LeaveType.objects.get(id=id)
+        leave.delete()
+        messages.success(request, "Leave type was successfully removed")
+        return HttpResponseRedirect(reverse('employees:leave_type'))
 
 
 def attendance(request):
@@ -351,7 +327,6 @@ def filter_objects(date,month=None,year=None):
 class StaffAC(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Staff.objects.all().order_by('user__username')
-        print(qs)
         if self.q:
             qs = qs.filter(user__username__istartswith=self.q)
         return qs

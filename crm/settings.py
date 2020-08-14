@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tasks',
     'blog',
     'books',
+    'django_summernote',
 
 
 
@@ -195,3 +196,6 @@ ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 LOGIN_REDIRECT_URL  = 'dashboard:home'
 
 ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SUMMERNOTE_THEME = 'bs4' 

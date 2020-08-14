@@ -37,9 +37,6 @@ class StaffSignupForm(SignupForm):
         return user
 
 
-
-
-
 class DateInput(forms.DateInput):
     input_type = 'date'
 
@@ -62,9 +59,27 @@ class LeaveTypeForm(forms.ModelForm):
 class LeaveRequestForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
-        fields = ['leave_type', 'leave_start_date', 'leave_end_date',
-                  'number_of_days', 'remaining_days', 'leave_reason']
+        fields = ['employee','leave_type', 'leave_start_date', 'leave_end_date',
+                   'leave_reason']
         widgets = {
             'leave_start_date': DateInput(format='%Y-%m-%d'),
             'leave_end_date': DateInput(format='%Y-%m-%d'),
         }
+
+
+class LeaveTypeForm(forms.ModelForm):
+    class Meta:
+        model = LeaveType
+        fields = ['title']
+
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ['name']
+
+
+class DesignationForm(forms.ModelForm):
+    class Meta:
+        model = Designation
+        fields = ['title']

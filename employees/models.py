@@ -83,15 +83,19 @@ class LeaveType(models.Model):
     def __str__(self):
         return str(self.title)
 
+LEAVE_STATUS = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('Declined', 'Declined'),
+    )
 
 class LeaveRequest(models.Model):
     employee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     leave_type = models.ForeignKey(LeaveType, on_delete=models.CASCADE)
-    leave_start_date = models.DateTimeField(auto_now_add=False)
-    leave_end_date = models.DateTimeField(auto_now_add=False)
-    number_of_days = models.IntegerField()
-    remaining_days = models.IntegerField()
+    leave_start_date = models.DateField(auto_now_add=False)
+    leave_end_date = models.DateField(auto_now_add=False)
     leave_reason = models.TextField()
+    status = models.CharField(max_length=20, choices=LEAVE_STATUS)
 
 
 

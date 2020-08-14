@@ -113,10 +113,8 @@ def upload_doc(request,pk):
         return redirect(reverse('project:project_detail',args=(pk,)))
 
 class ClientsCreateView(SignupView):
-    model = CustomUser
     template_name = 'project/clients.html'
-    redirect_field_name = 'next'
-    view_name = 'client_sign_up'
+    form_class = ClientSignupForm
     success_url = None
 
     def get_context_data(self, **kwargs):
@@ -124,37 +122,17 @@ class ClientsCreateView(SignupView):
         context['clients'] = CustomUser.objects.filter(is_client=True)
         return context
 
-    # def form_valid(self, form):
-    #     username = self.request.POST.get('username')
-    #     h = CustomUser.objects.create(username)
-    #     h.save()
-    #     form.user = h
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        username = self.request.POST.get('username')
+        h = CustomUser.objects.create(username)
+        h.save()
+        form.user = h
+        return super().form_valid(form)
 
-    # def form_invalid(self, form):
-    #     print("Invalid", form.errors)
-    #     return super().form_invalid(form)
+    def form_invalid(self, form):
+        print("Invalid", form.errors)
+        return super().form_invalid(form)
 
-
-class ClientsDetailView(DetailView):
-    model = Clients
-    template_name = 'project/client_detail.html'
-
-
-class ClientsUpdateView(UpdateView):
-    model = Clients
-    fields = ['company_name', 'client_email', 'clients_id', 'state', 'country',   'phone_number', 'contact_person', 'contact_person_designation',
-              'address',  'photo']
-    success_url = reverse_lazy('project:clients')
-
-    # def form_valid(self, form):
-    #     form.instance.author == self.request.user
-    #     return super().form_valid(form)
-
-
-class ClientDelete(DeleteView):
-    model = Clients
-    template_name = 'project/delete_client.html'
 
 
 class UsersAutocompletesView(autocomplete.Select2QuerySetView):

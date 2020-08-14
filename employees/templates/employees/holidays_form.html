@@ -8,11 +8,10 @@
         <div class="page-wrapper">
             <div class="content container-fluid">
                 <div class="row">
-                    <div class="col-md-8 offset-2">
-                        <div class="col-sm-5 col-5">
-                            <h4 class="page-title">Holidays</h4>
-                        </div>
-                        <div>
+                    <div class="modal-dialog modal-lg modal-content">
+                        <div class="mb-4">
+                            <h3 class="modal-title text-center">Update Holiday</h3>
+                         </div>
                             <form method="POST">
                                 {% csrf_token %}
                                 <div class="form-group">
@@ -22,7 +21,7 @@
                                     {{ form.date|as_crispy_field }}
                                 </div>
                                 <div class="m-t-20">
-                                    <button class="btn btn-primary btn-lg" type="submit">Edit Holiday</button>
+                                    <button class="btn btn-primary" type="submit">Update</button>
                                 </div>
                             </form>
                         </div>

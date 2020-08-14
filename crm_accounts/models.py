@@ -34,7 +34,7 @@ PROVIDENCE_STATUS = (
 class Taxes(models.Model):
     TAX_STATUS = ( ('pending', 'Pending'),('approved', 'Approved'),)
     tax_name = models.CharField(max_length=100)
-    tax_percentage = models.IntegerField()
+    tax_percentage = models.FloatField()
     tax_status = models.CharField(max_length=100, choices=TAX_STATUS)
 
     def __str__(self):
@@ -55,10 +55,8 @@ class Estimate(models.Model):
     billing_address = models.TextField()
     extimate_date = models.DateField()
     expiry_date = models.DateField()
-
-    amount = models.FloatField(blank=True, null=True)
-    estimate_id = models.CharField(
-        max_length=10, default=ran_gen, unique=True)
+    amount = models.FloatField(blank=True, null=True) 
+    estimate_id = models.CharField(max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
     discount = models.FloatField(default=0, max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
@@ -190,4 +188,4 @@ class Expenses(models.Model):
         return self.item_name
 
     def get_absolute_url(self):
-        return reverse('accounts:expenses')
+        return reverse('crm_accounts:expenses')

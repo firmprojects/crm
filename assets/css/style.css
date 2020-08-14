@@ -1776,3 +1776,31 @@ blockquote p {font-style: italic;font-weight: 400;}
 	border-color: #f5c6cb;
 
 }
+
+.select2-container{
+	width: 100% !important;
+}
+
+.link-label{
+	position: relative;
+}
+
+.form-link{
+	position: absolute;
+	right: 188px;
+}
+
+#collapseExample{
+	position: absolute;
+	top: 20px;
+	z-index: 10;
+	left: 0;
+	right: 0;
+}
+
+.slide-form{
+	background-color: #fff;
+	padding: 10px;
+	border: 1px solid #cdcdcd;
+
+}

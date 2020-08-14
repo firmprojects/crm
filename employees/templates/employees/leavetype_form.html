@@ -1,0 +1,40 @@
+{% extends 'backend/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    <div>
+
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="modal-dialog modal-content modal-md">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-sm-5 col-5">
+                            <h4 class="page-title">Leave Type</h4>
+                        </div>
+                        <div>
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        {{ form.title|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="ml-3 text-center">
+                                    <button class="btn btn-primary" type="submit">Update</button>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    {% endblock content%}

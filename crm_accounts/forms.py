@@ -1,5 +1,6 @@
 from django import forms
-from .models import Expenses
+from .models import Expenses, ProvidentFund
+
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -13,3 +14,10 @@ class ExpensesForm(forms.ModelForm):
         widgets = {
             'purchase_date': DateInput(format='%m-%d-%Y'),
         }
+
+
+class ProvidentFundForm(forms.ModelForm):
+    class Meta:
+        model = ProvidentFund
+        fields = ['user', 'provident_type', 'employee_share_amount', 'company_share_amount',
+              'employee_share', 'company_share', 'status', 'description']

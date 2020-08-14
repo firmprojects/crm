@@ -168,7 +168,7 @@
                                         <td class="d-none d-sm-block">{{ item.item_description}}</td>
                                         <td>{{item.unit_cost|intcomma }}</td>
                                         <td>{{item.quantity}}</td>
-                                        <td>{{item.total}}</td>
+                                        <td>₦{{item.total}}</td>
                                     </tr>
                                   {% endfor %}
                                 </tbody>
@@ -185,20 +185,20 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>Subtotal:</th>
-                                                            <td class="text-right" id='subtotal_'>${{object.get_total}}</td>
+                                                            <td class="text-right" id='subtotal_'>₦{{object.get_total}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
-                                                            <td class="text-right" id='taxes_'>${{object.get_taxes}}</td>
+                                                            <td class="text-right" id='taxes_'>₦{{object.get_taxes}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
-                                                            <td class="text-right" id='discount_'>${{object.get_dis}}</td>
+                                                            <td class="text-right" id='discount_'>₦{{object.get_dis}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Total:</th>
                                                             <td class="text-right text-primary">
-                                                                <h5 id='amount_'>${{object.amount}}</h5>
+                                                                <h4 id='amount_'>₦{{object.amount}}</h4>
                                                             </td>
                                                         </tr>
                                                     </tbody>

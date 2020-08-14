@@ -7,20 +7,18 @@ app_name = 'employees'
 urlpatterns = [
     path('', StaffCreateView.as_view(), name='staff'),
     path('department/', CreateDepartment.as_view(), name='departments'),
-    path('department/<int:pk>/update',
-         UpdateDepartment.as_view(), name='update_department'),
-    path('department/<int:pk>/delete',
-         DeleteDepartment.as_view(), name='delete_department'),
+    path('department/<int:pk>/update', UpdateDepartment.as_view(), name='update_department'),
+    path('department/<id>/delete', DeleteDepartment.as_view(), name='delete_department'),
     path('designation/', CreateDesignation.as_view(), name='designation'),
     path('designation/<int:pk>/update', UpdateDesignation.as_view(), name='update_designation'),
-    path('designation/<int:pk>/delete', DeleteDesignation.as_view(), name='delete_designation'),
+    path('designation/<id>/delete', DeleteDesignation.as_view(), name='delete_designation'),
     path('leave/', CreateLeave.as_view(), name='leave'),
     path('leave/<int:pk>/update',  UpdateLeave.as_view(), name='update_leave'),
-    path('leave/<int:pk>/delete', DeleteLeave.as_view(), name='delete_leave'),
+    path('leave/<id>/delete', DeleteLeave.as_view(), name='delete_leave'),
     path('leave_type/', CreateLeaveType.as_view(), name='leave_type'),
     path('leave_type/<int:pk>/update',
          UpdateLeaveType.as_view(), name='update_leavetype'),
-    path('leave_type/<int:pk>/delete',
+    path('leave_type/<id>/delete',
          DeleteLeaveType.as_view(), name='delete_leavetype'),
     path('attendance/', attendance, name='attendance'),
     path('tasks/', tasks, name='tasks'),
@@ -37,10 +35,9 @@ urlpatterns = [
 
     path('staff_ac',StaffAC.as_view(),name='staff_ac'),
 
-    path('holiday/', holiday_list, name='holiday'),
-    path('create/', holiday_create, name='holiday_create'),
-    path('<pk>/update/', holiday_update, name='holiday_update'),
-    path('<pk>/delete/', holiday_delete, name='delete_holiday'),
-
-
+    path('holiday/', HolidayList.as_view(), name='holiday'),
+    path('holiday/<id>/delete/', DeleteHoliday.as_view(), name='delete_holiday'),
+    path('holiday/<pk>/update/', UpdateHoliday.as_view(), name='update_holiday'),
+    path('change_status/',change_status, name='change_status'),
+  
 ]

@@ -9,7 +9,8 @@ from project.models import Clients, Projects
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 import json
-from .forms import ExpensesForm
+from users.models import CustomUser
+from .forms import ExpensesForm, ProvidentFundForm
 from django import forms
 
 
@@ -107,9 +108,16 @@ class EstimateUpdate(UpdateView):
         'other_information'
     ]
 
+
+def estimate_status(request):
+    if request.method == 'POST':
+        estimate = Estimate.objects.get(pk = request.POST['pk'])
+        estimate.status = request.POST['status']
+        estimate.save()
+        return JsonResponse({"status":estimate.status})
+
+
 # Invoice views
-
-
 class InvoiceView(ListView):
     model = Invoice
     template_name = 'crm_accounts/invoice.html'
@@ -154,11 +162,11 @@ class PaymentsView(ListView):
     ordering = ['-invoice_date']
 
 
-class ProvidentFundView(ListView):
-    model = ProvidentFund
-    template_name = 'crm_accounts/providentfund.html'
-    fields = ['user', 'provident_type', 'employee_share', 'company_share',
-              'employee_share', 'company_share', 'created', 'description']
+class ProvidentFundView(View):
+    def get(self, request):
+        form = ProvidentFundForm()
+        fund = ProvidentFund.objects.all()
+        return render(request, 'crm_accounts/providentfund.html', {'form':form, 'fund':fund})
 
 
 class ExpensesView(View):
@@ -185,16 +193,9 @@ class DeleteExpense(View):
         return HttpResponseRedirect(reverse('crm_accounts:expenses'))
 
 
-def update_expense(request, pk):
-    expense = get_object_or_404(Expenses, pk=pk)
-    if request.method == 'POST':
-        form = ExpensesForm(request.POST, instance=expense)
-        if form.is_valid():
-            form.save()
-    else:
-        form = ExpensesForm(instance=expense)
-        return render(request, 'crm_accounts/updateExpensesForm.html', {'form':form})
-
+class ExpenseUpdate(UpdateView):
+    model = Expenses
+    fields = '__all__'
 
 def change_status(request):
     if request.method == 'POST':
@@ -241,4 +242,13 @@ class ProjectAutocompletesView(autocomplete.Select2QuerySetView):
         qs = Projects.objects.all().order_by('-name')
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+
+class UsersAutocompletesView(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = CustomUser.objects.filter(is_employee=True)
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+        print(qs)
         return qs
