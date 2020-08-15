@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 
 def CreateCompany(request):
     if request.method == 'POST':
-        form = settingsForm(instance=request.POST)
+        form = settingsForm(request.POST)
         if form.is_valid():
             form.save()
     else:

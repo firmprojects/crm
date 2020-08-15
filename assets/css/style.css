@@ -194,7 +194,7 @@ table.table td h2 span {color: #9e9e9e;display: block;font-size: 12px;margin-top
 .btn-link, .btn-link:hover, .btn-link:focus, .btn-link:active {box-shadow: none;}
 .btn-link {color: #333;}
 .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {background-color: rgba(0, 0, 0, 0.2);}
-.card {margin-bottom: 30px;border:1px solid #e7e7e7;box-shadow: 0 6px 15px rgba(36, 37, 38, 0.08);}
+.card {margin-bottom: 30px;border:1px solid #e7e7e7;}
 .card-title {margin-bottom: 1.125rem;}
 .dropdown-action .dropdown-toggle::after {display: none;}
 .badge.badge-pill {border-radius: 10rem;}
@@ -1779,6 +1779,10 @@ blockquote p {font-style: italic;font-weight: 400;}
 
 .select2-container{
 	width: 100% !important;
+}
+
+.project-select .select2-container{
+	width: 80% !important;
 }
 
 .link-label{

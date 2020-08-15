@@ -139,8 +139,7 @@ class ProvidentType(models.Model):
 
 
 class ProvidentFund(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     provident_type = models.ForeignKey(
         ProvidentType, on_delete=models.DO_NOTHING)
     employee_share_amount = models.IntegerField(

@@ -41,17 +41,16 @@ class Clients(models.Model):
 
 
 class Projects(models.Model):
-    PRIORITY = ( ('high', 'High'), ('medium', 'Medium'), ('low', 'Low'), )
-    STATUS = ( ('working', 'Working'), ('pending', 'Pending'), ('suspended', 'Suspended'), ('cancelled', 'cancelled'),)
+    PRIORITY = ( ('not_set', 'Not Set'),('high', 'High'), ('medium', 'Medium'), ('low', 'Low'), )
+    STATUS = (('not_set', 'Not Set'), ('working', 'Working'), ('pending', 'Pending'), ('suspended', 'Suspended'), ('cancelled', 'cancelled'),)
 
     clients = models.ForeignKey(Clients,  on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)
-    created = models.DateField(auto_now_add=True)
-    project_cost = models.PositiveIntegerField()
-    priority = models.CharField(max_length=50, choices=PRIORITY)
-    status = models.CharField(max_length=50, choices=STATUS)
+    deadline = models.DateField(blank=True, null=True)
+    created_date = models.DateField(auto_now_add=True)
+    project_cost = models.PositiveIntegerField(blank=True, null=True)
+    priority = models.CharField(max_length=50, choices=PRIORITY, blank=True )
+    status = models.CharField(max_length=50, choices=STATUS, blank=True,)
     project_leader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leader_set', blank=True, null=True)
     team_member = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='team_set', blank=True)
 
@@ -71,11 +70,12 @@ class Projects(models.Model):
         return {"complete":len(complete),"in_complete":len(in_complete)}
 
     def get_progress(self):
-        try:
+        return
+        # try:
 
-            return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
-        except ZeroDivisionError:
-            return 0
+        #     return ((timezone.localdate() - self.created_date).total_seconds()/(self.end_date - self.created_date).total_seconds())*100
+        # except ZeroDivisionError:
+        #     return 0
 
 class Comment(models.Model):
     text = models.TextField()

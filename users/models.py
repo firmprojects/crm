@@ -22,17 +22,19 @@ class CustomUser(AbstractUser):
 
 def generate_asset_id():
     asset_id = get_random_string(6)
-    return "AST"+str(asset_id)
+    return "AST-"+str(asset_id)
 
 class Assets(models.Model):
-      assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+      assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
       asset_name = models.CharField(max_length=100)
-      asset_id = models.CharField(max_length=10, unique=True, default=generate_asset_id)
-      purchase_date = models.DateTimeField( blank=True, null=True)
-      warranty_time = models.IntegerField(blank=True, null=True)
+      asset_id = models.CharField(max_length=10, default=generate_asset_id(), blank=True)
+      purchase_date = models.DateTimeField(blank=True, null=True)
+      warranty_start = models.DateField(blank=True, null=True)
       assigned_date = models.DateField(auto_now_add=True)
       warranty_end = models.DateTimeField(blank=True, null=True)
       asset_amount = models.IntegerField(blank=True, null=True)
+      description = models.TextField(blank=True, null=True)
+      receipt = models.FileField(upload_to="documents/", max_length=100, blank=True)
     
       def __str__(self):
         return self.asset_name

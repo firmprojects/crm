@@ -5,7 +5,7 @@ from .models import Projects, Clients
 
 
 class ProjectsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'start_date', 'end_date', 'priority']
+    list_display = ['name',  'deadline', 'priority', "created_date", "project_cost", "status", "project_leader",]
 
 
 admin.site.register(Projects, ProjectsAdmin)

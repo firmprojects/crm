@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'settings',
     'tasks',
     'blog',
-    'books',
     'django_summernote',
 
 

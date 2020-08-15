@@ -129,9 +129,10 @@ class DateInput(forms.DateInput):
 class AssetForm(forms.ModelForm):
     class Meta:
         model = Assets
-        fields = ['assigned_to', 'asset_name', 'asset_id', 'purchase_date', 'warranty_time', 'warranty_end', 'asset_amount']
+        fields = ['assigned_to', 'asset_name', 'asset_id', 'description', 'receipt', 'purchase_date', 'warranty_start', 'warranty_end', 'asset_amount']
         widgets = {
             'warranty_end': DateInput(format='%m-%d-%Y'),
+            'warranty_start': DateInput(format='%m-%d-%Y'),
             'purchase_date': DateInput(format='%m-%d-%Y'),
         }
 

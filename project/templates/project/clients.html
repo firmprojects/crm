@@ -13,10 +13,10 @@
                 <div class="col-sm-8 col-9 text-right m-b-20">
                     <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
                         data-target="#add_client"><i class="fa fa-plus"></i> Add Client</a>
-                    <div class="view-icons">
+                    <!-- <div class="view-icons">
                         <a href="clients.html" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
                         <a href="clients-list.html" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="row staff-grid-row">
@@ -24,7 +24,7 @@
                 <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
                     <div class="profile-widget">
                         <div class="profile-img">
-                            <a href="{% url 'project:client_detail' item.pk %}" class="avatar">
+                            <a href="" class="avatar">
                                 <img src="{{ item.photo.url}}" />
                             </a>
                         </div>
@@ -40,13 +40,13 @@
                             </div>
                         </div>
                         <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a
-                                href="{% url 'project:client_detail' item.pk %}">{{ item.first_name}}</a></h4>
+                                href="">{{ item.first_name}}</a></h4>
                         <h5 class="user-name m-t-10 m-b-0 text-ellipsis"><a
                                 href="#">{{ item.contact_person}}</a>
                         </h5>
                         <div class="small text-muted">{{ item.contact_person_designation}}</div>
-                        <a href="chat.html" class="btn btn-white btn-sm m-t-10">Message</a>
-                        <a href="/user/{{item.user.pk}}/" class="btn btn-white btn-sm m-t-10">View Profile</a>
+                        <a href="{% url 'messaging:compose' %}" class="btn btn-white btn-sm m-t-10">Message</a>
+                        <a href="/user/{{item.pk}}/" class="btn btn-white btn-sm m-t-10">View Profile</a>
                     </div>
                 </div>
                 {% endfor %}
