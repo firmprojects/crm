@@ -73,9 +73,19 @@ class Projects(models.Model):
     def get_progress(self):
         try:
 
-            return ((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100
+            return min(max(((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100,0),100)
         except ZeroDivisionError:
             return 0
+
+    def get_tasks(self):
+        d = {'completed':0,'in_complete':0}
+        for i in self.milestone_set.all():
+            if i.completed:
+                d['completed'] += 1
+            else:
+                d['in_complete'] += 1
+
+        return d
 
 class Comment(models.Model):
     text = models.TextField()
