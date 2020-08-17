@@ -122,16 +122,16 @@ class ClientsCreateView(SignupView):
         context['clients'] = CustomUser.objects.filter(is_client=True)
         return context
 
-    def form_valid(self, form):
-        username = self.request.POST.get('username')
-        h = CustomUser.objects.create(username)
-        h.save()
-        form.user = h
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     username = self.request.POST.get('username')
+    #     h = CustomUser.objects.create(username)
+    #     h.save()
+    #     form.user = h
+    #     return super().form_valid(form)
 
-    def form_invalid(self, form):
-        print("Invalid", form.errors)
-        return super().form_invalid(form)
+    # def form_invalid(self, form):
+    #     print("Invalid", form.errors)
+    #     return super().form_invalid(form)
 
 
 

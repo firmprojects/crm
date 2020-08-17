@@ -40,6 +40,7 @@
                                     <td>{{ item.extimate_date }}</td>
                                     <td>{{ item.expiry_date }}</td>
                                     <td>N{{ item.amount|intword }}</td>
+<<<<<<< Updated upstream
                                     <td>
                                         <div class="dropdown action-label">
                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle status_change" status_id="{{item.id}}" data-toggle="dropdown" aria-expanded="false">
@@ -58,6 +59,9 @@
                                             </div>
                                         </div>
                                     </td>
+=======
+                                    <td><span class="badge badge-success-border">{{ item.status }}</span></td>
+>>>>>>> Stashed changes
                                     <td class="text-right">
                                         <div class="dropdown dropdown-action">
                                             <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
@@ -81,12 +85,17 @@
                 </div>
             </div>
         </div>
+<<<<<<< Updated upstream
+=======
+        {% include 'backend/notifications.html' %}
+>>>>>>> Stashed changes
     </div>
 
 
     <div class="sidebar-overlay" data-reff=""></div>
 </div>
 {% endblock content%}
+<<<<<<< Updated upstream
 
 {% block js %}
 <script>
@@ -129,3 +138,5 @@
         } );
 </script>
 {% endblock js%}
+=======
+>>>>>>> Stashed changes
