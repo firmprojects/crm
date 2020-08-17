@@ -25,4 +25,6 @@ urlpatterns = [
     path('users/profile', user_profile, name='user_profile_view'),
     path('change/select/',select,name='select_role'),
     path('change_staff_status/<pk>/',change_staff_status,name='change_staff_status'),
+    path('user_autocomplete/', UsersAutocompletesView.as_view(), name='user_autocomplete'),
+
 ]

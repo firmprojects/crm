@@ -14,99 +14,71 @@ Leave Request Form
               </button>
             </div>
             <div class="modal-body">
-<<<<<<< Updated upstream
                 <form method="POST" enctype="multipart/form-data">
-=======
-                <form method="POST">
->>>>>>> Stashed changes
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                             {{ form.item_name|as_crispy_field }}
-<<<<<<< Updated upstream
                             {% for i in form.item_name.errors %}
                             <small class="text-danger">{{ i }}</small>
                             {% endfor %}
-=======
->>>>>>> Stashed changes
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                         {{ form.purchase_from|as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.purchase_from.errors %}
                             <small class="text-danger">{{ i }}</small>
                             {% endfor %}
-=======
->>>>>>> Stashed changes
                     </div>
                 </div>
                     <div class="col-md-6">
                         <div class="form-group">
                         {{ form.purchase_date|as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.purchase_date.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
-=======
->>>>>>> Stashed changes
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         {{ form.purchase_by |as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.purchase_by.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
-=======
->>>>>>> Stashed changes
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         {{ form.amount|as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.amount.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
-=======
->>>>>>> Stashed changes
                       </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         {{ form.paid_by|as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.paid_by.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
-=======
->>>>>>> Stashed changes
                       </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         {{ form.status|as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.status.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
-=======
->>>>>>> Stashed changes
                       </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         {{ form.attachement|as_crispy_field }}
-<<<<<<< Updated upstream
                         {% for i in form.attachement.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
-=======
->>>>>>> Stashed changes
                       </div>
                 </div>
                 </div>

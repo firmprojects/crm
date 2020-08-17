@@ -29,14 +29,14 @@ class ClientSignupForm(SignupForm):
         user.last_name = self.cleaned_data.get('last_name')
         user.is_client = True
         user.save()
-        client = Clients.objects.create(user=user)
+        client = Clients.objects.get(user=user)
         client.address = self.cleaned_data.get('address')
         client.phone_number = self.cleaned_data.get('phone_number')
         client.client_id = self.cleaned_data.get('client_id')
         client.country = self.cleaned_data.get('country')
         client.state = self.cleaned_data.pop('state')
         client.company_name = self.cleaned_data.get('company_name')
-        client.phote = self.cleaned_data.get('address')
+        client.photo = self.cleaned_data.get('photo')
         client.save()
         return user
 
@@ -61,7 +61,7 @@ class ProjectForm(forms.ModelForm):
         }
 
 
-class ClientForm(forms.ModelForm):
-    class Meta:
-        model = Clients
-        fields = ['company_name','clients_id', 'address',  'photo']
+# class ClientForm(forms.ModelForm):
+#     class Meta:
+#         model = Clients
+#         fields = ['company_name','clients_id', 'address',  'photo']

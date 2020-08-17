@@ -74,129 +74,9 @@
             </div>
         </div>
     </div>
-    {% include 'backend/notifications.html' %}
+    {% include 'users/add_assets.html' %}
 </div>
-<div id="add_asset" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content modal-md">
-            <div class="modal-header">
-                <h4 class="modal-title">Add Asset</h4>
-            </div>
-            <div class="modal-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ form }}
-                    <!-- <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Asset Name</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Asset Id</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Purchase Date</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Purchase From</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Manufacturer</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Model</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Serial Number</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Supplier</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Condition</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Warranty</label>
-                                <input class="form-control" type="text" placeholder="In Months">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Value</label>
-                                <input class="form-control" type="text" placeholder="$1800">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Asset User</label>
-                                <select class="select">
-                                    <option>John Doe</option>
-                                    <option>Richard Miles</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select class="select">
-                                    <option>Pending</option>
-                                    <option>Approved</option>
-                                    <option>Deployed</option>
-                                    <option>Damaged</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div> -->
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary btn-lg">Add Asset</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div id="edit_asset" class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -334,3 +214,21 @@
     </div>
 </div>
 {% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#id_assigned_to').select2({
+        minimumInputLength: 1,
+        placeholder: "Select Staff",
+        multiple: false,
+        ajax: {
+            url: '/user_autocomplete/',
+            dataType: 'json'
+        },
+    });
+    });
+</script>
+    
+{% endblock js %}
