@@ -83,8 +83,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'crm.wsgi.application'
 
 SITE_ID  = 1
-Database
-https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+# Database
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
