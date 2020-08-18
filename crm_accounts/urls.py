@@ -29,11 +29,12 @@ urlpatterns = [
     path('client_autocomplete/', ClientAutocompletesView.as_view(), name="client-autocomplete"),
     path('project_autocomplete/', ProjectAutocompletesView.as_view(), name="project-autocomplete"),
     path('create_estimates_ajax/',create_estimate),
+    path('create_invoice_ajax/',create_invoice),
     path('get_tax/<pk>/',get_tax,name='get_tax'),
      path('change_status/',change_status, name='change_status'),
     path('estimate_status/', estimate_status, name='estimate_status'),
     path('user_autocomplete/', UsersAutocompletesView.as_view(), name="user_autocomplete")
-     
-    
+
+
 
 ]

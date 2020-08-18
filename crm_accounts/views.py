@@ -1,6 +1,6 @@
 from dal import autocomplete
 from django.shortcuts import render, get_object_or_404
-from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses,Items
+from crm_accounts.models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses,Items,InoviceItems
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
@@ -27,6 +27,19 @@ class EstimateForm(forms.ModelForm):
         ]
     def __init__(self,*args,**kwargs):
         super(EstimateForm,self).__init__(*args,**kwargs)
+        self.fields['discount'].widget = forms.NumberInput(attrs={'min':0,'max':100,'step':0.01})
+
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = [
+            'client', 'projects', 'email', 'taxes', 'invoice_date', 'expiry_date', 'client_address',
+            'billing_address',  'discount',
+            'other_information'
+
+        ]
+    def __init__(self,*args,**kwargs):
+        super(InvoiceForm,self).__init__(*args,**kwargs)
         self.fields['discount'].widget = forms.NumberInput(attrs={'min':0,'max':100,'step':0.01})
 
 # Estimate views
@@ -128,14 +141,59 @@ class InvoiceView(ListView):
         return context
 
 
-class CreateInvoice(CreateView):
-    model = Invoice
+# class CreateInvoice(CreateView):
+#     model = Invoice
+#
+#     fields = [
+#         'client', 'projects', 'email', 'taxes', 'invoice_date', 'expiry_date', 'client_address',
+#         'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
+#         'other_information'
+#     ]
 
-    fields = [
-        'client', 'projects', 'email', 'taxes', 'invoice_date', 'expiry_date', 'client_address',
-        'billing_address', 'item_name', 'item_description', 'unit_cost', 'quantity', 'amount', 'discount',
-        'other_information'
-    ]
+
+class CreateInvoice(TemplateView):
+
+    template_name = 'crm_accounts/invoice_form.html'
+    def get(self,request,*args,**kwargs):
+        super().get(request,*args,**kwargs)
+        conte = super().get_context_data()
+        conte['form'] = InvoiceForm
+        return render(request,self.template_name,conte)
+
+def create_invoice(request):
+    if request.method == 'POST':
+        data = request.POST
+        print(data)
+        print(data.getlist('items'))
+
+        es = Invoice.objects.create(
+            client=Clients.objects.get(pk=int(data['client'])),projects=Projects.objects.get(pk=int(data['projects'])),email=data['email'],
+            taxes=Taxes.objects.get(pk=int(data['taxes'])),invoice_date=data.get('invoice_date'),expiry_date=data.get('expiry_date'),
+            client_address=data.get('client_address'),billing_address=data['billing_address'],
+            discount=0 if data.get('discount') is None or data.get('discount')=='' else data.get('discount'),other_information=data['other_information']
+        )
+        items = json.loads(data['items'])
+        for js in items:
+
+            InoviceItems.objects.create(
+                item_name=js['item_name'],item_description=js['item_description'],
+                unit_cost=js['unit_cost'],quantity=js['quantity'],estimate=es
+            )
+
+        am = 0
+        for i in es.inoviceitems_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            print(amo,i.quantity,i.unit_cost)
+            i.total = amo
+            i.save()
+            am+=amo
+        amo = am
+        am = am*(1+(es.taxes.tax_percentage/100))
+        am = am-amo*(float(es.discount)/100)
+        es.amount = am
+
+        es.save()
+        return JsonResponse({'success':'success','pk':es.pk})
 
 
 class InvoiceDetail(DetailView):
@@ -144,7 +202,7 @@ class InvoiceDetail(DetailView):
 
 class InvoiceDelete(DeleteView):
     model = Invoice
-    success_url = "/acct/invoices"
+    success_url = "/crm_accounts/invoices"
 
 
 class InvoiceUpdate(UpdateView):
@@ -203,7 +261,7 @@ def change_status(request):
         expenses.status = request.POST['status']
         expenses.save()
         return JsonResponse({"status":expenses.status})
-    
+
 
 
 

@@ -154,6 +154,7 @@ class ClientAutocompletesView(autocomplete.Select2QuerySetView):
 class CompanyAutocompletesView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = CustomUser.objects.filter(is_client=True)
+        print(qs)
         if self.q:
             qs = qs.filter(clients__company_name__icontains=self.q)
         return qs

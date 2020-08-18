@@ -98,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'NAME': 'crm2',
-        'PASSWORD': 'enternow',
+        'PASSWORD': 'vihas007',
         'HOST': 'localhost',
         'PORT': '5432'
     },
@@ -198,4 +198,4 @@ LOGIN_REDIRECT_URL  = 'dashboard:home'
 ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-SUMMERNOTE_THEME = 'bs4' 
+SUMMERNOTE_THEME = 'bs4'
