@@ -20,8 +20,11 @@
                 </div>
             </div>
             <div class="row">
-
-                <table class="table table-striped custom-table datatable">
+              <div class="col-12">
+                <div class="card-box">
+                  <div class="card-block">
+                <div class="responsive-table">
+                 <table class="table custom-table table-striped datatable">
                     <thead>
                         <tr>
                             <th>Project ID</th>
@@ -63,12 +66,9 @@
                                                 src="{% static 'img/user.jpg' %}" alt="{{ i.username }}"></a>
                                     </li>
                                     {% endfor %}
-
-
-
                                 </ul>
                             </td>
-                            <td>  {{ item.end_date }} </td>
+                            <td>  {{ item.deadline }} </td>
                             <td>
                                 <div class="dropdown action-label">
                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current" data-toggle="dropdown" aria-expanded="false">
@@ -122,19 +122,15 @@
                         {% endfor %}
                     </tbody>
                 </table>
-
-
             </div>
+            </div>
+            </div>
+          </div>
+          </div>
         </div>
-
     </div>
 
     {% include 'project/projects_form.html' %}
-
-
-
-
-
 
 </div>
 {% endblock content%}

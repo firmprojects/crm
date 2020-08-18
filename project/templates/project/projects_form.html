@@ -24,10 +24,9 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label for="id_label_clients" style="width: 100%">
-                                Clients*
+                            <label for="id_label_clients" style="width: 100%"> Clients*</label>
                                 <select required name="clients" style="width: 100%" class="project_clients js-states form-control" id="id_label_clients"></select>
-                            </label>
+                            
                         </div>
                     </div>
                     <div class="row">
@@ -38,7 +37,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                {{ form.end_date|as_crispy_field }}
+                                {{ form.deadline|as_crispy_field }}
                             </div>
                         </div>
                     </div>
@@ -48,13 +47,13 @@
                                 {{ form.project_cost|as_crispy_field }}
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <!-- <div class="col-sm-6">
                             <div class="form-group">
                                 {{ form.priority|as_crispy_field }}
                             </div>
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-sm-6">
                             <label for="id_label_project_leader" style="width: 100%">
                                 Project leader*
@@ -69,8 +68,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
+                    </div> -->
+                    <!-- <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                             <label for="id_label_team_member" style="width: 100%">
@@ -87,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         {{ form.description|attr:"rows:3"|as_crispy_field }}
                     </div>

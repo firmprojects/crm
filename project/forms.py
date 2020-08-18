@@ -57,7 +57,7 @@ class ProjectForm(forms.ModelForm):
                   ]
         widgets = {
             'start_date': DateInput(format='%m-%d-%Y'),
-            'end_date': DateInput(format='%m-%d-%Y'),
+            'deadline': DateInput(format='%m-%d-%Y'),
         }
 
 
