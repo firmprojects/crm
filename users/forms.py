@@ -5,7 +5,7 @@ from allauth.account.forms import SignupForm
 from django.contrib.auth import get_user_model
 from employees.models import Staff
 from project.models import Clients
-from .models import Assets
+from .models import Assets, CustomUser
 
 class UserCreate(SignupForm):
     first_name = forms.CharField(required=True)
@@ -41,14 +41,14 @@ class UserCreate(SignupForm):
 class UserChange(UserChangeForm):
     class Meta:
         model = get_user_model()
-        fields = ('username','first_name','last_name','email','photo')
+        fields = ('username','first_name','last_name','email',)
 
     def __init__(self,*args,**kwargs):
         super(UserChange,self).__init__(*args,**kwargs)
         self.fields['first_name'].required = True
         self.fields['email'].required = True
         self.fields['username'].required = True
-        self.fields['username'].disabled = True
+        self.fields['last_name'].required = True
         self.fields['email'].disabled = True
 
         # self.fields['email'].required = True

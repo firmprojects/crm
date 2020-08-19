@@ -145,6 +145,8 @@ class Invoice(models.Model):
             am+=amo
         return round(am*float(self.discount)/100,2)
 
+
+
 class InoviceItems(models.Model):
     estimate = models.ForeignKey(to=Invoice,on_delete=models.CASCADE)
     item_name = models.CharField("", max_length=200)
