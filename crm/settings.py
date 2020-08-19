@@ -1,6 +1,6 @@
 import os
 import pytz
-import django_heroku
+# import django_heroku
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -214,4 +214,4 @@ ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'bs4' 
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
