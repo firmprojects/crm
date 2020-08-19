@@ -308,7 +308,7 @@
                                     </tr>
                                     <tr>
                                         <td>Deadline:</td>
-                                        <td class="text-right">{{ object.deadline }}</td>
+                                        <td class="text-right">{{ object.end_date }}</td>
                                     </tr>
                                     <tr>
                                         <td>Priority:</td>
@@ -335,7 +335,7 @@
                     <div class="card project-user">
                         <div class="card-body">
                             <h6 class="card-title m-b-20">Project Manager
-                              <button type="button" class="pull-right btn btn-primary btn-sm"  data-izimodal-open="#modal_project_manager"><i class="fa fa-plus"></i> Add</button>
+                              <button type="button" class="pull-right btn btn-primary btn-sm" data-toggle="modal"  data-target="#modal_project_manager"><i class="fa fa-plus"></i> Add</button>
                             </h6>
                             <ul class="list-box">
                                 <li>
@@ -352,27 +352,13 @@
                                         </div>
                                     </a>
                                 </li>
-                                <!-- <li>
-                                    <a href="profile.html">
-                                        <div class="list-item">
-                                            <div class="list-left">
-                                                <span class="avatar">L</span>
-                                            </div>
-                                            <div class="list-body">
-                                                <span class="message-author">Lesley Grauer</span>
-                                                <div class="clearfix"></div>
-                                                <span class="message-content">Team Leader</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li> -->
-                            </ul>
+                             </ul>
                         </div>
                     </div>
                     <div class="card project-user">
                         <div class="card-body">
                             <h6 class="card-title">Project Team Members 
-                            <button type="button" class="pull-right btn btn-primary btn-sm" data-izimodal-open="#modal_add_team_member"><i class="fa fa-plus"></i> Add</button></h6>
+                            <button type="button" class="pull-right btn btn-primary btn-sm" data-toggle="modal"  data-target="#add_team_member"><i class="fa fa-plus"></i> Add</button></h6>
                             <ul class="list-box">
                               {% for i in object.team_member.all %}
                                 <li>
@@ -390,20 +376,6 @@
                                     </a>
                                 </li>
                                 {% endfor %}
-                                <!-- <li>
-                                    <a href="profile.html">
-                                        <div class="list-item">
-                                            <div class="list-left">
-                                                <span class="avatar">V</span>
-                                            </div>
-                                            <div class="list-body">
-                                                <span class="message-author">Richard Miles</span>
-                                                <div class="clearfix"></div>
-                                                <span class="message-content">Web Developer</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li> -->
                             </ul>
                         </div>
                     </div>
@@ -412,12 +384,18 @@
         </div>
     </div>
 
-    <div id="assign_leader" class="modal custom-modal fade" role="dialog">
+
+
+</div>
+
+
+
+<div id="modal_project_manager" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">Assign a leader to this project</h3>
+                    <h3 class="modal-title">Assign team leader</h3>
                 </div>
                 <div class="modal-body">
                     <div class="input-group m-b-10">
@@ -432,85 +410,15 @@
                     <div>
 
                     </div>
-                    <div class="m-t-50 text-center">
-                        <button class="btn btn-primary btn-lg">Add</button>
+                    <div class="text-center">
+                        <button class="btn btn-primary btn">Add</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div class="mt-20">
-    <!-- Modal Start -->
-    <div class="izimodal" id="modal_project_manager" data-iziModal-width="600px" data-iziModal-fullscreen="true"
-        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
-        <!-- Close Button Start -->
-        <div class="close-modal">
-            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
-        </div>
-        <!-- Close Button Start -->
-        <!-- Modal Body Start -->
-        <div class="modal-inside inner-30">
-            <div class="modal-heading">
-                <h4 class="modal-title center-holder">Add Project Manager</h4>
-            </div>
-            <div class="modal-body">
-                    <div class="input-group m-b-10">
-                        <input placeholder="Search staff" class="form-control search-input" type="text">
-                    </div>
-                    <div class="input-group m-b-10">
-                        <input placeholder="Search milestone" class="form-control search-input mt-2" type="text">
-
-                    </div>
-
-
-                    <div>
-
-                    </div>
-                    <div class="m-t-50 text-center">
-                        <button class="btn btn-primary btn-lg">Add</button>
-                    </div>
-                </div>
-        </div>
-        <!-- Modal Body End -->
-    </div>
-    <!-- Modal End -->
-</div>
-
-
-
-    <div class="mt-20">
-    <!-- Modal Start -->
-    <div class="izimodal" id="modal_add_team_member" data-iziModal-width="600px" data-iziModal-fullscreen="true"
-        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
-        <!-- Close Button Start -->
-        <div class="close-modal">
-            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
-        </div>
-        <!-- Close Button Start -->
-        <!-- Modal Body Start -->
-        <div class="modal-inside inner-30">
-            <div class="modal-heading">
-                <h4 class="modal-title center-holder">Add Team Members</h4>
-            </div>
-            <form method="post">
-                    {% csrf_token %}
-                    <div class="input-group m-b-10">
-                        <select placeholder="Search staff" name="team_member" id="add_team_member" style="width: 100%" class="form-control"></select>
-                    </div>
-
-                    <div class="m-t-50 text-center">
-                        <button class="btn btn-primary btn-lg" type="submit">Add</button>
-                    </div>
-                  </form>
-        </div>
-        <!-- Modal Body End -->
-    </div>
-    <!-- Modal End -->
-</div>
-
+    {% include 'project/add_team_form.html' %}
     {% include 'project/projects_edit_form.html' %}
 
-</div>
 {% endblock content%}

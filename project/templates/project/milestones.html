@@ -50,7 +50,7 @@
                                                             </span>
                                                             <span class="task-label" contenteditable="true">{{ i.task }}</span>
                                                             <span class="task-action-btn task-btn-right">
-                                                                <span data-izimodal-open="#modal_assign_miles" class="action-circle large" title="Assign">
+                                                                <span data-target="#modal_assign_miles" data-toggle="modal" class="action-circle large" title="Assign">
                                                                     <i class="material-icons text-primary" >person_add</i>
                                                                 </span>
                                                                 <span class="action-circle large delete-btn" milestone_id="{{i.pk}}" title="Delete Task">
@@ -93,7 +93,7 @@
                                     {% for i in milestones %}
                                       <a href="#" data-toggle="tooltip" data-placement="bottom" title="{{i.assigned_to}} ">
                                         <img src="assets/img/user.jpg" class="avatar" height="20" width="20">
-
+                                                
                                       </a>
                                     {% endfor %}
                                     <!-- <button href="#" class="followers-add" title="Add Assignee" data-izimodal-open="#modal_assign_miles"><i class="material-icons">add</i></button> -->
@@ -166,39 +166,34 @@
             </div>
         </div>
 
-        <div class="mt-20">
-            <!-- Modal Start -->
-            <div class="izimodal" id="modal_assign_miles" data-iziModal-width="600px" data-iziModal-fullscreen="true"
-                data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
-                <!-- Close Button Start -->
-                <div class="close-modal">
-                    <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
-                </div>
-                <!-- Close Button Start -->
-                <!-- Modal Body Start -->
-                <div class="modal-inside inner-30">
-                    <div class="modal-heading">
-                        <h4 class="modal-title center-holder">Assign this Milestone</h4>
+
+
+        <div id="modal_assign_miles" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Assign this Milestone</h3>
                     </div>
-                    <form method="post" action="{% url 'project:assign_' pk %}">
-                        {% csrf_token %}
-                        <div class="input-group m-b-10">
-                          <select placeholder="select to add" class="form-control select_staff" id="" name='staff'></select>
-                        </div>
-                        <div class="input-group m-b-30">
-                          <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
-                        </div>
-                        <div class="m-t-50 text-center">
-                            <button class="btn btn-primary btn-lg">Assign</button>
-                        </div>
-                      </form>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'project:assign_' pk %}">
+                            {% csrf_token %}
+                            <div class="input-group m-b-10">
+                              <select placeholder="select to add" class="form-control select_staff " id="" name='staff'></select>
+                            </div>
+                            <div class="input-group m-b-30">
+                              <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
+                            </div>
+                            <div class=" text-center">
+                                <button class="btn btn-primary btn-lg">Assign</button>
+                            </div>
+                          </form>
+
+                    </div>
                 </div>
-                <!-- Modal Body End -->
             </div>
-            <!-- Modal End -->
         </div>
 
-        <div id="task_followers" class="modal custom-modal fade" role="dialog">
+        <div id="task_followers" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -213,10 +208,8 @@
                         <div class="input-group m-b-30">
                           <select placeholder="Select milestone" style='width:100%' class="form-control select_milestone" id='' name='milestones'></select>
                         </div>
-                        <div class="m-t-50 text-center">
+                        <div class="text-center">
                             <button class="btn btn-primary btn-lg">Assign</button>
-                            <button type="button" class="btn btn-primary btn-lg" data-dismiss="modal">Close</button>
-
                         </div>
                       </form>
 

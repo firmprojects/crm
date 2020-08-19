@@ -1,5 +1,5 @@
 from django import forms
-from .models import Expenses, ProvidentFund
+from .models import Expenses
 
 
 class DateInput(forms.DateInput):
@@ -16,8 +16,8 @@ class ExpensesForm(forms.ModelForm):
         }
 
 
-class ProvidentFundForm(forms.ModelForm):
-    class Meta:
-        model = ProvidentFund
-        fields = ['user', 'provident_type', 'employee_share_amount', 'company_share_amount',
-              'employee_share', 'company_share', 'status', 'description']
+# class ProvidentFundForm(forms.ModelForm):
+#     class Meta:
+#         model = ProvidentFund
+#         fields = ['user', 'provident_type', 'employee_share_amount', 'company_share_amount',
+#               'employee_share', 'company_share', 'status', 'description']

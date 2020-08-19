@@ -23,10 +23,40 @@
                         New Invoice</a>
                 </div>
             </div>
-                 <div class="row">
+            <div class="row filter-row">
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">From</label>
+                        <div class="cal-icon">
+                            <input class="form-control floating datetimepicker" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">To</label>
+                        <div class="cal-icon">
+                            <input class="form-control floating datetimepicker" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus select-focus">
+                        <label class="focus-label">Status</label>
+                        <select class="select floating">
+                            <option>Select Status</option>
+                            <option>Accepted</option>
+                            <option>Declined</option>
+                            <option>Expired</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" class="btn btn-success btn-block"> Search </a>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
-                    <div class="card-box">
-                        <div class="card-block">
                     <div class="table-responsive">
                         <table class="table table-striped custom-table datatable m-b-0">
                             <thead>
@@ -70,8 +100,6 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                    </div>
-                    </div>
                     </div>
                 </div>
             </div>

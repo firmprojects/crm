@@ -47,7 +47,7 @@ class Projects(models.Model):
     clients = models.ForeignKey(Clients,  on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200)
     start_date = models.DateField(blank=True)
-    deadline = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     created_date = models.DateField(auto_now_add=True)
     project_cost = models.PositiveIntegerField(blank=True)
     priority = models.CharField(max_length=50, choices=PRIORITY, blank=True)
@@ -73,7 +73,7 @@ class Projects(models.Model):
     def get_progress(self):
         try:
 
-            return min(max(((timezone.localdate() - self.start_date).total_seconds()/(self.deadline - self.start_date).total_seconds())*100,0),100)
+            return min(max(((timezone.localdate() - self.start_date).total_seconds()/(self.end_date - self.start_date).total_seconds())*100,0),100)
         except ZeroDivisionError:
             return 0
 
