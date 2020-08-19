@@ -10,7 +10,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'j@qygt-g8f#g2ackof@gsdm-3(p^4k*q0))k++inqx8=rjt1&@'
 
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -100,17 +100,17 @@ SITE_ID  = 1
 # db_from_env = dj_database_url.config(conn_max_age=600)
 # DATABASES['default'].update(db_from_env)
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         # 'USER': 'postgres',
-#         # 'NAME': 'crm2',
-#         # 'PASSWORD': 'enternow',
-#         # 'HOST': 'localhost',
-#         # 'PORT': '5432'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'jdunvxhfsbzydr',
+        'NAME': 'd3jqqkqp4duur6',
+        'PASSWORD': 'c90d233314d95372878d00b70a2c73e2ec4ef6f5677822ff42da017a2f9153e4',
+        'HOST': 'ec2-34-237-89-96.compute-1.amazonaws.com',
+        'PORT': '5432'
 
-#     },
-# }
+    },
+}
 
 MAINTENANCE_MODE = None
 
