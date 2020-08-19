@@ -101,11 +101,18 @@ SITE_ID  = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'postgres',
-        'NAME': 'crm2',
-        'PASSWORD': 'enternow',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        # 'USER': 'postgres',
+        # 'NAME': 'crm2',
+        # 'PASSWORD': 'enternow',
+        # 'HOST': 'localhost',
+        # 'PORT': '5432'
+       ' Host': 'ec2-34-237-89-96.compute-1.amazonaws.com',
+       'Database': 'd3jqqkqp4duur6',
+       'User': 'jdunvxhfsbzydr',
+       'Port':'5432',
+       'Password': 'c90d233314d95372878d00b70a2c73e2ec4ef6f5677822ff42da017a2f9153e4',
+       'URI': 'postgres://jdunvxhfsbzydr:c90d233314d95372878d00b70a2c73e2ec4ef6f5677822ff42da017a2f9153e4@ec2-34-237-89-96.compute-1.amazonaws.com:5432/d3jqqkqp4duur6',
+       'Heroku CLI':' heroku pg:psql postgresql-polished-94696 --app firmcrm'
     },
 }
 
