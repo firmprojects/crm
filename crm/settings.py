@@ -1,4 +1,4 @@
-import django_heroku
+# import django_heroku
 
 import os
 import pytz
@@ -210,4 +210,4 @@ ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SUMMERNOTE_THEME = 'bs4' 
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
