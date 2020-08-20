@@ -5,9 +5,9 @@
 {% block content %}
 <script type="text/javascript" src="{% static 'js/easytimer.min.js' %}"></script>
 <script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/weekly_report_and_timer.js' %}">
 </script>
-<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 
 <style media="screen">
   .tooltip-inner {
@@ -28,7 +28,7 @@
     $("#today_").html(`${moment().format("dddd, MMMM DD")}`)
     $.ajax({
       type:'GET',
-      url:"{% url 'users:get_date_on_refresh' %}",
+      url:"/get_date_on_refresh/",
       success:(res)=>{
         if(res['time'] == 'No'){
           $("#clock_in_time").html("--:--:--")

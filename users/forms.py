@@ -11,28 +11,30 @@ class UserCreate(SignupForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
-    is_client = forms.CharField(widget=forms.CheckboxInput,required=False)
-    is_employee = forms.CharField(widget=forms.CheckboxInput,required=False)
-    is_admin = forms.CharField(widget=forms.CheckboxInput,required=False)
+    # is_client = forms.CharField(widget=forms.CheckboxInput,required=False)
+    # is_employee = forms.CharField(widget=forms.CheckboxInput,required=False)
+    # is_admin = forms.CharField(widget=forms.CheckboxInput,required=False)
+    role = forms.ChoiceField(choices = (('is_client','Client'),('is_employee','Employee'),('is_admin','Admin')),required=True,widget=forms.RadioSelect,)
     username = forms.CharField(required=True)
 
 
-    def clean(self):
-        cleaned_data = super().clean()
-        print(cleaned_data)
-        if not cleaned_data['is_client'] and not cleaned_data['is_admin'] and not cleaned_data['is_employee']:
-            raise forms.ValidationError({'is_admin':'Select atleast one of is_client or is_admin or is_employee'})
-
-        return cleaned_data
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     print(cleaned_data)
+    #     if not cleaned_data['is_client'] and not cleaned_data['is_admin'] and not cleaned_data['is_employee']:
+    #         raise forms.ValidationError({'is_admin':'Select atleast one of is_client or is_admin or is_employee'})
+    #
+    #     return cleaned_data
 
     def save(self, request):
         user = super(UserCreate, self).save(request)
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
         print(self.cleaned_data.get('is_admin'))
-        user.is_admin = True if self.cleaned_data.get('is_admin') == 'True' else False
-        user.is_employee = True if self.cleaned_data.get('is_employee') == 'True'else False
-        user.is_client = True if self.cleaned_data.get('is_client') == 'True' else False
+        setattr(user,self.cleaned_data['role'],True)
+        # user.is_admin = True if self.cleaned_data.get('is_admin') == 'True' else False
+        # user.is_employee = True if self.cleaned_data.get('is_employee') == 'True'else False
+        # user.is_client = True if self.cleaned_data.get('is_client') == 'True' else False
         if user.is_admin: user.is_superuser = True
 
         user.save()
@@ -134,4 +136,3 @@ class AssetForm(forms.ModelForm):
             'assigned_date': DateInput(format='%m-%d-%Y'),
             'purchase_date': DateInput(format='%m-%d-%Y'),
         }
-

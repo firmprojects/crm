@@ -28,6 +28,7 @@ class ClientSignupForm(SignupForm):
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
         user.is_client = True
+        user.photo = self.cleaned_data.get('photo')
         user.save()
         client = Clients.objects.get(user=user)
         client.address = self.cleaned_data.get('address')
@@ -36,7 +37,6 @@ class ClientSignupForm(SignupForm):
         client.country = self.cleaned_data.get('country')
         client.state = self.cleaned_data.pop('state')
         client.company_name = self.cleaned_data.get('company_name')
-        client.photo = self.cleaned_data.get('photo')
         client.save()
         return user
 

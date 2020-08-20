@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
     is_client = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now=True)
-    photo = models.ImageField(default='users/doc_avatar.jpg', upload_to='users')
+    photo = models.ImageField(default='default.jpg', upload_to='users')
 
     def team_leader(self):
         return self.leader_set.all()
@@ -43,11 +43,11 @@ class Assets(models.Model):
       asset_amount = models.IntegerField(blank=True, null=True)
       status = models.CharField(max_length=50, choices=ASSETS_STATUS, blank=True)
       receipt = models.FileField(upload_to='receipts', max_length=100, blank=True)
-    
+
       def __str__(self):
         return self.asset_name
 
-        
+
 
 class Clocking(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)

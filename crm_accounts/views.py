@@ -47,6 +47,19 @@ class InvoiceForm(forms.ModelForm):
         self.fields['discount'].widget = forms.NumberInput(
             attrs={'min': 0, 'max': 100, 'step': 0.01})
 
+class InvoiceForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = [
+            'client', 'projects', 'email', 'taxes', 'invoice_date', 'expiry_date', 'client_address',
+            'billing_address',  'discount',
+            'other_information'
+
+        ]
+    def __init__(self,*args,**kwargs):
+        super(InvoiceForm,self).__init__(*args,**kwargs)
+        self.fields['discount'].widget = forms.NumberInput(attrs={'min':0,'max':100,'step':0.01})
+
 # Estimate views
 
 

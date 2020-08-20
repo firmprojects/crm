@@ -21,7 +21,7 @@ from django.contrib import messages
 from dal import autocomplete
 from users.models import CustomUser
 
-
+from allauth.exceptions import ImmediateHttpResponse
 
 class UsersAutocompletesView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -50,7 +50,7 @@ class AssetView(View):
             else:
                 form = AssetForm()
                 messages.error(request, "Asset was not created")
-                
+
             return HttpResponseRedirect(reverse('users:assets'))
 
 
@@ -86,6 +86,7 @@ def profile(request):
         form = UserChange(request.POST,request.FILES,instance=request.user)
         if form.is_valid():
             form.save()
+            print('pk')
             return redirect('users:user_edit')
         return render(request,'users/user_profile.html',{'form':form})
 
@@ -96,10 +97,11 @@ def edit_profile_admin(request,pk):
     if user == request.user:
         return redirect('users:user_edit')
     if request.method == 'POST':
+        print(request.FILES)
         if user.is_client:
-            form = ClientForm(request.POST,request.FILES,instance=user.clients)
+            form = ClientForm(request.POST,request.FILES,user=user,instance=user.clients)
         elif user.is_employee:
-            form = StaffForm(request.POST,request.FILES,instance=user.staff)
+            form = StaffForm(request.POST,request.FILES,user=user,instance=user.staff)
         if form.is_valid():
             form.save()
             return redirect('users:edit_profile_admin',pk=pk)
@@ -169,6 +171,8 @@ class Users(SignupView):
         context = super().get_context_data()
         context['users'] = CustomUser.objects.all()
         context['change_form'] = UserChangeForm
+        context['form'] = UserCreate(initial={'role':'is_employee'})
+
         return render(request,self.template_name,context=context)
 
     def form_valid(self, form):
