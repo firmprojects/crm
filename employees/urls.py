@@ -34,10 +34,21 @@ urlpatterns = [
     path('get_attendance/',getAttendance,name='getAttendance'),
 
     path('staff_ac',StaffAC.as_view(),name='staff_ac'),
+<<<<<<< Updated upstream
 
     path('holiday/', HolidayList.as_view(), name='holiday'),
     path('holiday/<id>/delete/', DeleteHoliday.as_view(), name='delete_holiday'),
     path('holiday/<pk>/update/', UpdateHoliday.as_view(), name='update_holiday'),
     path('change_status/',change_status, name='change_status'),
   
+=======
+    
+    path('<int:pk>/delete/', holiday_delete, name='delete_holiday'),
+    path('holiday/', holiday_list, name='holiday'),
+    path('create/', holiday_create, name='holiday_create'),
+    path('<int:pk>/update/', holiday_update, name='holiday_update'),
+    
+
+
+>>>>>>> Stashed changes
 ]

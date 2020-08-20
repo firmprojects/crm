@@ -26,6 +26,8 @@ from django.contrib import messages
 
 from dal import autocomplete
 
+
+
 class StaffCreateView(SignupView):
 <<<<<<< Updated upstream
     model = CustomUser
@@ -43,6 +45,7 @@ class StaffCreateView(SignupView):
 
 
 
+<<<<<<< Updated upstream
 class HolidayList(View):
     def get(self, request):
         form = HolidaysForm()
@@ -51,6 +54,22 @@ class HolidayList(View):
 =======
         
         return context
+=======
+
+# class HolidayList(View):
+#     def get(self, request):
+#         form = HolidaysForm()
+#         holidays = Holidays.objects.all()
+#         return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
+
+
+#     def post(self, request):
+#         if request.method == 'POST':
+#             form = HolidaysForm(request.POST)
+#             if form.is_valid():
+#                 new_holiday = form.save()
+#                 return JsonResponse({'hols':model_to_dict(new_holiday)})
+>>>>>>> Stashed changes
 
 
 class HolidayCreate(View):
