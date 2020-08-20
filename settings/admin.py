@@ -19,5 +19,6 @@ admin.site.register(Localization, LocalizationAdmin)
 
 admin.site.register(ThemeSettings)
 
+admin.site.register(InvoiceSettings)
 
 admin.site.register(RoleAccess)

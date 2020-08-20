@@ -1,0 +1,38 @@
+{% extends 'backend/settings-base.html' %}
+{% load crispy_forms_tags %}
+{% block content%}
+
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h4 class="page-title">Invoice Settings</h4>
+                    <div class="form-group row">
+                        <div class="col-lg-9">
+                            {{ form.invoice_prefix|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div>
+                            {{ form.invoice_logo|as_crispy_field }}
+                            <span class="form-text text-muted">Recommended image size is 40px x 40px</span>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="img-thumbnail pull-right"><img src="assets/img/logo.png" alt="" width="40"
+                                    height="40"></div>
+                        </div>
+                    </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary btn-lg" type="submit">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

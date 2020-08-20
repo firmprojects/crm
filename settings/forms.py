@@ -24,3 +24,9 @@ class RoleAccessForm(forms.ModelForm):
     class Meta:
         model = RoleAccess
         fields = '__all__'
+
+
+class InvoiceSettingsForm(forms.ModelForm):
+    class Meta:
+        model = InvoiceSettings
+        fields = '__all__'

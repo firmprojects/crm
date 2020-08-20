@@ -71,3 +71,19 @@ def role_delete(request, id):
     role.delete()
     messages.success(request, "Role successfully deleted")
     return HttpResponseRedirect(reverse("settings:role-access"))
+
+
+class InvoicesettingView(View):
+    def get(self, request):
+        form = InvoiceSettingsForm()
+        return render(request, 'settings/invoice-settings.html', {'form': form})
+
+    def post(self, request):
+        form = InvoiceSettingsForm(request.POST or None, request.FILES)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request, "Invoice settings successfully created")
+            return HttpResponseRedirect(reverse("settings:invoice-settings"))
+        return render(request, 'settings/invoice-settings.html', {'form': form})

@@ -92,3 +92,17 @@ class RoleAccess(models.Model):
         return self.row_access
 
         pass
+
+
+class InvoiceSettings(models.Model):
+    """Model definition for ThemeSettings."""
+    invoice_prefix = models.CharField(max_length=200, blank=True, null=True)
+    invoice_logo = models.ImageField(upload_to='invoices')
+
+    def __str__(self):
+        return self.invoice_prefix
+
+    class Meta:
+        """Meta definition for ThemeSettings."""
+        verbose_name = 'Invoice Settings'
+        verbose_name_plural = 'Invoice Settings'
