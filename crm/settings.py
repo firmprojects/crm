@@ -9,7 +9,7 @@ SECRET_KEY = 'j@qygt-g8f#g2ackof@gsdm-3(p^4k*q0))k++inqx8=rjt1&@'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [

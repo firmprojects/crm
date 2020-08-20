@@ -1,0 +1,60 @@
+{% extends 'backend/base.html'%}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+<div class="main-wrapper">
+    {% include 'backend/navbar.html' %}
+    <div class="sidebar" id="sidebar">
+        {% include 'backend/sidebar.html' %}
+    </div>
+
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="page-title">Payments</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table datatable m-b-0">
+                            <thead>
+
+                                <tr>
+                                    <th>Invoice ID</th>
+                                    <th>Client</th>
+                                    <th>Payment Type</th>
+                                    <th>Paid Date</th>
+                                    <th>Paid Amount</th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                {% for item in object_list %}
+                                <tr>
+                                    <td><a href="{% url 'accounts:invoice_detail' item.id %}">INV-00{{ item.id }}</a>
+                                    </td>
+                                    <td>
+                                        <h2>{{ item.client }}</h2>
+                                    </td>
+                                    <td>Paypal</td>
+                                    <td>{{ item.invoice_date }}</td>
+                                    <td>N{{ item.amount|intword }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-overlay" data-reff=""></div>
+</div>
+{% endblock content%}
