@@ -18,3 +18,9 @@ class ThemeSettingsForm(forms.ModelForm):
     class Meta:
         model = ThemeSettings
         fields = '__all__'
+
+
+class RoleAccessForm(forms.ModelForm):
+    class Meta:
+        model = RoleAccess
+        fields = '__all__'

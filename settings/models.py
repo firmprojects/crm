@@ -76,3 +76,19 @@ class ThemeSettings(models.Model):
         """Meta definition for ThemeSettings."""
         verbose_name = 'Theme Settings'
         verbose_name_plural = 'Theme Settings'
+
+
+class RoleAccess(models.Model):
+    """Model definition for ModuleAccess."""
+    row_name = models.CharField(max_length=150)
+
+    class Meta:
+        """Meta definition for ModuleAccess."""
+
+        verbose_name = 'Module Access'
+        verbose_name_plural = 'Module Access'
+
+    def __str__(self):
+        return self.row_access
+
+        pass
