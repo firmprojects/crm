@@ -43,58 +43,22 @@
                 <div class="widget post-widget">
                     <h5>Latest Posts</h5>
                     <ul class="latest-posts">
+                        
+                        {% for item in blogs  %}
                         <li>
                             <div class="post-thumb">
                                 <a href="blog-details.html">
-                                    <img class="img-fluid" src="{% static 'img/blog/blog-thumb-01.jpg'  %}" alt="">
+                                    <img class="img-fluid" src="{{ item.image.url}}" alt="">
                                 </a>
                             </div>
                             <div class="post-info">
                                 <h4>
-                                    <a href="blog-details.html">Lorem ipsum dolor sit amet consectetur</a>
+                                    <a href="blog-details.html">{{ item.title}}</a>
                                 </h4>
-                                <p><i aria-hidden="true" class="fa fa-calendar"></i> December 6, 2017</p>
+                                <p><i aria-hidden="true" class="fa fa-calendar"></i> {{ item.date|timesince }} ago</p>
                             </div>
                         </li>
-                        <li>
-                            <div class="post-thumb">
-                                <a href="blog-details.html">
-                                    <img class="img-fluid" src="{% static 'img/blog/blog-thumb-02.jpg'  %}" alt="">
-                                </a>
-                            </div>
-                            <div class="post-info">
-                                <h4>
-                                    <a href="blog-details.html">Lorem ipsum dolor sit amet consectetur</a>
-                                </h4>
-                                <p><i aria-hidden="true" class="fa fa-calendar"></i> December 6, 2017</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="post-thumb">
-                                <a href="blog-details.html">
-                                    <img class="img-fluid" src="{% static 'img/blog/blog-thumb-03.jpg'  %}" alt="">
-                                </a>
-                            </div>
-                            <div class="post-info">
-                                <h4>
-                                    <a href="blog-details.html">Lorem ipsum dolor sit amet consectetur</a>
-                                </h4>
-                                <p><i aria-hidden="true" class="fa fa-calendar"></i> December 6, 2017</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="post-thumb">
-                                <a href="blog-details.html">
-                                    <img class="img-fluid" src="{% static 'img/blog/blog-thumb-04.jpg'  %}" alt="">
-                                </a>
-                            </div>
-                            <div class="post-info">
-                                <h4>
-                                    <a href="blog-details.html">Lorem ipsum dolor sit amet consectetur</a>
-                                </h4>
-                                <p><i aria-hidden="true" class="fa fa-calendar"></i> December 6, 2017</p>
-                            </div>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="widget category-widget">

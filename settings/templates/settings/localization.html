@@ -1,0 +1,58 @@
+{% extends 'backend/settings-base.html' %}
+{% load crispy_forms_tags %}
+{% block content%}
+
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card-box">
+                    <div class="card-block">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <h3 class="page-title">Localization Settings</h3>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form.default_country|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form.date_format|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form.timezone|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form.default_language|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form.currency_code|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{ form.currency_symbol|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 text-center m-t-20">
+                                    <button type="submit" class="btn btn-primary btn-lg">Save &amp; update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

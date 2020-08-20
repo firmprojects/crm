@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Estimate, Taxes, Invoice, ProvidentFund, ProvidentType, Expenses
+from .models import Estimate, Taxes, Invoice,  ProvidentType, Expenses
 
 
 class EstimateAdmin(admin.ModelAdmin):
@@ -17,18 +17,18 @@ class InvoiceAdmin(admin.ModelAdmin):
 admin.site.register(Invoice, InvoiceAdmin)
 
 
-class ProvidentFundAdmin(admin.ModelAdmin):
-    list_display = ['provident_type', 'employee_share', 'company_share', 'employee_share', 'company_share']
+# class ProvidentFundAdmin(admin.ModelAdmin):
+#     list_display = ['provident_type', 'employee_share', 'company_share', 'employee_share', 'company_share']
 
 
-admin.site.register(ProvidentFund, ProvidentFundAdmin)
+# admin.site.register(ProvidentFund, ProvidentFundAdmin)
 
 
-class ProvidentTypeFundAdmin(admin.ModelAdmin):
-    list_display = ['name']
+# class ProvidentTypeFundAdmin(admin.ModelAdmin):
+#     list_display = ['name']
 
 
-admin.site.register(ProvidentType, ProvidentTypeFundAdmin)
+# admin.site.register(ProvidentType, ProvidentTypeFundAdmin)
 
 
 class ExpensesAdmin(admin.ModelAdmin):

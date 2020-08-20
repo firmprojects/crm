@@ -3,23 +3,35 @@ from django.views.generic import ListView, DetailView, View, DeleteView, CreateV
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Blog
+from django.urls import reverse
 from .forms import BlogForm
 
 
-class CreateBlogView(LoginRequiredMixin, CreateView):
-    model = Blog
-    template_name = 'blog/add_blog.html'
-    fields = ['title', 'category', 'image', 'status', 'body']
+# class CreateBlogView(LoginRequiredMixin, CreateView):
+#     model = Blog
+#     template_name = 'blog/add_blog.html'
+#     form_class = BlogForm
 
-    def form_invalid(self, form):
-        form.instance.author = self.request.user
-        return super().form_invalid(form)
+#     def form_invalid(self, form):
+#         form.instance.author = self.request.user
+#         return super().form_invalid(form)
+
+
+def create_blog(request):
+    form = BlogForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
+            return HttpResponseRedirect(reverse("blog:blog_view"))
+    return render(request, 'blog/add_blog.html', {'form':form})
+
 
 
 class UpdateBlogView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Blog
     template_name = 'blog/add_blog.html'
-    fields = ['title', 'category', 'image', 'status', 'body']
 
     def form_invalid(self, form):
         form.instance.author = self.request.user
@@ -39,9 +51,15 @@ class BlogListView(LoginRequiredMixin, ListView):
     ordering = ['-date']
 
 
+
 class BlogDetail(LoginRequiredMixin, DetailView):
     model = Blog
     template_name = 'blog/blog_view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(BlogDetail, self).get_context_data(**kwargs)
+        context['blogs'] = Blog.objects.filter(publish=True).order_by('-date')[0:5]
+        return context
 
 
 class BlogDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

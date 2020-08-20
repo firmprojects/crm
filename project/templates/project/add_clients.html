@@ -11,7 +11,7 @@
                 <div class="m-b-30">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="row">
+                                <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     {{ form.first_name|as_crispy_field }}
@@ -20,6 +20,11 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     {{ form.last_name|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.username|as_crispy_field }}
                                 </div>
                             </div>
                             <div class="col-sm-6">

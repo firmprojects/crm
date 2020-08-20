@@ -145,6 +145,9 @@ class Invoice(models.Model):
             amo = int(i.unit_cost*i.quantity)
             am+=amo
         return round(am*float(self.discount)/100,2)
+
+
+
 class InoviceItems(models.Model):
     estimate = models.ForeignKey(to=Invoice,on_delete=models.CASCADE)
     item_name = models.CharField("", max_length=200)
@@ -161,27 +164,24 @@ class ProvidentType(models.Model):
         return self.name
 
 
-class ProvidentFund(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    provident_type = models.ForeignKey(
-        ProvidentType, on_delete=models.DO_NOTHING)
-    employee_share_amount = models.IntegerField(
-        verbose_name="Employee Share(amount)")
-    company_share_amount = models.IntegerField(
-        verbose_name="Company Share(amount)")
-    employee_share = models.IntegerField(verbose_name="Employee Share(%)")
-    company_share = models.IntegerField(
-        verbose_name="Company Share(%)")
-    created = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=100, choices=PROVIDENCE_STATUS)
-    description = models.TextField(blank=True, null=True)
+# class ProvidentFund(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     provident_type = models.ForeignKey( ProvidentType, on_delete=models.DO_NOTHING)
+#     employee_share_amount = models.IntegerField(verbose_name="Employee Share(amount)")
+#     company_share_amount = models.IntegerField(
+#         verbose_name="Company Share(amount)")
+#     employee_share = models.IntegerField(verbose_name="Employee Share(%)")
+#     company_share = models.IntegerField(
+#         verbose_name="Company Share(%)")
+#     created = models.DateField(auto_now_add=True)
+#     status = models.CharField(max_length=100, choices=PROVIDENCE_STATUS)
+#     description = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.user} Provident Fund"
+#     def __str__(self):
+#         return f"{self.user} Provident Fund"
 
-    def get_absolute_url(self):
-        return reverse('accounts:providentfund')
+#     def get_absolute_url(self):
+#         return reverse('accounts:providentfund')
 
 
 class Expenses(models.Model):

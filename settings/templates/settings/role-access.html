@@ -1,0 +1,159 @@
+{% extends 'backend/settings-base.html' %}
+{% load crispy_forms_tags %}
+{% block content%}
+
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4 class="page-title">Roles & Permissions</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#add_role"><i
+                        class="fa fa-plus"></i> Add Roles</a>
+                <div class="roles-menu">
+                    <ul> {% for item in role %}
+                        <li class="active">
+                            <a href="javascript:void(0);">{{ item.row_name }}
+                                <span class="role-action">
+                                    <span class="action-circle large" title="Edit" data-toggle="modal"
+                                        data-target="#edit_role">
+                                        <i class="material-icons">edit</i>
+                                    </span>
+                                    <span class="action-circle large delete-btn" data-key={{ item.id}}>
+                                        <i class="material-icons">delete</i>
+                                    </span>
+                                </span>
+                            </a>
+                        </li>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xl-9">
+                <h6 class="card-title m-b-20">Module Access</h6>
+                <div class="m-b-30">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            Employee
+                            <div class="material-switch pull-right">
+                                <input id="staff_module" type="checkbox">
+                                <label for="staff_module" class="badge-success"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Holidays
+                            <div class="material-switch pull-right">
+                                <input id="holidays_module" type="checkbox">
+                                <label for="holidays_module" class="badge-success"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Leave Request
+                            <div class="material-switch pull-right">
+                                <input id="leave_module" type="checkbox">
+                                <label for="leave_module" class="badge-success"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Events
+                            <div class="material-switch pull-right">
+                                <input id="events_module" type="checkbox">
+                                <label for="events_module" class="badge-success"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Chat
+                            <div class="material-switch pull-right">
+                                <input id="chat_module" type="checkbox">
+                                <label for="chat_module" class="badge-success"></label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="add_role" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Role</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.row_name|as_crispy_field }}
+                    </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary btn-lg" type="submit">Create Role</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="edit_role" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Role</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Role Name <span class="text-danger">*</span></label>
+                        <input class="form-control" value="Team Leader" type="text">
+                    </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary btn-lg">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="delete_role" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Role</h4>
+            </div>
+            <form>
+                <div class="modal-body card-box">
+                    <p>Are you sure want to delete this?</p>
+                    <div class="m-t-20 text-left">
+                        <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                        <button type="submit" class="btn btn-danger role_delete">Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+    $(".delete-btn").on('click', function () {
+        let id = $(this).attr("data-key");
+        $('#delete_role').modal('show');
+        $(".role_delete").on('click', function () {
+            window.location.href = `/settings/role-delete/${id}/`
+        });
+    });
+
+</script>
+
+{% endblock js %}

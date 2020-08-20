@@ -15,7 +15,7 @@ class Blog(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='blog_images')
-    status = models.BooleanField(default=True)
+    publish = models.BooleanField(default=True)
     body = models.TextField()
 
     def __str__(self):
