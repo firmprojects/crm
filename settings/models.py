@@ -1,8 +1,30 @@
+import pytz
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.conf import settings
+from django_countries.fields import CountryField
+from timezone_field import TimeZoneField
 
 
+CURRENCY_SYMBOL = (
+    ('₦', '₦'),
+    ('$', '$'),
+    ('€', '€'),
+    ('£', ('£'))
+)
+
+CURRENCY_CODE = (
+    ('naira', 'Naira'),
+    ('USD', 'USD'),
+    ('pound', 'Pound'),
+    ('euro', 'EURO')
+)
+
+LANGUAGES = (
+    ('eng', 'English'),
+    ('es', 'Spanish'),
+    ('fr', 'French')
+)
 
 
 class CompanyInfo(models.Model):
@@ -16,12 +38,31 @@ class CompanyInfo(models.Model):
     email = models.EmailField(blank=True, )
     phone_number = PhoneNumberField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
-    logo = models.ImageField(upload_to='company', default='logo.jpg', blank=True, null=True)
+    logo = models.ImageField(
+        upload_to='company', default='logo.jpg', blank=True, null=True)
 
     def __str__(self):
         return self.company_name
 
 
+class Localization(models.Model):
+    """Model definition for Localization."""
+    default_country = CountryField(blank_label='(select country)')
+    date_format = models.CharField(max_length=100, blank=True, null=True)
+    timezone = TimeZoneField(default="Africa/Lagos")
+    default_language = models.CharField(
+        max_length=100, choices=LANGUAGES, default="eng", blank=True, null=True)
+    currency_code = models.CharField(
+        max_length=100, choices=CURRENCY_CODE, default="naira", blank=True, null=True)
+    currency_symbol = models.CharField(
+        max_length=100, choices=CURRENCY_SYMBOL, default="₦", blank=True, null=True)
 
-    
+    class Meta:
+        """Meta definition for Localization."""
 
+        verbose_name = 'Localization'
+        verbose_name_plural = 'Localizations'
+
+    def __str__(self):
+        """Unicode representation of Localization."""
+        pass

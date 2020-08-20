@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'tasks',
     'blog',
     'django_summernote',
+    'django_countries',
+    'timezone_field',
 
 
 
@@ -80,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'crm.wsgi.application'
 
-SITE_ID  = 1
+SITE_ID = 1
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -158,7 +160,7 @@ MEDIA_URL = "/media/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'assets'),
-    os.path.join(BASE_DIR,'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -192,9 +194,9 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-LOGIN_REDIRECT_URL  = 'dashboard:home'
+LOGIN_REDIRECT_URL = 'dashboard:home'
 
 ACCOUNT_ADAPTER = 'users.allauth.MyAccountAdapter'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-SUMMERNOTE_THEME = 'bs4' 
+SUMMERNOTE_THEME = 'bs4'
