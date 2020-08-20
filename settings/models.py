@@ -26,6 +26,12 @@ LANGUAGES = (
     ('fr', 'French')
 )
 
+SMTP_SECURITY = (
+    ('none', 'NONE'),
+    ('ssl', 'SSL'),
+    ('tls', 'TLS')
+)
+
 
 class CompanyInfo(models.Model):
     company_name = models.CharField(max_length=200, blank=True, )
@@ -106,3 +112,43 @@ class InvoiceSettings(models.Model):
         """Meta definition for ThemeSettings."""
         verbose_name = 'Invoice Settings'
         verbose_name_plural = 'Invoice Settings'
+
+
+class SMTPEmailSettings(models.Model):
+    """Model definition for SMTPEmailSettings."""
+    smtp_host = models.CharField(max_length=150, blank=True)
+    smtp_user = models.CharField(max_length=150, blank=True)
+    smtp_password = models.CharField(max_length=150, blank=True)
+    smtp_port = models.CharField(max_length=150)
+    smtp_security = models.CharField(
+        max_length=150, choices=SMTP_SECURITY, blank=True)
+    smtp_auth_domain = models.CharField(
+        "SMTP Authentication Domain", max_length=150, blank=True)
+
+    class Meta:
+        """Meta definition for SMTPEmailSettings."""
+
+        verbose_name = 'SMTP Email Settings'
+        verbose_name_plural = 'SMTP Email Settingss'
+
+    def __str__(self):
+        return self.smtp_host
+
+
+class SalarySettings(models.Model):
+    """Model definition for SMTPEmailSettings."""
+    da = models.IntegerField(blank=True)
+    hra = models.IntegerField(blank=True)
+    provident_fund = models.IntegerField(blank=True)
+    organisation_share = models.IntegerField(blank=True)
+    esi_settings = models.IntegerField(blank=True)
+    organisation_share = models.IntegerField(blank=True)
+
+    class Meta:
+        """Meta definition for SMTPEmailSettings."""
+
+        verbose_name = 'Salary Settings'
+        verbose_name_plural = 'Salary Settingss'
+
+    def __str__(self):
+        return "Salary settings"

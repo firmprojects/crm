@@ -5,6 +5,11 @@
 
 <div class="page-wrapper">
     <div class="content container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+        {% endfor %}
+        {% endif %}
         <div class="row">
             <div class="col-sm-8">
                 <h4 class="page-title">Roles & Permissions</h4>

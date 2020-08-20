@@ -17,8 +17,19 @@ class LocalizationAdmin(admin.ModelAdmin):
 
 admin.site.register(Localization, LocalizationAdmin)
 
+
+class SMTPEmailSettingsAdmin(admin.ModelAdmin):
+    list_display = ['smtp_host', 'smtp_user', 'smtp_password', 'smtp_port',
+                    'smtp_security', 'smtp_auth_domain']
+
+
+admin.site.register(SMTPEmailSettings, SMTPEmailSettingsAdmin)
+
+
 admin.site.register(ThemeSettings)
 
 admin.site.register(InvoiceSettings)
 
 admin.site.register(RoleAccess)
+
+admin.site.register(SalarySettings)

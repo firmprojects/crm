@@ -87,3 +87,35 @@ class InvoicesettingView(View):
                     request, "Invoice settings successfully created")
             return HttpResponseRedirect(reverse("settings:invoice-settings"))
         return render(request, 'settings/invoice-settings.html', {'form': form})
+
+
+class SMTPEmailSettingsView(View):
+    def get(self, request):
+        form = SMTPEmailSettingsForm()
+        return render(request, 'settings/smtp-settings.html', {'form': form})
+
+    def post(self, request):
+        form = SMTPEmailSettingsForm(request.POST or None)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request, "Email settings successfully created")
+            return HttpResponseRedirect(reverse("settings:email-settings"))
+        return render(request, 'settings/smtp-settings.html', {'form': form})
+
+
+class SalarySettingsView(View):
+    def get(self, request):
+        form = SalarySettingsForm()
+        return render(request, 'settings/salary-settings.html', {'form': form})
+
+    def post(self, request):
+        form = SalarySettingsForm(request.POST or None)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request, "Salary settings successfully created")
+            return HttpResponseRedirect(reverse("settings:salary-settings"))
+        return render(request, 'settings/salary-settings.html', {'form': form})

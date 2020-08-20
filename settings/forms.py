@@ -30,3 +30,15 @@ class InvoiceSettingsForm(forms.ModelForm):
     class Meta:
         model = InvoiceSettings
         fields = '__all__'
+
+
+class SMTPEmailSettingsForm(forms.ModelForm):
+    class Meta:
+        model = SMTPEmailSettings
+        fields = '__all__'
+
+
+class SalarySettingsForm(forms.ModelForm):
+    class Meta:
+        model = SalarySettings
+        fields = '__all__'

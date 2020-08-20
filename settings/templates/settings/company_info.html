@@ -3,6 +3,11 @@
 {% block content%}
 <div class="page-wrapper">
     <div class="content container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+        {% endfor %}
+        {% endif %}
         <div class="row">
             <div class="col-md-10 offset-md-1">
                 <div class="card-box">
