@@ -1,14 +1,15 @@
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
     <!-- 
 ---------------------------------------------
 Leave Request Form
 -------------------------------------------- -->
 
-   <div class="modal fade" id="expensesForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal fade" id="providentForm">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title text-center" id="exampleModalLabel">Add Expenses</h4>
+              <h4 class="modal-title text-center" id="exampleModalLabel">Add Provident Fund</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -19,64 +20,64 @@ Leave Request Form
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                            {{ form.item_name|as_crispy_field }}
-                            {% for i in form.item_name.errors %}
+                            {{ form.user|add_class:'select2_style'|as_crispy_field}}
+                            {% for i in form.user.errors %}
                             <small class="text-danger">{{ i }}</small>
                             {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
-                        {{ form.purchase_from|as_crispy_field }}
-                        {% for i in form.purchase_from.errors %}
-                            <small class="text-danger">{{ i }}</small>
-                            {% endfor %}
+                        <div class="form-group link-label">
+                            <label class="form-link" data-toggle="collapse" data-target="#collapseExample" data-placement="top" title="add type"><i class="fa fa-plus"></i></label>
+                        {{ form.provident_type|as_crispy_field }}
+                        <div class="collapse" id="collapseExample">
+                            <div class="slide-form">
+                                <form class="form-inline">
+                                    <div class="form-group col-md-12">
+                                       <input type="text" class="form-control" placeholder="Provident Type">
+                                    </div>
+                                    <button type="button" class="btn btn-primary">Create</button>
+                                  </form>
+                            </div>
+                     </div>
                     </div>
                 </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                        {{ form.purchase_date|as_crispy_field }}
-                        {% for i in form.purchase_date.errors %}
+                        {{ form.employee_share_amount|as_crispy_field }}
+                        {% for i in form.employee_share_amount.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        {{ form.purchase_by |as_crispy_field }}
-                        {% for i in form.purchase_by.errors %}
+                        {{ form.company_share_amount |as_crispy_field }}
+                        {% for i in form.company_share_amount.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        {{ form.amount|as_crispy_field }}
-                        {% for i in form.amount.errors %}
+                        {{ form.employee_share|as_crispy_field }}
+                        {% for i in form.employee_share.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
                       </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        {{ form.paid_by|as_crispy_field }}
-                        {% for i in form.paid_by.errors %}
+                        {{ form.company_share|as_crispy_field }}
+                        {% for i in form.company_share.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
                       </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
-                        {{ form.status|as_crispy_field }}
-                        {% for i in form.status.errors %}
-                        <small class="text-danger">{{ i }}</small>
-                        {% endfor %}
-                      </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {{ form.attachement|as_crispy_field }}
-                        {% for i in form.attachement.errors %}
+                        {{ form.description|attr:"rows:3"|as_crispy_field }}
+                        {% for i in form.description.errors %}
                         <small class="text-danger">{{ i }}</small>
                         {% endfor %}
                       </div>
@@ -84,7 +85,7 @@ Leave Request Form
                 </div>
                 
                       <div class="m-t-20 text-center">
-                        <button class="btn btn-primary btn-lg">Add Expenses</button>
+                        <button class="btn btn-primary btn-lg">Add</button>
                     </div>
                 </form>
             </div>

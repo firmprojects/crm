@@ -1,0 +1,26 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+<div id="add_team_member" class="modal fade">
+    <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Assign team members</h3>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="input-group m-b-10">
+                        <select placeholder="Search staff" name="team_member" id="add_team_member" style="width: 100%" class="form-control"></select>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit">Add</button>
+                    </div>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>

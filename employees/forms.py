@@ -49,17 +49,6 @@ class HolidaysForm(forms.ModelForm):
             'date': DateInput(format='%Y-%m-%d'),
         }
 
-class DepartmentForm(forms.ModelForm):
-    class Meta:
-        model = Department
-        fields = ['name']
-
-
-class DesignationForm(forms.ModelForm):
-    class Meta:
-        model = Designation
-        fields = ['title']
-
 
 class LeaveTypeForm(forms.ModelForm):
     class Meta:

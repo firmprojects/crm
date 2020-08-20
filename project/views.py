@@ -67,6 +67,7 @@ class ProjectDetail(DetailView):
         if form.is_valid():
             ins = form.save(commit=False)
             self.object.name=form.cleaned_data['name']
+            self.object.start_date=form.cleaned_data['start_date']
             self.object.end_date=form.cleaned_data['end_date']
             self.object.project_cost = form.cleaned_data['project_cost']
             self.object.priority = form.cleaned_data['priority']

@@ -7,15 +7,11 @@ app_name = 'employees'
 urlpatterns = [
     path('', StaffCreateView.as_view(), name='staff'),
     path('department/', CreateDepartment.as_view(), name='departments'),
-    path('department/<int:pk>/update',
-         UpdateDepartment.as_view(), name='update_department'),
-    path('department/<id>/delete', DeleteDepartment.as_view(),
-         name='delete_department'),
+    path('department/<int:pk>/update', UpdateDepartment.as_view(), name='update_department'),
+    path('department/<id>/delete', DeleteDepartment.as_view(), name='delete_department'),
     path('designation/', CreateDesignation.as_view(), name='designation'),
-    path('designation/<int:pk>/update',
-         UpdateDesignation.as_view(), name='update_designation'),
-    path('designation/<id>/delete', DeleteDesignation.as_view(),
-         name='delete_designation'),
+    path('designation/<int:pk>/update', UpdateDesignation.as_view(), name='update_designation'),
+    path('designation/<id>/delete', DeleteDesignation.as_view(), name='delete_designation'),
     path('leave/', CreateLeave.as_view(), name='leave'),
     path('leave/<int:pk>/update',  UpdateLeave.as_view(), name='update_leave'),
     path('leave/<id>/delete', DeleteLeave.as_view(), name='delete_leave'),
@@ -35,17 +31,13 @@ urlpatterns = [
     path('video_call/', video_call, name='video_call'),
     path('chat/', chat, name='chat'),
 
-    path('get_attendance/', getAttendance, name='getAttendance'),
+    path('get_attendance/',getAttendance,name='getAttendance'),
 
-    path('staff_ac', StaffAC.as_view(), name='staff_ac'),
+    path('staff_ac',StaffAC.as_view(),name='staff_ac'),
+
     path('holiday/', HolidayList.as_view(), name='holiday'),
     path('holiday/<id>/delete/', DeleteHoliday.as_view(), name='delete_holiday'),
     path('holiday/<pk>/update/', UpdateHoliday.as_view(), name='update_holiday'),
-    path('change_status/', change_status, name='change_status'),
-
-    path('<int:pk>/delete/', DeleteHoliday.as_view(), name='delete_holiday'),
-    path('holiday/', HolidayList.as_view(), name='holiday'),
-    path('create/', HolidayCreate.as_view(), name='holiday_create'),
-    path('<int:pk>/update/', UpdateHoliday.as_view(), name='holiday_update'),
-
+    path('change_status/',change_status, name='change_status'),
+  
 ]

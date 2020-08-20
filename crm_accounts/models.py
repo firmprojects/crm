@@ -113,22 +113,47 @@ class Invoice(models.Model):
     billing_address = models.TextField()
     invoice_date = models.DateField()
     expiry_date = models.DateField()
-    item_name = models.CharField("", max_length=200)
-    item_description = models.CharField("", max_length=200)
-    unit_cost = models.IntegerField("")
-    quantity = models.IntegerField("")
-    amount = models.IntegerField("")
-    invoice_id = models.CharField(
-        max_length=10, default=ran_gen, unique=True)
+    amount = models.IntegerField(blank=True, null=True)
+    invoice_id = models.CharField(max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=INVOICE_STATUS)
-    discount = models.CharField("", max_length=100, blank=True, null=True)
+    discount = models.FloatField(default=0, max_length=100, blank=True, null=True)
     other_information = models.TextField(blank=True, null=True)
-
     def __str__(self):
         return f"{self.client} Invoice"
 
     def get_absolute_url(self):
         return reverse('crm_accounts:invoices')
+
+    def get_total(self):
+        am = 0
+        for i in self.inoviceitems_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            am+=amo
+        return round(am,2)
+
+    def get_taxes(self):
+        am = 0
+        for i in self.inoviceitems_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            am+=amo
+        return round(am*(self.taxes.tax_percentage/100),2)
+
+    def get_dis(self):
+        am = 0
+        for i in self.inoviceitems_set.all():
+            amo = int(i.unit_cost*i.quantity)
+            am+=amo
+        return round(am*float(self.discount)/100,2)
+
+
+
+class InoviceItems(models.Model):
+    estimate = models.ForeignKey(to=Invoice,on_delete=models.CASCADE)
+    item_name = models.CharField("", max_length=200)
+    item_description = models.CharField("", max_length=200)
+    unit_cost = models.IntegerField("")
+    quantity = models.IntegerField("")
+    total = models.IntegerField(default=0)
 
 
 class ProvidentType(models.Model):
@@ -138,26 +163,24 @@ class ProvidentType(models.Model):
         return self.name
 
 
-class ProvidentFund(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    provident_type = models.ForeignKey(
-        ProvidentType, on_delete=models.DO_NOTHING)
-    employee_share_amount = models.IntegerField(
-        verbose_name="Employee Share(amount)")
-    company_share_amount = models.IntegerField(
-        verbose_name="Company Share(amount)")
-    employee_share = models.IntegerField(verbose_name="Employee Share(%)")
-    company_share = models.IntegerField(
-        verbose_name="Company Share(%)")
-    created = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=100, choices=PROVIDENCE_STATUS)
-    description = models.TextField(blank=True, null=True)
+# class ProvidentFund(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     provident_type = models.ForeignKey( ProvidentType, on_delete=models.DO_NOTHING)
+#     employee_share_amount = models.IntegerField(verbose_name="Employee Share(amount)")
+#     company_share_amount = models.IntegerField(
+#         verbose_name="Company Share(amount)")
+#     employee_share = models.IntegerField(verbose_name="Employee Share(%)")
+#     company_share = models.IntegerField(
+#         verbose_name="Company Share(%)")
+#     created = models.DateField(auto_now_add=True)
+#     status = models.CharField(max_length=100, choices=PROVIDENCE_STATUS)
+#     description = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.user} Provident Fund"
+#     def __str__(self):
+#         return f"{self.user} Provident Fund"
 
-    def get_absolute_url(self):
-        return reverse('accounts:providentfund')
+#     def get_absolute_url(self):
+#         return reverse('accounts:providentfund')
 
 
 class Expenses(models.Model):

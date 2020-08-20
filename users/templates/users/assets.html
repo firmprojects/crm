@@ -1,6 +1,4 @@
 {% extends 'backend/base.html' %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
 
 {% block content%}
 <div class="page-wrapper">
@@ -20,17 +18,19 @@
         </div>
           <div class="row">
             <div class="col-md-12">
+                <div class="card-box">
+                    <div class="card-block">
                 <div class="table-responsive">
                     <table class="table table-striped custom-table m-b-0 datatable">
                         <thead>
                             <tr>
-                                <th>Asset Id</th>
-                                <th>Assigned To</th>
+                                <th>Asset User</th>
                                 <th>Asset Name</th>
+                                <th>Asset Id</th>
                                 <th>Purchase Date</th>
-                                <th>Warranty Start</th>
+                                <th>Warranty</th>
                                 <th>Warranty End</th>
-                                <th>Asset Amount</th>
+                                <th>Amount</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-right">Actions</th>
                             </tr>
@@ -38,11 +38,11 @@
                         <tbody>
                             {% for item in assets%}
                             <tr>
-                                <td>{{ item.asset_id }}</td>
                                 <td>{{item.assigned_to}}</td>
                                 <td>
                                     <strong> {{ item.asset_name }} </strong>
                                 </td>
+                                <td>{{ item.asset_id }}</td>
                                 <td>5 {{ item.purchase_date }}</td>
                                 <td>{{ item.warranty_time }}</td>
                                 <td>{{ item.warranty_end }}</td>
@@ -75,82 +75,12 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div id="add_asset" class="modal fade" role="dialog">
-    <div class="modal-dialog  modal-lg">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add Asset</h4>
-            </div>
-            <div class="modal-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                             {{form.assigned_to|as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{form.asset_name|as_crispy_field}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                 {{form.purchase_date|as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{form.asset_amount|as_crispy_field}}
-                            </div>
-                        </div>
-                        <!-- <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Purchase From</label>
-                                <input class="form-control" type="text">
-                            </div>
-                        </div> -->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{form.warranty_start|as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{form.warranty_end|as_crispy_field}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{form.receipt|as_crispy_field}}
-                            </div>
-                        </div>
-                       </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                {{form.description|attr:"rows:3"|as_crispy_field}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary">Add Asset</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
+    {% include 'users/add_assets.html' %}
 </div>
+
 <div id="edit_asset" class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -288,3 +218,21 @@
     </div>
 </div>
 {% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#id_assigned_to').select2({
+        minimumInputLength: 1,
+        placeholder: "Select Staff",
+        multiple: false,
+        ajax: {
+            url: '/user_autocomplete/',
+            dataType: 'json'
+        },
+    });
+    });
+</script>
+    
+{% endblock js %}

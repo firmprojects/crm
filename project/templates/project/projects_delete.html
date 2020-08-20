@@ -1,21 +1,26 @@
-<div class="modal fade" id="modal_delete">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title text-center">Delete Project</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+
+<div class="mt-20">
+    <!-- Modal Start -->
+    <div class="izimodal" id="modal_delete" data-iziModal-width="600px" data-iziModal-fullscreen="true"
+        data-iziModal-transitionIn="bounceInDown" data-iziModal-transitionOut="bounceOutDown">
+        <!-- Close Button Start -->
+        <div class="close-modal">
+            <button class="close-modal" data-izimodal-close><i class="ti-close"></i></button>
         </div>
-        <div class="modal-body">
-            <p>Are you sure want to delete this project?</p>
-                <div class="m-t-20 text-left">
-                    <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                    <button type="button" class="btn btn-danger exp_del">Delete</button>
+        <!-- Close Button Start -->
+        <!-- Modal Body Start -->
+        <div class="modal-inside inner-30">
+            <div class="modal-heading">
+                <h4 class="modal-title center-holder">Delete Project</h4>
+            </div>
+            <p>Are you sure want to delete this?</p>
+                <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                    <a role="button" href="#" class="btn btn-danger" id="delete">Delete</a>
+                </div>
         </div>
-      </div>
+        <!-- Modal Body End -->
     </div>
-  </div>
+    <!-- Modal End -->
 </div>
 
 

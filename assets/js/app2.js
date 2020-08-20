@@ -1,4 +1,5 @@
 // Sidebar
+
 ! function($) {
     "use strict";
     var Sidemenu = function() {
@@ -29,13 +30,13 @@
 
 
 $(document).ready(function($) {
-
+	
 	// Sidebar Initiate
-
+	
 	$.Sidemenu.init();
 
     // Sidebar overlay
-
+	
     var $sidebarOverlay = $(".sidebar-overlay");
     $("#mobile_btn, .task-chat").on("click", function(e) {
         var $target = $($(this).attr("href"));
@@ -58,7 +59,7 @@ $(document).ready(function($) {
         }
         e.preventDefault();
     });
-
+	
     // Select 2
 
     if ($('.select').length > 0) {
@@ -72,7 +73,7 @@ $(document).ready(function($) {
 
     if ($('.modal').length > 0) {
         var modalUniqueClass = ".modal";
-        $('.modal').on('show.bs.modal', function(e) {
+        $('.modal').on('shown.bs.modal', function(e) {
             var $element = $(this);
             var $uniques = $(modalUniqueClass + ':visible').not($(this));
             if ($uniques.length) {
@@ -223,16 +224,16 @@ $(document).ready(function($) {
             selector: 'a'
         });
     }
-
+	
     if ($('#lightgallery').length > 0) {
         $('#lightgallery').lightGallery({
 			thumbnail: true,
 			selector: 'a'
 		});
     }
-
+	
 	// Incoming call popup
-
+	
     if ($('#incoming_call').length > 0) {
 		$(window).on('load',function(){
 			$('#incoming_call').modal('show');
@@ -286,9 +287,9 @@ $(document).ready(function($) {
             }
         });
     }
-
+	
 	/* Custom Modal */
-
+	
 	if ($('.custom-modal').length > 0) {
 		$(".custom-modal .modal-content").prepend('<button data-dismiss="modal" class="close" type="button">×</button>');
 	}
@@ -308,7 +309,7 @@ $(document).ready(function($) {
 
     var notificationTimeout;
 
-    //Shows updated notification popup
+    //Shows updated notification popup 
     var updateNotification = function(task, notificationText, newClass) {
         var notificationPopup = $('.notification-popup ');
         notificationPopup.find('.task').text(task);
@@ -326,8 +327,8 @@ $(document).ready(function($) {
         }, 3000);
     };
 
-    // Adds a new Task to the todo list
-    addTask = function() {
+    // Adds a new Task to the todo list 
+    var addTask = function() {
         // Get the new task entered by user
         var newTask = $('#new-task').val();
         // If new task is blank show error message
@@ -357,12 +358,6 @@ $(document).ready(function($) {
             $('.task-list-body').animate({
                 scrollTop: todoListScrollHeight
             }, 1000);
-            console.log(id);
-
-            $.ajax({
-              type:"POST",url:`/project/milestones/add/`,
-              data:{"id":id,"newTask":newTask,csrfmiddlewaretoken:csrf_token}
-            })
         }
     };
 
@@ -376,7 +371,7 @@ $(document).ready(function($) {
         }
     };
 
-    // Initalizes HTML template for a given task
+    // Initalizes HTML template for a given task 
     //var taskTemplate = $($('#task-template').html());
     var taskTemplate = '<li class="task"><div class="task-container"><span class="task-action-btn task-check"><span class="action-circle large complete-btn" title="Mark Complete"><i class="material-icons">check</i></span></span><span class="task-label" contenteditable="true"></span><span class="task-action-btn task-btn-right"><span class="action-circle large" title="Assign"><i class="material-icons">person_add</i></span> <span class="action-circle large delete-btn" title="Delete Task"><i class="material-icons">delete</i></span></span></div></li>';
     // Shows panel for entering new tasks
@@ -397,15 +392,7 @@ $(document).ready(function($) {
         var task = $(this).closest('.task');
         var taskText = task.find('.task-label').text();
         task.remove();
-        updateNotification(taskText, ' has been deleted');
-        $.ajax({
-          type:"POST",data:{"id":$(this).attr("milestone_id"),"csrfmiddlewaretoken":csrf_token},
-          url:"/project/milestones/delete/",success:()=>{
-            console.log("DONE");
-          }
-        })
-
-        console.log();
+        updateNotification(taskText, ' has been deleted.');
     });
 
     // Marks a task as complete
@@ -416,12 +403,6 @@ $(document).ready(function($) {
         $(this).attr('title', newTitle);
         task.hasClass('completed') ? updateNotification(taskText, 'marked as Incomplete.') : updateNotification(taskText, ' marked as complete.', 'success');
         task.toggleClass('completed');
-        $.ajax({
-          type:"POST",data:{"id":$(this).attr("milestone_id"),"csrfmiddlewaretoken":csrf_token,"completed":task.hasClass('completed')?true:false},
-          url:"/project/milestones/mark_complete/",success:()=>{
-            console.log("DONE");
-          }
-        })
     });
 
     // Adds a task on hitting Enter key, hides the panel for entering new task on hitting Esc. key
@@ -502,7 +483,7 @@ $(document).ready(function($) {
         }
 
     }
-
+	
     // Coming Soon
 
     function getTimeRemaining(endtime) {
@@ -549,7 +530,7 @@ $(document).ready(function($) {
         initializeClock('countdown', deadline);
 
     // Chart
-
+	
     if ($("#areaChart, #bar-example, #donutChart, #area-chart").length > 0) {
         var colors = [
             '#E94B3B',

@@ -11,7 +11,7 @@
                     <a href="{% url 'chat:chat' %}"><i class="fa fa-comments" aria-hidden="true"></i> Chat <span class="badge badge-pill bg-primary pull-right">5</span></a>
                 </li> -->
                 <li class="submenu">
-                    <a href="#"><i class="fa fa-users"></i><span> Staff</span> <span class="menu-arrow"></span></a>
+                    <a href="#" class="noti-dot"><i class="fa fa-users"></i><span> Staff</span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
                         <li><a href="{% url 'employees:staff' %}">Staff</a></li>
                         <li><a href="{% url 'employees:holiday' %}">Holidays</a></li>
@@ -29,7 +29,6 @@
                         <li><a href="{% url 'crm_accounts:invoices' %}">Invoices</a></li>
                         <li><a href="{% url 'crm_accounts:payments' %}">Payments</a></li>
                         <li><a href="{% url 'crm_accounts:expenses' %}">Expenses</a></li>
-                        <li><a href="{% url 'crm_accounts:providentfund' %}">Provident Fund</a></li>
                         <li><a href="{% url 'crm_accounts:taxes' %}">Taxes</a></li>
                     </ul>
                 </li>
@@ -43,7 +42,7 @@
                 </li>
 
                 <li>
-                    <a href="{% url 'tasks:tasks' %}"><i class="fa fa-tasks"></i><span> Task</span><span class="menu-arrow"></span></a>
+                    <a href="{% url 'tasks:tasks' %}"><i class="fa fa-tasks"></i><span> Task</span></a>
                 </li>
 
                 <li class="submenu">
@@ -59,12 +58,12 @@
                         <li><a href="{% url 'blog:blog_view' %}">Blog</a></li>
                     </ul>
                 </li>
-                <li class="submenu">
+                <!-- <li class="submenu">
                     <a href="#"><i class="fa fa-pie-chart"></i><span> Reports </span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
 
                     </ul>
-                </li>
+                </li> -->
                 <li class="submenu">
                     <a href="#"><i class="fa fa-user"></i><span> Users </span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">

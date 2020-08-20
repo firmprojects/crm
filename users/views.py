@@ -18,6 +18,19 @@ from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 from users.decorators import employee_check, client_check
 from django.contrib import messages
+from dal import autocomplete
+from users.models import CustomUser
+
+
+
+class UsersAutocompletesView(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = CustomUser.objects.filter(is_employee=True)
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+        print(qs)
+        return qs
+
 
 
 class AssetView(View):

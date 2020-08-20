@@ -13,15 +13,18 @@
                 <div class="col-sm-8 col-8 text-right m-b-30">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><i
                       class="fa fa-plus"></i>Add Project</button>
-                    <!-- <div class="view-icons">
+                    <div class="view-icons">
                         <a href="{% url 'project:projects' %}" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
                         <a href="{% url 'project:project-list' %}" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                <table class="table table-striped custom-table datatable">
+              <div class="col-12">
+                <div class="card-box">
+                  <div class="card-block">
+                <div class="responsive-table">
+                 <table class="table custom-table table-striped datatable">
                     <thead>
                         <tr>
                             <th>Project ID</th>
@@ -63,12 +66,9 @@
                                                 src="{% static 'img/user.jpg' %}" alt="{{ i.username }}"></a>
                                     </li>
                                     {% endfor %}
-
-
-
                                 </ul>
                             </td>
-                            <td>  {{ item.deadline }} </td>
+                            <td>  {{ item.end_date }} </td>
                             <td>
                                 <div class="dropdown action-label">
                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle current" data-toggle="dropdown" aria-expanded="false">
@@ -112,8 +112,8 @@
                             </td>
 
                                 <td class="text-right">
-                                  <button class="btn btn-sm btn-primary" data-toggle="modal"  data-target="#edit_project"><i class="fa fa-pencil"></i></button>
-                                  <button class="btn btn-sm btn-primary" proj_id="{{ item.pk }}" data-toggle="modal"  data-target="#modal_delete"><i class="fa fa-trash"></i></button>
+                                  <button class="btn btn-sm btn-primary"  data-izimodal-open="#modal4"><i class="fa fa-pencil"></i></button>
+                                  <button class="btn btn-sm btn-primary" proj_id="{{ item.pk }}"  data-izimodal-open="#modal_delete"><i class="fa fa-trash"></i></button>
                                      <!-- <a type="button" class="btn btn-sm btn-danger" data-toggle="modal" proj_id="{{ item.pk }}" data-target="#delete_project">
                                       <span class="fa fa-trash"></span>
                                     </a> -->
@@ -122,16 +122,15 @@
                         {% endfor %}
                     </tbody>
                 </table>
-              </div>
-
             </div>
+            </div>
+            </div>
+          </div>
+          </div>
         </div>
-
     </div>
 
     {% include 'project/projects_form.html' %}
-    {% include 'project/projects_edit_form.html' %}
-    {% include 'project/projects_delete.html' %}
 
 </div>
 {% endblock content%}

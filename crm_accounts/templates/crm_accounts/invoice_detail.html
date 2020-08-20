@@ -1,6 +1,9 @@
 {% extends 'backend/base.html'%}
 {% load static %}
 {% load humanize %}
+
+
+{% block content %}
 {% block js %}
 <script type="text/javascript" src='/static/js/pdfMake.js'></script>
 <script type="text/javascript" src="{% static 'js/fonts.js' %}"></script>
@@ -77,8 +80,14 @@
       var nw = window.open();
       nw.document.write(
       `
+      <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
       <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-      ${$(".div_print").html()}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+        <div class="main-wrapper">
+          <div class="row">
+            ${$(".div_print").html()}
+          </div>
+        </div>
       `
       );
       nw.print();
@@ -86,9 +95,6 @@
   }
 </script>
 {% endblock %}
-
-
-{% block content %}
 <div class="main-wrapper">
     {% include 'backend/navbar.html' %}
     <div class="sidebar" id="sidebar">
@@ -99,17 +105,17 @@
         <div class="content container-fluid">
             <div class="row">
                 <div class="col-sm-5 col-4">
-                    <h4 class="page-title">Invoice</h4>
+                    <h4 class="page-title">Estimate</h4>
                 </div>
                 <div class="col-sm-7 col-8 text-right m-b-30">
                     <div class="btn-group btn-group-sm">
-                        <button class="btn btn-white">CSV</button>
-                        <button class="btn btn-white">PDF</button>
-                        <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
+                        <!-- <button class="btn btn-white">CSV</button> -->
+                        <button class="btn btn-white" onclick="Export()">PDF</button>
+                        <button class="btn btn-white" onclick="divPrint()"><i class="fa fa-print fa-lg"></i> Print</button>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row div_print">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
@@ -124,9 +130,9 @@
                                 </div>
                                 <div class="col-sm-6 m-b-20">
                                     <div class="invoice-details">
-                                        <h3 class="text-uppercase">Invoice #{{ object.invoice_id }}</h3>
+                                        <h3 class="text-uppercase">Invoice #{{ object.estimate_id }}</h3>
                                         <ul class="list-unstyled">
-                                            <li>Create Date: <span> {{ object.invoice_date }}</span></li>
+                                            <li>Create Date: <span> {{ object.extimate_date }}</span></li>
                                             <li>Expiry date: <span>{{ object.expiry_date }}</span></li>
                                         </ul>
                                     </div>
@@ -154,14 +160,17 @@
                                     </tr>
                                 </thead>
                                 <tbody class="item_body">
+                                  <!-- {{object.items_set.all}} -->
+                                  {% for item in object.inoviceitems_set.all %}
                                     <tr>
-                                        <td>{{ object.id}}</td>
-                                        <td>{{ object.item_name}}</td>
-                                        <td class="d-none d-sm-block">{{ object.item_description}}</td>
-                                        <td>N{{object.unit_cost|intword }}</td>
-                                        <td>{{object.quantity}}</td>
-                                        <td>N2000</td>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{ item.item_name}}</td>
+                                        <td class="d-none d-sm-block">{{ item.item_description}}</td>
+                                        <td>{{item.unit_cost|intcomma }}</td>
+                                        <td>{{item.quantity}}</td>
+                                        <td>₦{{item.total}}</td>
                                     </tr>
+                                  {% endfor %}
                                 </tbody>
                             </table>
                             <div>
@@ -176,16 +185,20 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>Subtotal:</th>
-                                                            <td class="text-right">$7,000</td>
+                                                            <td class="text-right" id='subtotal_'>₦{{object.get_total}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Tax: <span class="text-regular">(25%)</span></th>
-                                                            <td class="text-right">$1,750</td>
+                                                            <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
+                                                            <td class="text-right" id='taxes_'>₦{{object.get_taxes}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
+                                                            <td class="text-right" id='discount_'>₦{{object.get_dis}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Total:</th>
                                                             <td class="text-right text-primary">
-                                                                <h5>$8,750</h5>
+                                                                <h4 id='amount_'>₦{{object.amount}}</h4>
                                                             </td>
                                                         </tr>
                                                     </tbody>
