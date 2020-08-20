@@ -59,10 +59,5 @@ class Localization(models.Model):
 
     class Meta:
         """Meta definition for Localization."""
-
         verbose_name = 'Localization'
         verbose_name_plural = 'Localizations'
-
-    def __str__(self):
-        """Unicode representation of Localization."""
-        pass

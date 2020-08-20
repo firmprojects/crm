@@ -29,6 +29,5 @@ class LocalizationView(View):
         if request.method == 'POST':
             if form.is_valid():
                 form.save()
-        print(form.error)
-        HttpResponseRedirect(reverse("settings:localization"))
+            return HttpResponseRedirect(reverse("settings:localization"))
         return render(request, 'settings/localization.html', {'form': form})
