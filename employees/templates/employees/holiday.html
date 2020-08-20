@@ -5,62 +5,61 @@
 
 {% block content %}
 <div class="main-wrapper">
-    <div class="page-wrapper">
-        <div class="content container-fluid">
-          {% if messages %}
-          {% for message in messages %}
-          <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
-          {% endfor %}
-          {% endif %}
-            <div class="row">
-                <div class="col-sm-5 col-5">
-                    <h4 class="page-title">Holidays</h4>
-                </div>
-                <div class="col-sm-7 col-7 text-right m-b-30">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#HolidayForm" data-whatever="@mdo"><i
-                    class="fa fa-plus"></i>Add Holiday</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <table class="table datatable table-striped custom-table m-b-0" id="holiday-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Title </th>
-                                    <th>Holiday Date</th>
-                                    <th class="text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody >
-<<<<<<< Updated upstream
-                                {% for item in holidays %}
-                                <tr class="holiday-upcoming">
-                                    <td>{{ item.pk }}</td>
-                                    <td>{{ item.name }}</td>
-                                    <td>{{ item.date|date:"d M, Y" }}</td>
-                                    <td style="width: 150px" class="text-right">
-                                        <a class="btn btn-primary btn-sm" href="{% url 'employees:update_holiday' item.pk %}"> <span class="fa fa-pencil"></span>
-                                        </a>
-                                        <button type="button" class="btn btn-danger btn-sm delete" data-key="{{ item.id}}">
-                                          <span class="fa fa-trash"></span>
-                                        </button>
-                                      </td>
-                                </tr>
-                                {% endfor %}
-=======
-                               {% include 'employees/modals/partial_list.html' %}
->>>>>>> Stashed changes
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      {% if messages %}
+      {% for message in messages %}
+      <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+      <div class="row">
+        <div class="col-sm-5 col-5">
+          <h4 class="page-title">Holidays</h4>
         </div>
-
-
+        <div class="col-sm-7 col-7 text-right m-b-30">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#HolidayForm"
+            data-whatever="@mdo"><i class="fa fa-plus"></i>Add Holiday</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table datatable table-striped custom-table m-b-0" id="holiday-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title </th>
+                  <th>Holiday Date</th>
+                  <th class="text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in holidays %}
+                <tr class="holiday-upcoming">
+                  <td>{{ item.pk }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.date|date:"d M, Y" }}</td>
+                  <td style="width: 150px" class="text-right">
+                    <a class="btn btn-primary btn-sm" href="{% url 'employees:update_holiday' item.pk %}"> <span
+                        class="fa fa-pencil"></span>
+                    </a>
+                    <button type="button" class="btn btn-danger btn-sm delete" data-key="{{ item.id}}">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% include 'employees/modals/partial_list.html' %}
+                {% include 'employees/modals/partial_list.html' %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
+
+
+  </div>
 </div>
 
 
@@ -74,20 +73,20 @@
         </button>
       </div>
       <div class="modal-body">
-          <p>Are you sure want to delete this holiday?</p>
-              <div class="m-t-20 text-left">
-                  <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-            <button type="button" class="btn btn-danger delete_button">Delete</button>
+        <p>Are you sure want to delete this holiday?</p>
+        <div class="m-t-20 text-left">
+          <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+          <button type="button" class="btn btn-danger delete_button">Delete</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 
 
 <div class="modal fade" id="HolidayForm">
-  <div class="modal-dialog modal-lg" >
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title text-center">Add Holiday</h4>
@@ -96,30 +95,30 @@
         </button>
       </div>
       <div class="modal-body">
-          <form method="POST" enctype="multipart/form-data">
-              {% csrf_token %}
-              <div class="row">
-                  <div class="col-md-6">
-                      <div class="form-group">
-                      {{ form.name|as_crispy_field }}
-                      {% for i in form.name.errors %}
-                      <small class="text-danger">{{ i }}</small>
-                      {% endfor %}
-                  </div>
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ form.name|as_crispy_field }}
+                {% for i in form.name.errors %}
+                <small class="text-danger">{{ i }}</small>
+                {% endfor %}
               </div>
-              <div class="col-md-6">
-                  <div class="form-group">
-                  {{ form.date|as_crispy_field }}
-                  {% for i in form.date.errors %}
-                      <small class="text-danger">{{ i }}</small>
-                      {% endfor %}
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                {{ form.date|as_crispy_field }}
+                {% for i in form.date.errors %}
+                <small class="text-danger">{{ i }}</small>
+                {% endfor %}
               </div>
-          </div>
-          
-                <div class="m-t-20 text-center">
-                  <button class="btn btn-primary btn-lg">Add Holiday</button>
-              </div>
-          </form>
+            </div>
+
+            <div class="m-t-20 text-center">
+              <button class="btn btn-primary btn-lg">Add Holiday</button>
+            </div>
+        </form>
       </div>
     </div>
   </div>
@@ -132,13 +131,13 @@
 
 {% block js %}
 <script>
-        $(".delete").on('click', function(){
-            let id = $(this).attr("data-key");
-            $('.del_modal').modal('show');
-            $(".delete_button").on('click', function(){
-               window.location.href = `/employees/holiday/${id}/delete`
-            });
-        });
+  $(".delete").on('click', function () {
+    let id = $(this).attr("data-key");
+    $('.del_modal').modal('show');
+    $(".delete_button").on('click', function () {
+      window.location.href = `/employees/holiday/${id}/delete`
+    });
+  });
 
 </script>
 

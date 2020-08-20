@@ -4,6 +4,9 @@ from .models import *
 class EmployyeeAdmin(admin.ModelAdmin):
     change_list_template = 'smuggler/change_list.html'
 
+class EmployyeeAdmin(admin.ModelAdmin):
+    change_list_template = 'smuggler/change_list.html'
+
 
 class EducationAdmin(admin.ModelAdmin):
     list_display = ['institution', 'course_name',

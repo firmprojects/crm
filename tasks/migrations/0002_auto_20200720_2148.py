@@ -20,36 +20,43 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='ticketing',
             name='project',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Projects'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='project.Projects'),
         ),
         migrations.AddField(
             model_name='tasktracker',
             name='task',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='tasks.Task'),
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE, to='tasks.Task'),
         ),
         migrations.AddField(
             model_name='task',
             name='assign_to',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='task_asignee', to='employees.Staff'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='task_asignee', to='employees.Staff'),
         ),
         migrations.AddField(
             model_name='task',
             name='client',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='project.Clients'),
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='project.Clients'),
         ),
         migrations.AddField(
             model_name='task',
             name='task_followers',
-            field=models.ManyToManyField(blank=True, related_name='task_followers', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                blank=True, related_name='task_followers', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='imagetask',
             name='task',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tasks.Task'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='tasks.Task'),
         ),
         migrations.AddField(
             model_name='doctask',
             name='task',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tasks.Task'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='tasks.Task'),
         ),
     ]
