@@ -5,4 +5,5 @@ app_name = 'settings'
 urlpatterns = [
     path('company_info/', CreateCompany, name='company_info'),
     path('localization/', LocalizationView.as_view(), name='localization'),
+    path('theme-settings/', ThemesettingView.as_view(), name='theme-settings'),
 ]

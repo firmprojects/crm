@@ -16,3 +16,5 @@ class LocalizationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Localization, LocalizationAdmin)
+
+admin.site.register(ThemeSettings)

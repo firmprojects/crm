@@ -21,7 +21,6 @@ def CreateCompany(request):
 class LocalizationView(View):
     def get(self, request):
         form = LocalizationForm()
-        loc_data = Localization.objects.all()
         return render(request, 'settings/localization.html', {'form': form})
 
     def post(self, request):
@@ -31,3 +30,17 @@ class LocalizationView(View):
                 form.save()
             return HttpResponseRedirect(reverse("settings:localization"))
         return render(request, 'settings/localization.html', {'form': form})
+
+
+class ThemesettingView(View):
+    def get(self, request):
+        form = ThemeSettingsForm()
+        return render(request, 'settings/theme-settings.html', {'form': form})
+
+    def post(self, request):
+        form = ThemeSettingsForm(request.POST or None, request.FILES)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+            return HttpResponseRedirect(reverse("settings:theme-settings"))
+        return render(request, 'settings/theme-settings.html', {'form': form})

@@ -61,3 +61,18 @@ class Localization(models.Model):
         """Meta definition for Localization."""
         verbose_name = 'Localization'
         verbose_name_plural = 'Localizations'
+
+
+class ThemeSettings(models.Model):
+    """Model definition for ThemeSettings."""
+    website_name = models.CharField(max_length=200, blank=True, null=True)
+    logo = models.ImageField(upload_to='company')
+    favicon = models.ImageField(upload_to='company')
+
+    def __str__(self):
+        return self.website_name
+
+    class Meta:
+        """Meta definition for ThemeSettings."""
+        verbose_name = 'Theme Settings'
+        verbose_name_plural = 'Theme Settings'

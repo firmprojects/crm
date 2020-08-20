@@ -12,3 +12,9 @@ class LocalizationForm(forms.ModelForm):
     class Meta:
         model = Localization
         fields = '__all__'
+
+
+class ThemeSettingsForm(forms.ModelForm):
+    class Meta:
+        model = ThemeSettings
+        fields = '__all__'
