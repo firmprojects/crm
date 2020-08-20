@@ -10,10 +10,10 @@
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 <script type="text/javascript">
   function Export() {
-    let items = [['#','ITEM','DESCRIPTION','UNIT COST','QUANTITY','TOTAL']]
-    $.each($('.item_body').find('tr'),function () {
+    let items = [['#', 'ITEM', 'DESCRIPTION', 'UNIT COST', 'QUANTITY', 'TOTAL']]
+    $.each($('.item_body').find('tr'), function () {
       let qu = []
-      $(this).find('td').map((i,item)=>{
+      $(this).find('td').map((i, item) => {
         // console.log(item);
         qu.push($(item).html())
       })
@@ -24,36 +24,36 @@
     var docDefinition = {
       content: [
         {
-          stack:[
+          stack: [
             'Estimate to: {{ object.client_address }}',
             'Create Date: {{ object.extimate_date }}',
             'Expiry date: {{ object.expiry_date }}',
 
           ],
-          style:'style'
+          style: 'style'
         },
         {
-    			style: 'tableExample',
-    			table: {
-    				body: items
-    			},
+          style: 'tableExample',
+          table: {
+            body: items
+          },
 
-  		  },
+        },
         {
           ul: [
-  				'Subtotal: '+$("#subtotal_").html(),
-          'Tax ({{object.taxes.tax_percentage}}%): '+$("#taxes_").html(),
-          'Discount ({{object.discount}}%): '+$("#discount_").html(),
-          'Total: '+$("#amount_").html(),
+            'Subtotal: ' + $("#subtotal_").html(),
+            'Tax ({{object.taxes.tax_percentage}}%): ' + $("#taxes_").html(),
+            'Discount ({{object.discount}}%): ' + $("#discount_").html(),
+            'Total: ' + $("#amount_").html(),
           ],
-          style:'items'
+          style: 'items'
 
         },
         {
-          stack:[
+          stack: [
             'Other info: {{object.other_information}}',
           ],
-          style:'items'
+          style: 'items'
         }
       ],
       styles: {
@@ -61,11 +61,11 @@
           bold: true,
           fontSize: 15,
         },
-        items:{
-          marginTop:10,
+        items: {
+          marginTop: 10,
         },
-        style:{
-          marginBottom:10
+        style: {
+          marginBottom: 10
         }
       },
       defaultStyle: {
@@ -77,8 +77,8 @@
   }
 
   function divPrint() {
-      var nw = window.open();
-      nw.document.write(
+    var nw = window.open();
+    nw.document.write(
       `
       <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
       <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -89,157 +89,132 @@
           </div>
         </div>
       `
-      );
-      nw.print();
-      return false;
+    );
+    nw.print();
+    return false;
   }
 </script>
 {% endblock %}
 <div class="main-wrapper">
-    {% include 'backend/navbar.html' %}
-    <div class="sidebar" id="sidebar">
-        {% include 'backend/sidebar.html' %}
-    </div>
-
-    <div class="page-wrapper">
-        <div class="content container-fluid">
-            <div class="row">
-                <div class="col-sm-5 col-4">
-                    <h4 class="page-title">Estimate</h4>
-                </div>
-                <div class="col-sm-7 col-8 text-right m-b-30">
-                    <div class="btn-group btn-group-sm">
-                        <!-- <button class="btn btn-white">CSV</button> -->
-                        <button class="btn btn-white" onclick="Export()">PDF</button>
-                        <button class="btn btn-white" onclick="divPrint()"><i class="fa fa-print fa-lg"></i> Print</button>
-                    </div>
-                </div>
-            </div>
-            <div class="row div_print">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6 m-b-20">
-                                    <img src="{% static 'img/logo2.png' %}" class="inv-logo" alt="">
-                                    <div class="col-4">
-                                        <p>
-                                            {{ object.client_address }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 m-b-20">
-                                    <div class="invoice-details">
-                                        <h3 class="text-uppercase">Estimate #{{ object.estimate_id }}</h3>
-                                        <ul class="list-unstyled">
-                                            <li>Create Date: <span> {{ object.extimate_date }}</span></li>
-                                            <li>Expiry date: <span>{{ object.expiry_date }}</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-9 m-b-20">
-                                    <h5>Estimate to:</h5>
-                                    <div class="col-4">
-                                        <p>
-                                            {{ object.client_address }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>ITEM</th>
-                                        <th class="d-none d-sm-block">DESCRIPTION</th>
-                                        <th>UNIT COST</th>
-                                        <th>QUANTITY</th>
-                                        <th>TOTAL</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="item_body">
-                                  <!-- {{object.items_set.all}} -->
-                                  {% for item in object.items_set.all %}
-                                    <tr>
-                                        <td>{{forloop.counter}}</td>
-                                        <td>{{ item.item_name}}</td>
-                                        <td class="d-none d-sm-block">{{ item.item_description}}</td>
-                                        <td>{{item.unit_cost|intcomma }}</td>
-                                        <td>{{item.quantity}}</td>
-<<<<<<< Updated upstream
-                                        <td>₦{{item.total}}</td>
-=======
-                                        <td>{{item.total}}</td>
->>>>>>> Stashed changes
-                                    </tr>
-                                  {% endfor %}
-                                </tbody>
-                            </table>
-                            <div>
-                                <div class="row invoice-payment">
-                                    <div class="col-sm-7">
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="m-b-20">
-                                            <h6>Total due</h6>
-                                            <div class="table-responsive no-border">
-                                                <table class="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <th>Subtotal:</th>
-<<<<<<< Updated upstream
-                                                            <td class="text-right" id='subtotal_'>₦{{object.get_total}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
-                                                            <td class="text-right" id='taxes_'>₦{{object.get_taxes}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
-                                                            <td class="text-right" id='discount_'>₦{{object.get_dis}}</td>
-=======
-                                                            <td class="text-right" id='subtotal_'>${{object.get_total}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
-                                                            <td class="text-right" id='taxes_'>${{object.get_taxes}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
-                                                            <td class="text-right" id='discount_'>${{object.get_dis}}</td>
->>>>>>> Stashed changes
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Total:</th>
-                                                            <td class="text-right text-primary">
-<<<<<<< Updated upstream
-                                                                <h4 id='amount_'>₦{{object.amount}}</h4>
-=======
-                                                                <h5 id='amount_'>${{object.amount}}</h5>
->>>>>>> Stashed changes
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="invoice-info">
-                                    <h5>Other information</h5>
-                                    <p class="text-muted">{{object.other_information}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="row">
+        <div class="col-sm-5 col-4">
+          <h4 class="page-title">Estimate</h4>
         </div>
+        <div class="col-sm-7 col-8 text-right m-b-30">
+          <div class="btn-group btn-group-sm">
+            <!-- <button class="btn btn-white">CSV</button> -->
+            <button class="btn btn-white" onclick="Export()">PDF</button>
+            <button class="btn btn-white" onclick="divPrint()"><i class="fa fa-print fa-lg"></i> Print</button>
+          </div>
+        </div>
+      </div>
+      <div class="row div_print">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6 m-b-20">
+                  <img src="{% static 'img/logo2.png' %}" class="inv-logo" alt="">
+                  <div class="col-4">
+                    <p>
+                      {{ object.client_address }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-6 m-b-20">
+                  <div class="invoice-details">
+                    <h3 class="text-uppercase">Estimate #{{ object.estimate_id }}</h3>
+                    <ul class="list-unstyled">
+                      <li>Create Date: <span> {{ object.extimate_date }}</span></li>
+                      <li>Expiry date: <span>{{ object.expiry_date }}</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6 col-lg-9 m-b-20">
+                  <h5>Estimate to:</h5>
+                  <div class="col-4">
+                    <p>
+                      {{ object.client_address }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>ITEM</th>
+                    <th class="d-none d-sm-block">DESCRIPTION</th>
+                    <th>UNIT COST</th>
+                    <th>QUANTITY</th>
+                    <th>TOTAL</th>
+                  </tr>
+                </thead>
+                <tbody class="item_body">
+                  <!-- {{object.items_set.all}} -->
+                  {% for item in object.items_set.all %}
+                  <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ item.item_name}}</td>
+                    <td class="d-none d-sm-block">{{ item.item_description}}</td>
+                    <td>{{item.unit_cost|intcomma }}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>₦{{item.total}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div>
+                <div class="row invoice-payment">
+                  <div class="col-sm-7">
+                  </div>
+                  <div class="col-sm-5">
+                    <div class="m-b-20">
+                      <h6>Total due</h6>
+                      <div class="table-responsive no-border">
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <th>Subtotal:</th>
+                              <td class="text-right" id='subtotal_'>₦{{object.get_total}}</td>
+                            </tr>
+                            <tr>
+                              <th>Tax: <span class="text-regular">({{object.taxes.tax_percentage}}%)</span></th>
+                              <td class="text-right" id='taxes_'>₦{{object.get_taxes}}</td>
+                            </tr>
+                            <tr>
+                              <th>Discount: <span class="text-regular">({{object.discount}}%)</span></th>
+                              <td class="text-right" id='discount_'>₦{{object.get_dis}}</td>
+                            </tr>
+                            <tr>
+                              <th>Total:</th>
+                              <td class="text-right text-primary">
+                                <h4 id='amount_'>₦{{object.amount}}</h4>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="invoice-info">
+                  <h5>Other information</h5>
+                  <p class="text-muted">{{object.other_information}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
 
-    <div class="sidebar-overlay" data-reff=""></div>
+  <div class="sidebar-overlay" data-reff=""></div>
 </div>
 {% endblock content%}
