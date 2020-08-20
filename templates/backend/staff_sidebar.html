@@ -8,14 +8,17 @@
                     <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Task</span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
                         <li><a href="{% url 'tasks:staff_task' %}">All Tasks</a></li>
-                        <li><a href="{% url 'tasks:new' %}">Start a new task</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
                     <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Email</span> <span class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
-                        <li><a href="{% url 'messaging:compose' %}">Compose Mail</a></li>
+                         <!--<li><a href="{% url 'messaging:compose' %}">Compose Mail</a></li>
                         <li><a href="{% url 'messaging:inbox' %}">Inbox</a></li>
+<<<<<<< Updated upstream
+=======
+                        <li><a href="{% url 'messaging:mail_view' %}">Mail View</a></li> -->
+>>>>>>> Stashed changes
                     </ul>
                 </li>
                 <li><a href="{% url 'employees:leave' %}"><i class="fa fa-tasks"></i><span>Leave Requests</a></li>

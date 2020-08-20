@@ -21,7 +21,7 @@ class UserCreate(SignupForm):
         cleaned_data = super().clean()
         print(cleaned_data)
         if not cleaned_data['is_client'] and not cleaned_data['is_admin'] and not cleaned_data['is_employee']:
-            raise forms.ValidationError({'is_admin':'Select atleast one of is_client or is_admin or is_employee'})
+            raise forms.ValidationError({'is_admin':'Select at least one of is_client or is_admin or is_employee'})
 
         return cleaned_data
 

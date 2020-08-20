@@ -1,10 +1,18 @@
 from django.http import JsonResponse,HttpResponseRedirect
+<<<<<<< Updated upstream
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, View, DetailView, CreateView, UpdateView, DeleteView
 from django.forms import modelformset_factory
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm, LeaveTypeForm, DepartmentForm, DesignationForm)
+=======
+from django.shortcuts import render, get_object_or_404,reverse
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
+from django.forms import modelformset_factory
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .forms import (HolidaysForm, LeaveRequestForm, StaffSignupForm, DepartmentForm, DesignationForm)
+>>>>>>> Stashed changes
 from .models import *
 from allauth.account.views import SignupView
 from users.models import Clocking
@@ -19,12 +27,18 @@ from django.contrib import messages
 from dal import autocomplete
 
 class StaffCreateView(SignupView):
+<<<<<<< Updated upstream
     model = CustomUser
+=======
+    # model = Staff
+    # form_class = StaffSignupForm
+>>>>>>> Stashed changes
     template_name = 'employees/employees.html'
 
     def get_context_data(self, **kwargs):
         context = super(StaffCreateView, self).get_context_data(**kwargs)
         context['staff'] = CustomUser.objects.filter(is_employee=True)
+<<<<<<< Updated upstream
         return context
 
 
@@ -34,6 +48,26 @@ class HolidayList(View):
         form = HolidaysForm()
         holidays = Holidays.objects.all()
         return render(request, 'employees/holiday.html', {'form':form, 'holidays':holidays})
+=======
+        
+        return context
+
+
+class HolidayCreate(View):
+    def get(self, request):
+        form = HolidaysForm()
+        holidays = Holidays.objects.all()
+
+        context = {'form':form, 'holidays':holidays}
+        return render(self.request, 'employees/holiday.html', context )
+
+    def post(self, request):
+        form = HolidaysForm(request.POST)
+        if form.is_valid():
+            form.save()
+        
+        return HttpResponseRedirect(reverse('employees:holiday'))
+>>>>>>> Stashed changes
 
     def post(self, request):
         if request.method == 'POST':
@@ -57,6 +91,7 @@ class UpdateHoliday(UpdateView):
     fields = '__all__'
 
 
+<<<<<<< Updated upstream
 
 class CreateDepartment(View):
         def get(self, request):
@@ -73,6 +108,20 @@ class CreateDepartment(View):
                     messages.success(request, "Department was successfully created")
                 return HttpResponseRedirect(reverse('employees:departments'))
 
+=======
+class CreateDepartment(View):
+    def get(self, request):
+        form = DepartmentForm()
+        dept = Department.objects.all()
+        return render(self.request, 'employees/department.html', {'form':form, 'dept':dept})
+
+    def post(self, request):
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return HttpResponseRedirect(reverse('employees:departments'))
+>>>>>>> Stashed changes
 
 
 class UpdateDepartment(UpdateView):
@@ -89,6 +138,7 @@ class DeleteDepartment(View):
 
 
 class CreateDesignation(View):
+<<<<<<< Updated upstream
         def get(self, request):
             form = DesignationForm()
             designation = Designation.objects.all()
@@ -102,6 +152,19 @@ class CreateDesignation(View):
                     messages.success(request, "Designation was successfully created")
                 return HttpResponseRedirect(reverse('employees:designation'))
 
+=======
+    def get(self, request):
+        form = DesignationForm()
+        designation = Designation.objects.all()
+        return render(self.request, 'employees/designation.html', {'form':form, 'designation':designation})
+
+    def post(self, request):
+        form = DesignationForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return HttpResponseRedirect(reverse('employees:designation'))
+>>>>>>> Stashed changes
 
 
 class UpdateDesignation(UpdateView):
