@@ -143,16 +143,16 @@ $( document ).ready(function() {
           $.ajax({
             type:"POST",url:"/project/change_priority/",
             data:{"id":$(this).parent().attr("project_id"),"priority":$(this).attr("priority"),"csrfmiddlewaretoken":"{{csrf_token}}"},
-            success:function(res){
-              console.log(res);
+            success:(res)=>{
+              console.log($(this).parent().parent());
               if(res['priority'] === 'high'){
-                $(".current").html(`<i class="fa fa-dot-circle-o text-danger"></i> High`)
+                $(this).parent().parent().find(".current").html(`<i class="fa fa-dot-circle-o text-danger"></i> High`)
               }
               else if(res['priority'] === 'medium'){
-                $(".current").html(`<i class="fa fa-dot-circle-o text-warning"></i> Mediun`)
+                $(this).parent().parent().find(".current").html(`<i class="fa fa-dot-circle-o text-warning"></i> Mediun`)
               }
               else{
-                $(".current").html(`<i class="fa fa-dot-circle-o text-success"></i> Low`)
+                $(this).parent().parent().find(".current").html(`<i class="fa fa-dot-circle-o text-success"></i> Low`)
               }
             }
           })
@@ -162,20 +162,20 @@ $( document ).ready(function() {
           $.ajax({
             type:"POST",url:"/project/change_status/",
             data:{"id":$(this).parent().attr("project_id"),"status":$(this).attr("status"),"csrfmiddlewaretoken":"{{csrf_token}}"},
-            success:function(res){
+            success:(res)=>{
               console.log(res);
               if(res['status'] === 'working'){
-                $(".current_status").html(`<i class="fa fa-dot-circle-o text-success"></i> Working`)
+                $(this).parent().parent().find(".current_status").html(`<i class="fa fa-dot-circle-o text-success"></i> Working`)
               }
               else if(res['status'] === 'pending'){
-                $(".current_status").html(`<i class="fa fa-dot-circle-o text-warning"></i> Pending`)
+                $(this).parent().parent().find(".current_status").html(`<i class="fa fa-dot-circle-o text-warning"></i> Pending`)
               }
               else if(res['status'] === 'suspended'){
-                $(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Suspended`)
+                $(this).parent().parent().find(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Suspended`)
               }
 
               else{
-                $(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Cancelled`)
+                $(this).parent().parent().find(".current_status").html(`<i class="fa fa-dot-circle-o text-danger"></i> Cancelled`)
               }
             }
           })

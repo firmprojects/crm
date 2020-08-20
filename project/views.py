@@ -11,6 +11,8 @@ from allauth.account.views import SignupView
 from django.core.files.storage import FileSystemStorage,File
 from django.conf import settings
 from django.db import models
+from allauth.exceptions import ImmediateHttpResponse
+from allauth.account import signals
 
 class CreateProject(CreateView):
     model = Projects
@@ -115,12 +117,25 @@ def upload_doc(request,pk):
 class ClientsCreateView(SignupView):
     template_name = 'project/clients.html'
     form_class = ClientSignupForm
-    success_url = None
+    success_url = '/project/clients/'
 
     def get_context_data(self, **kwargs):
         context = super(ClientsCreateView, self).get_context_data(**kwargs)
         context['clients'] = CustomUser.objects.filter(is_client=True)
         return context
+
+    def form_valid(self, form):
+        self.user = form.save(self.request)
+        try:
+            signals.user_signed_up.send(
+                sender=self.user.__class__,
+                request=self.request,
+                user=self.user,
+                **{}
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        except ImmediateHttpResponse as e:
+            return e.response
 
     # def form_valid(self, form):
     #     username = self.request.POST.get('username')
@@ -154,6 +169,7 @@ class ClientAutocompletesView(autocomplete.Select2QuerySetView):
 class CompanyAutocompletesView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = CustomUser.objects.filter(is_client=True)
+        print(qs)
         if self.q:
             qs = qs.filter(clients__company_name__icontains=self.q)
         return qs

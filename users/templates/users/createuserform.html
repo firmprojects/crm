@@ -41,16 +41,14 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                           
+
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Select role</label>
-                            {{form.is_admin|as_crispy_field}}
-                            {{form.is_client|as_crispy_field}}
-                            {{form.is_employee|as_crispy_field}}
+                            {{form.role|as_crispy_field}}
                                                    </div>
                     </div>
 
@@ -64,7 +62,3 @@
       </div>
     </div>
   </div>
-
-
-
-

@@ -35,7 +35,7 @@
                         </h5>
                         <div class="small text-muted">{{ item.contact_person_designation}}</div>
                         <a href="{% url 'messaging:compose' %}" class="btn btn-white btn-sm m-t-10">Message</a>
-                        <a href="/user/{{item.user.pk}}/" class="btn btn-white btn-sm m-t-10">View Profile</a>
+                        <a href="/user/{{item.pk}}/" class="btn btn-white btn-sm m-t-10">View Profile</a>
                     </div>
                 </div>
                 {% endfor %}

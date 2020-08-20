@@ -55,7 +55,7 @@ class Estimate(models.Model):
     billing_address = models.TextField()
     extimate_date = models.DateField()
     expiry_date = models.DateField()
-    amount = models.FloatField(blank=True, null=True) 
+    amount = models.FloatField(blank=True, null=True)
     estimate_id = models.CharField(max_length=10, default=ran_gen, unique=True)
     status = models.CharField(max_length=100, choices=ESTIMATE_STATUS)
     discount = models.FloatField(default=0, max_length=100, blank=True, null=True)
@@ -97,6 +97,7 @@ class Items(models.Model):
     unit_cost = models.IntegerField("")
     quantity = models.IntegerField("")
     total = models.IntegerField(default=0)
+
 
 # def cal_info(sender,instance,created,**extra):
 #     if created:
