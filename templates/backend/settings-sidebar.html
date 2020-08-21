@@ -10,6 +10,9 @@
                     <a href="{% url 'settings:company_info' %}">Company Settings</a>
                 </li>
                 <li>
+                    <a href="{% url 'settings:module-settings' %}">Modules</a>
+                </li>
+                <li>
                     <a href="{% url 'settings:localization' %}">Localization</a>
                 </li>
                 <li>
@@ -28,14 +31,14 @@
                     <a href="{% url 'settings:salary-settings' %}">Salary Settings</a>
                 </li>
                 <li>
-                    <a href="notifications-settings.html">Notifications</a>
+                    <a href="{% url 'settings:notifications-settings' %}">Notifications</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="change-password.html">Change Password</a>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a href="leave-type.html">Leave Type</a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

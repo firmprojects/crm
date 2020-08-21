@@ -1,0 +1,60 @@
+{% extends 'backend/settings-base.html' %}
+{% load crispy_forms_tags %}
+{% block content%}
+
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h4 class="page-title">Module Settings</h4>
+                <div>
+                    <ul class="list-group notification-list">
+                        <li class="list-group-item">
+                            Employee
+                            <div class="material-switch pull-right">
+                                <input id="staff_module" type="checkbox" checked="checked">
+                                <label for="staff_module" class="badge-primary"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Holidays
+                            <div class="material-switch pull-right">
+                                <input id="holidays_module" type="checkbox">
+                                <label for="holidays_module" class="badge-primary"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Leave Request
+                            <div class="material-switch pull-right">
+                                <input id="leave_module" type="checkbox">
+                                <label for="leave_module" class="badge-primary"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Events
+                            <div class="material-switch pull-right">
+                                <input id="events_module" type="checkbox">
+                                <label for="events_module" class="badge-primary"></label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            Chat
+                            <div class="material-switch pull-right">
+                                <input id="chat_module" type="checkbox">
+                                <label for="chat_module" class="badge-primary"></label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

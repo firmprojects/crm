@@ -14,8 +14,8 @@
                     <a href="#" class="btn btn-primary btn-rounded pull-right" data-toggle="modal"
                         data-target="#add_client"><i class="fa fa-plus"></i> Add Client</a>
                     <div class="view-icons">
-                        <a href="clients.html" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
-                        <a href="clients-list.html" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
+                        <a href="#" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
+                        <a href="#" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
                     </div>
                 </div>
             </div>
@@ -28,10 +28,8 @@
                                 <img src="{{ item.photo.url}}" />
                             </a>
                         </div>
-                        <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a
-                                href="#">{{ item.first_name}}</a></h4>
-                        <h5 class="user-name m-t-10 m-b-0 text-ellipsis"><a
-                                href="#">{{ item.contact_person}}</a>
+                        <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a href="#">{{ item.first_name}}</a></h4>
+                        <h5 class="user-name m-t-10 m-b-0 text-ellipsis"><a href="#">{{ item.contact_person}}</a>
                         </h5>
                         <div class="small text-muted">{{ item.contact_person_designation}}</div>
                         <a href="{% url 'messaging:compose' %}" class="btn btn-white btn-sm m-t-10">Message</a>

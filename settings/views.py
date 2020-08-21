@@ -119,3 +119,13 @@ class SalarySettingsView(View):
                     request, "Salary settings successfully created")
             return HttpResponseRedirect(reverse("settings:salary-settings"))
         return render(request, 'settings/salary-settings.html', {'form': form})
+
+
+class NotificationSettings(View):
+    def get(self, request):
+        return render(request, 'settings/notifications.html')
+
+
+class ModuleSettings(View):
+    def get(self, request):
+        return render(request, 'settings/module-settings.html')
