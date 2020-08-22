@@ -11,7 +11,8 @@
                     <a href="{% url 'chat:chat' %}"><i class="fa fa-comments" aria-hidden="true"></i> Chat <span class="badge badge-pill bg-primary pull-right">5</span></a>
                 </li> -->
                 <li class="submenu">
-                    <a href="#" class="noti-dot"><i class="fa fa-users"></i><span> Staff</span> <span class="menu-arrow"></span></a>
+                    <a href="#" class="noti-dot"><i class="fa fa-users"></i><span> Staff</span> <span
+                            class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
                         <li><a href="{% url 'employees:staff' %}">Staff</a></li>
                         <li><a href="{% url 'employees:holiday' %}">Holidays</a></li>
@@ -22,8 +23,10 @@
                         <li><a href="{% url 'employees:designation' %}">Designations</a></li>
                     </ul>
                 </li>
+              
                 <li class="submenu">
-                    <a href="#"><i class="fa fa-calculator"></i><span> Accounting </span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="fa fa-calculator"></i><span> Accounting </span> <span
+                            class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
                         <li><a href="{% url 'crm_accounts:estimates' %}">Estimates</a></li>
                         <li><a href="{% url 'crm_accounts:invoices' %}">Invoices</a></li>
@@ -31,6 +34,9 @@
                         <li><a href="{% url 'crm_accounts:expenses' %}">Expenses</a></li>
                         <li><a href="{% url 'crm_accounts:taxes' %}">Taxes</a></li>
                     </ul>
+                </li>
+                <li>
+                    <a href="{% url 'payroll:salary' %}"><i class="fa fa-tasks"></i><span> Payroll</span></a>
                 </li>
                 <li class="submenu">
                     <a href="#"><i class="fa fa-tasks"></i><span> Projects</span> <span class="menu-arrow"></span></a>
@@ -46,14 +52,16 @@
                 </li>
 
                 <li class="submenu">
-                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Email</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <span> Email</span> <span
+                            class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
                         <li><a href="{% url 'messaging:compose' %}">Compose Mail</a></li>
                         <li><a href="{% url 'messaging:inbox' %}">Inbox</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fa fa-commenting-o" aria-hidden="true"></i> <span> Blog</span> <span class="menu-arrow"></span></a>
+                    <a href="#"><i class="fa fa-commenting-o" aria-hidden="true"></i> <span> Blog</span> <span
+                            class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
                         <li><a href="{% url 'blog:blog_view' %}">Blog</a></li>
                     </ul>
@@ -75,8 +83,9 @@
                 <li>
                     <a href="{% url 'users:assets' %}"><i class="fa fa-building-o"></i><span>Assets</span></a>
                 </li>
-                  <li>
-                    <a href="{% url 'settings:company_info' %}"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                <li>
+                    <a href="{% url 'settings:company_info' %}"><i class="fa fa-cog" aria-hidden="true"></i>
+                        Settings</a>
                 </li>
 
             </ul>

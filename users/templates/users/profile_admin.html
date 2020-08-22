@@ -11,7 +11,8 @@
             </div>
 
             <div class="col-sm-5 col-8 text-right m-b-30">
-                <a href="{% url 'users:edit_profile_admin' object.pk %}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Edit Profile</a>
+                <a href="{% url 'users:edit_profile_admin' object.pk %}" class="btn btn-primary btn-rounded"><i
+                        class="fa fa-plus"></i> Edit Profile</a>
             </div>
         </div>
         <div class="card-box">
@@ -20,67 +21,69 @@
                     <div class="profile-view">
                         <div class="profile-img-wrap">
                             <div class="profile-img">
-                              {% if object.photo %}
+                                {% if object.photo %}
 
                                 <a href="#"><img class="avatar" src="{{object.photo.url}}" alt=""></a>
-                              {% else %}
+                                {% else %}
                                 <a href="#"><img class="avatar" src="/media/man.jpg/" alt=""></a>
-                              {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                         <div class="profile-basic">
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="profile-info-left">
-                                        <h3 class="user-name m-t-0 m-b-0">{{object.first_name|title}} {{object.last_name|title}}</h3>
+                                        <h3 class="user-name m-t-0 m-b-0">{{object.first_name|title}}
+                                            {{object.last_name|title}}</h3>
                                         {% if object.is_client %}
-                                          <div class="staff-id">Client ID : {{object.clients.clients_id}}</div>
-                                          <div class="staff-id">Company : {{object.clients.company_name}}</div>
+                                        <div class="staff-id">Client ID : {{object.clients.clients_id}}</div>
+                                        <div class="staff-id">Company : {{object.clients.company_name}}</div>
                                         {% elif object.is_employee %}
-                                          <div class="staff-id">Employee ID : {{object.staff.staff_id}}</div>
-                                          <div class="staff-id">Designation : {{object.staff.designation}}</div>
+                                        <div class="staff-id">Employee ID : {{object.staff.staff_id}}</div>
+                                        <div class="staff-id">Designation : {{object.staff.designation}}</div>
                                         {% endif %}
-                                        <div class="staff-msg"><a href="chat.html" class="btn btn-primary">Send Message</a></div>
+                                        <div class="staff-msg"><a href="#" class="btn btn-primary">Send Message</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-7">
                                     <ul class="personal-info">
                                         {% if object.is_employee %}
-                                          <li>
-                                              <span class="title">Phone:</span>
-                                              <span class="text"><a href="">{{object.staff.phone_number}}</a></span>
-                                          </li>
-                                          <li>
-                                              <span class="title">Email:</span>
-                                              <span class="text"><a href="">{{object.email}}</a></span>
-                                          </li>
-                                         <li>
-                                              <span class="title">Address:</span>
-                                              <span class="text">{{object.staff.address}}</span>
-                                          </li>
-                                          <li>
+                                        <li>
+                                            <span class="title">Phone:</span>
+                                            <span class="text"><a href="">{{object.staff.phone_number}}</a></span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Email:</span>
+                                            <span class="text"><a href="">{{object.email}}</a></span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Address:</span>
+                                            <span class="text">{{object.staff.address}}</span>
+                                        </li>
+                                        <li>
 
-                                              <span class="title">Gender:</span>
-                                              <span class="text">{{object.staff.gender}}</span>
-                                          </li>
+                                            <span class="title">Gender:</span>
+                                            <span class="text">{{object.staff.gender}}</span>
+                                        </li>
                                         {% elif object.is_client %}
-                                          <li>
-                                              <span class="title">Phone:</span>
-                                              <span class="text"><a href="">{{object.clients.phone_number}}</a></span>
-                                          </li>
-                                          <li>
-                                              <span class="title">Email:</span>
-                                              <span class="text"><a href="">{{object.email}}</a></span>
-                                          </li>
-                                          <li>
-                                              <span class="title">Address:</span>
-                                              <span class="text">{{object.clients.address}}</span>
-                                          </li>
-                                          <li>
+                                        <li>
+                                            <span class="title">Phone:</span>
+                                            <span class="text"><a href="">{{object.clients.phone_number}}</a></span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Email:</span>
+                                            <span class="text"><a href="">{{object.email}}</a></span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Address:</span>
+                                            <span class="text">{{object.clients.address}}</span>
+                                        </li>
+                                        <li>
 
-                                              <span class="title">Gender:</span>
-                                              <span class="text">{{object.clients.gender}}</span>
-                                          </li>
+                                            <span class="title">Gender:</span>
+                                            <span class="text">{{object.clients.gender}}</span>
+                                        </li>
 
                                         {% endif %}
                                     </ul>

@@ -11,7 +11,7 @@ from django.contrib import messages
 
 def CreateCompany(request):
     if request.method == 'POST':
-        form = settingsForm(instance=request.POST)
+        form = settingsForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Company details successfully created")

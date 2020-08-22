@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django_summernote',
     'django_countries',
     'timezone_field',
+    'payroll',
+    'djmoney',
 
 
 
