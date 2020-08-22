@@ -3,7 +3,7 @@ from .views import *
 
 app_name = 'settings'
 urlpatterns = [
-    path('company_info/', CreateCompany, name='company_info'),
+    path('company_info/', CreateCompany.as_view(), name='company_info'),
     path('localization/', LocalizationView.as_view(), name='localization'),
     path('theme-settings/', ThemesettingView.as_view(), name='theme-settings'),
     path('invoice-settings/', InvoicesettingView.as_view(), name='invoice-settings'),

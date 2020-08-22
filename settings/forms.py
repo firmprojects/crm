@@ -2,7 +2,7 @@ from django import forms
 from .models import *
 
 
-class settingsForm(forms.ModelForm):
+class CompanyinfoForm(forms.ModelForm):
     class Meta:
         model = CompanyInfo
         fields = '__all__'

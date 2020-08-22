@@ -79,7 +79,7 @@ class StaffForm(forms.ModelForm):
 
     class Meta:
         model = Staff
-        fields = ('staff_id','phone_number','designation','address','gender')
+        fields = ('staff_id', 'phone_number','designation','address','gender')
 
     def save(self,commit=True):
         staff = super().save(commit)

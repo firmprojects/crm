@@ -9,15 +9,20 @@ from django.forms.models import model_to_dict
 from django.contrib import messages
 
 
-def CreateCompany(request):
-    if request.method == 'POST':
-        form = settingsForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Company details successfully created")
-    else:
-        form = settingsForm(request.POST)
-    return render(request, 'settings/company_info.html', {'form': form})
+class CreateCompany(View):
+    def get(self, request):
+        form = CompanyinfoForm(self.request.POST, self.request.FILES)
+        return render(request, 'settings/company_info.html', {'form': form})
+
+    def post(self, request):
+        form = CompanyinfoForm(request.POST or None, request.FILES or None)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request, "Company details successfully created")
+            return HttpResponseRedirect(reverse('settings:company_info'))
+        return render(request, 'settings/company_info.html')
 
 
 class LocalizationView(View):

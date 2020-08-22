@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from djmoney.models.fields import MoneyField
+from django.urls import reverse
 
 
 class Salary(models.Model):
@@ -42,6 +43,9 @@ class Salary(models.Model):
 
     class Meta:
         """Meta definition for Payroll."""
+
+    def get_absolute_url(self):
+        return reverse('payroll:salary-detail', kwargs={'pk': self.pk})
 
         verbose_name = 'Salary'
         verbose_name_plural = 'Salaries'
