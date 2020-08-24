@@ -17,13 +17,12 @@ class StaffSignupForm(SignupForm):
      designation = forms.CharField(required=False)
      branch = forms.CharField(required=False)
      photo = forms.ImageField(required=False)
-    
+
      @transaction.atomic
      def save(self, request):
         user = super(StaffSignupForm, self).save(request)
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
-        user.is_employee = True
         user.save()
         staff = Staff.objects.create(user=user)
         staff.address = self.cleaned_data.get('address')
@@ -34,6 +33,7 @@ class StaffSignupForm(SignupForm):
         staff.designation = self.cleaned_data.get('designation')
         staff.phote = self.cleaned_data.get('address')
         staff.save()
+        user.is_employee = True
         return user
 
 

@@ -15,17 +15,31 @@ from users.models import CustomUser
 from django.forms.models import model_to_dict
 from django.template.loader import render_to_string
 from django.contrib import messages
+from allauth.exceptions import ImmediateHttpResponse
 
 from dal import autocomplete
 
 class StaffCreateView(SignupView):
-    model = CustomUser
     template_name = 'employees/employees.html'
+    form_class = StaffSignupForm
+    success_url = '/employees/'
 
     def get_context_data(self, **kwargs):
         context = super(StaffCreateView, self).get_context_data(**kwargs)
         context['staff'] = CustomUser.objects.filter(is_employee=True)
         return context
+    def form_valid(self, form):
+        self.user = form.save(self.request)
+        try:
+            signals.user_signed_up.send(
+                sender=self.user.__class__,
+                request=self.request,
+                user=self.user,
+                **{}
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        except ImmediateHttpResponse as e:
+            return e.response
 
 
 
@@ -131,7 +145,7 @@ class CreateLeave(View):
                 form.save()
                 messages.success(request, "Your leave request was successfull")
             return HttpResponseRedirect(reverse('employees:leave'))
-    
+
 
 class UpdateLeave(UpdateView):
     model = LeaveRequest

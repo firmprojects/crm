@@ -14,7 +14,7 @@ class UserCreate(SignupForm):
     # is_client = forms.CharField(widget=forms.CheckboxInput,required=False)
     # is_employee = forms.CharField(widget=forms.CheckboxInput,required=False)
     # is_admin = forms.CharField(widget=forms.CheckboxInput,required=False)
-    role = forms.ChoiceField(choices = (('is_client','Client'),('is_employee','Employee'),('is_admin','Admin')),required=True,widget=forms.RadioSelect,)
+    role = forms.ChoiceField(choices = (('is_employee','Employee'),('is_admin','Admin')),required=True,widget=forms.RadioSelect,)
     username = forms.CharField(required=True)
 
 
