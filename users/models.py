@@ -32,7 +32,7 @@ ASSETS_STATUS = (
 )
 
 class Assets(models.Model):
-      assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True, blank=True)
+      assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
       asset_name = models.CharField(max_length=100)
       asset_id = models.CharField(max_length=10, unique=True, default=generate_asset_id, blank=True)
       purchase_date = models.DateTimeField( blank=True, null=True)
@@ -68,17 +68,12 @@ def create_clocking(sender, instance,created, **kwargs):
             clocking.save()
 
 def create_staff(sender,instance,created,**kwargs):
-    if created:
-        if instance.is_employee:
+    if instance.is_employee:
+        try:
+            staff = Staff.objects.get(user=instance)
+        except ObjectDoesNotExist:
             staff = Staff(user=instance)
             staff.save()
-    else:
-        if instance.is_employee:
-            try:
-                staff = Staff.objects.get(user=instance)
-            except ObjectDoesNotExist:
-                staff = Staff(user=instance)
-                staff.save()
 #
 def create_client(sender,instance,created,**kwargs):
     if created:
