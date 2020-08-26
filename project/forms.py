@@ -9,21 +9,20 @@ from allauth.account.forms import SignupForm
 from phonenumber_field.formfields import PhoneNumberField
 
 
-
 class ClientSignupForm(SignupForm):
-     first_name = forms.CharField(required=True)
-     last_name = forms.CharField(required=True)
-     phone_number = PhoneNumberField()
-     email = forms.EmailField(required=True)
-     clients_id = forms.CharField(required=False)
-     address = forms.CharField(required=True)
-     state = forms.CharField(required=False)
-     country = forms.CharField(required=False)
-     company_name = forms.CharField(required=False)
-     photo = forms.ImageField(required=False)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    phone_number = PhoneNumberField()
+    email = forms.EmailField(required=True)
+    clients_id = forms.CharField(required=False)
+    address = forms.CharField(required=True)
+    state = forms.CharField(required=False)
+    country = forms.CharField(required=False)
+    company_name = forms.CharField(required=False)
+    photo = forms.ImageField(required=False)
 
-     @transaction.atomic
-     def save(self, request):
+    @transaction.atomic
+    def save(self, request):
         user = super(ClientSignupForm, self).save(request)
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
@@ -41,8 +40,6 @@ class ClientSignupForm(SignupForm):
         return user
 
 
-
-
 class DateInput(forms.DateInput):
     input_type = 'date'
 
@@ -50,8 +47,8 @@ class DateInput(forms.DateInput):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Projects
-        fields = ['clients','name', 'start_date',
-                  'end_date', 'project_cost', 'priority',
+        fields = ['clients', 'name', 'start_date',
+                  'end_date', 'project_cost', 'budget', 'planning', 'design', 'development', 'testing', 'priority',
                   'project_leader', 'team_member',
                   'description'
                   ]

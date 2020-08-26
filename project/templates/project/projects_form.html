@@ -5,104 +5,103 @@
 
 
 <div class="mt-20">
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title text-center" id="exampleModalLabel">Add Project</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                {{ form.name|as_crispy_field }}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center" id="exampleModalLabel">Add Project</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.name|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="id_label_clients" style="width: 100%"> Clients*</label>
+                                <select required name="clients" style="width: 100%"
+                                    class="project_clients js-states form-control" id="id_label_clients"></select>
+
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label for="id_label_clients" style="width: 100%"> Clients*</label>
-                                <select required name="clients" style="width: 100%" class="project_clients js-states form-control" id="id_label_clients"></select>
-                            
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                {{ form.start_date|as_crispy_field }}
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.start_date|as_crispy_field }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                {{ form.end_date|as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                {{ form.project_cost|as_crispy_field }}
-                            </div>
-                        </div>
-                        <!-- <div class="col-sm-6">
-                            <div class="form-group">
-                                {{ form.priority|as_crispy_field }}
-                            </div>
-                        </div> -->
-                    </div>
-                    <!-- <div class="row">
-                        <div class="col-sm-6">
-                            <label for="id_label_project_leader" style="width: 100%">
-                                Project leader*
-                                <select required name="project_leader" style="width: 100%" class="project_leader col-sm-12 form-control" id="id_label_project_leader"></select>
-                            </label>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Team Leader</label>
-                                <div class="project-members">
-    
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.end_date|as_crispy_field }}
                                 </div>
                             </div>
                         </div>
-                    </div> -->
-                    <!-- <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <label for="id_label_team_member" style="width: 100%">
-                                Team member
-                                <select required style="width: 100%" name="team_member" class="team_member js-states col-sm-12 form-control" id="id_label_team_member"></select>
-                            </label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.project_cost|as_crispy_field }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Team Members</label>
-                                <div class="team-members-list">
-    
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    {{ form.budget|as_crispy_field }}
                                 </div>
                             </div>
                         </div>
-                    </div> -->
-                    <div class="form-group">
-                        {{ form.description|attr:"rows:3"|as_crispy_field }}
-                    </div>
-    
-                    <div class="m-t-20 text-center">
-                        <button class="btn btn-primary btn-lg" type="submit">Create Project</button>
-                        <button class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">
-                          Close
-                        </button>
-                    </div>
-                </form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="id_label_project_leader" style="width: 100%">
+                                    Project leader*
+                                    <select required name="project_leader" style="width: 100%"
+                                        class="project_leader col-sm-12 form-control"
+                                        id="id_label_project_leader"></select>
+                                </label>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Team Leader</label>
+                                    <div class="project-members">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="id_label_team_member" style="width: 100%">
+                                        Team members
+                                        <select required style="width: 100%" name="team_member"
+                                            class="team_member js-states col-sm-12 form-control"
+                                            id="id_label_team_member"></select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Team Members</label>
+                                    <div class="team-members-list">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form.description|attr:"rows:3"|as_crispy_field }}
+                        </div>
+
+                        <div class="m-t-20 text-center">
+                            <button class="btn btn-primary btn-lg" type="submit">Create Project</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-
-
-
-
+    </div>
